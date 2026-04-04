@@ -1,0 +1,40 @@
+{
+  "title": "Hog badger",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "Hog badgers are three species of mustelid in the genus Arctonyx. They represent one of the two genera in the subfamily Melinae, alongside the true badgers.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Hog_badger",
+  "cleaned_content": "Hog badgers are three species of mustelid in the genus Arctonyx. They represent one of the two genera in the subfamily Melinae, alongside the true badgers.",
+  "chunks": [
+    "Hog badgers are three species of mustelid in the genus Arctonyx. They represent one of the two genera in the subfamily Melinae, alongside the true badgers."
+  ],
+  "extra": {
+    "page_title": "Hog_badger",
+    "canonical_name": "Hog badger",
+    "description": "Common name for three species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Hog_badger",
+        "revisions": "https://en.wikipedia.org/wiki/Hog_badger?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Hog_badger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Hog_badger"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Hog_badger",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Hog_badger",
+        "edit": "https://en.wikipedia.org/wiki/Hog_badger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Hog_badger"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Arctonyx-collaris-hog-badger.jpg/330px-Arctonyx-collaris-hog-badger.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Hog_badger",
+    "wikidata_item": null
+  }
+}

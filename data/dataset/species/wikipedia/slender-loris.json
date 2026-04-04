@@ -1,0 +1,41 @@
+{
+  "title": "Slender loris",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The slender lorises (Loris) are a genus of loris native to India and Sri Lanka. The genus comprises two species, the red slender loris found in Sri Lanka and the gray slender loris from Sri Lanka and India. Slender lorises spend most of their life in trees, traveling along the tops of branches with slow and precise movements. They are found in tropical rainforests, scrub forests, semi-deciduous forests, and swamps. The primates have lifespans of approximately 15 years and are nocturnal. Slender lorises generally feed on insects, reptiles, plant shoots, and fruit.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Slender_loris",
+  "cleaned_content": "The slender lorises (Loris) are a genus of loris native to India and Sri Lanka. The genus comprises two species, the red slender loris found in Sri Lanka and the gray slender loris from Sri Lanka and India. Slender lorises spend most of their life in trees, traveling along the tops of branches with slow and precise movements. They are found in tropical rainforests, scrub forests, semi-deciduous forests, and swamps. The primates have lifespans of approximately 15 years and are nocturnal. Slender lorises generally feed on insects, reptiles, plant shoots, and fruit.",
+  "chunks": [
+    "The slender lorises (Loris) are a genus of loris native to India and Sri Lanka. The genus comprises two species, the red slender loris found in Sri Lanka and the gray slender loris from Sri Lanka and India. Slender lorises spend most of their life in trees, traveling along the tops of branches with slow and precise movements. They are found in tropical rainforests, scrub forests, semi-deciduous forests, and swamps. The primates have lifespans of approximately 15 years and are nocturnal. Slender lorises generally feed on insects, reptiles, plant shoots, and fruit."
+  ],
+  "extra": {
+    "page_title": "Slender_loris",
+    "canonical_name": "Slender loris",
+    "description": "Genus of primates",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Slender_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Slender_loris?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Slender_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Slender_loris"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Slender_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Slender_loris",
+        "edit": "https://en.wikipedia.org/wiki/Slender_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Slender_loris"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Sri_Lankan_Slender_Loris_1.jpg/330px-Sri_Lankan_Slender_Loris_1.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Slender_loris",
+    "wikidata_item": null
+  }
+}

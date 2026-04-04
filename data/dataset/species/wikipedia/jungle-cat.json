@@ -1,0 +1,40 @@
+{
+  "title": "Jungle cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The jungle cat, also called reed cat and swamp cat, is a medium-sized cat native from the Eastern Mediterranean region and the Caucasus to parts of Central, South and Southeast Asia. It inhabits foremost wetlands like swamps, littoral and riparian areas with dense vegetation. It is listed as Least Concern on the IUCN Red List, and is mainly threatened by destruction of wetlands, trapping and poisoning.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Jungle_cat",
+  "cleaned_content": "The jungle cat, also called reed cat and swamp cat, is a medium-sized cat native from the Eastern Mediterranean region and the Caucasus to parts of Central, South and Southeast Asia. It inhabits foremost wetlands like swamps, littoral and riparian areas with dense vegetation. It is listed as Least Concern on the IUCN Red List, and is mainly threatened by destruction of wetlands, trapping and poisoning.",
+  "chunks": [
+    "The jungle cat, also called reed cat and swamp cat, is a medium-sized cat native from the Eastern Mediterranean region and the Caucasus to parts of Central, South and Southeast Asia. It inhabits foremost wetlands like swamps, littoral and riparian areas with dense vegetation. It is listed as Least Concern on the IUCN Red List, and is mainly threatened by destruction of wetlands, trapping and poisoning."
+  ],
+  "extra": {
+    "page_title": "Jungle_cat",
+    "canonical_name": "Jungle cat",
+    "description": "Medium-sized wild cat",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Jungle_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Jungle_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Jungle_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Jungle_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Jungle_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Jungle_cat",
+        "edit": "https://en.wikipedia.org/wiki/Jungle_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Jungle_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/FelisChausMunsiari1.jpg/330px-FelisChausMunsiari1.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Jungle_cat",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Bengal slow loris",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Bengal slow loris or northern slow loris is a strepsirrhine primate and a species of slow loris native to the Bangladesh, Northeast India, Cambodia, Laos, Burma, Vietnam, southern China, and Thailand. Its geographic range is larger than that of any other slow loris species. Considered a subspecies of the Sunda slow loris (N. coucang) until 2001, phylogenetic analysis suggests that the Bengal slow loris is most closely related to the Sunda slow loris. However, some individuals in both species have mitochondrial DNA sequences that resemble those of the other species, due to introgressive hybridization. It is the largest species of slow loris, measuring 26 to 38 cm from head to tail and weighing between 1 and 2.1 kg. Like other slow lorises, it has a wet nose (rhinarium), a round head, flat face, large eyes, small ears, a vestigial tail, and dense, woolly fur. The toxin it secretes from its brachial gland differs chemically from that of other slow loris species and may be used to communicate information about sex, age, health, and social status.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bengal_slow_loris",
+  "cleaned_content": "The Bengal slow loris or northern slow loris is a strepsirrhine primate and a species of slow loris native to the Bangladesh, Northeast India, Cambodia, Laos, Burma, Vietnam, southern China, and Thailand. Its geographic range is larger than that of any other slow loris species. Considered a subspecies of the Sunda slow loris (N. coucang) until 2001, phylogenetic analysis suggests that the Bengal slow loris is most closely related to the Sunda slow loris. However, some individuals in both species have mitochondrial DNA sequences that resemble those of the other species, due to introgressive hybridization. It is the largest species of slow loris, measuring 26 to 38 cm from head to tail and weighing between 1 and 2.1 kg. Like other slow lorises, it has a wet nose (rhinarium), a round head, flat face, large eyes, small ears, a vestigial tail, and dense, woolly fur. The toxin it secretes from its brachial gland differs chemically from that of other slow loris species and may be used to communicate information about sex, age, health, and social status.",
+  "chunks": [
+    "The Bengal slow loris or northern slow loris is a strepsirrhine primate and a species of slow loris native to the Bangladesh, Northeast India, Cambodia, Laos, Burma, Vietnam, southern China, and Thailand. Its geographic range is larger than that of any other slow loris species. Considered a subspecies of the Sunda slow loris (N. coucang) until 2001, phylogenetic analysis suggests that the Bengal slow loris is most closely related to the Sunda slow loris. However, some individuals in both species have mitochondrial DNA sequences that resemble those of the other species, due to introgressive hybridization. It is the largest species of slow loris, measuring 26 to 38 cm from head to tail and weighing between 1 and 2.1 kg. Like other slow lorises, it has a wet nose (rhinarium), a round head, flat face, large eyes, small ears, a vestigial tail, and dense, woolly fur. The toxin it secretes from its brachial gland differs chemically from that of other slow loris species and may be used to communicate information about sex, age, health, and social status."
+  ],
+  "extra": {
+    "page_title": "Bengal_slow_loris",
+    "canonical_name": "Bengal slow loris",
+    "description": "Species of primate",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Bengal_slow_loris?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_slow_loris"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bengal_slow_loris",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_slow_loris"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Captive_N._bengalensis_from_Laos_with_6-week_baby.JPG/330px-Captive_N._bengalensis_from_Laos_with_6-week_baby.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Bengal_slow_loris",
+    "wikidata_item": null
+  }
+}

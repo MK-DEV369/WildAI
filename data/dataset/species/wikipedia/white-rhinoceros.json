@@ -1,0 +1,42 @@
+{
+  "title": "White rhinoceros",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The white rhinoceros, also known as the white rhino or square-lipped rhinoceros, is the largest extant species of rhinoceros and the most social of all rhino species, characterized by its wide mouth adapted for grazing. The species includes two subspecies with dramatically different conservation outlooks: the southern white rhinoceros, with an estimated 17,464 individuals in the wild as of the end of 2023, and the northern white rhinoceros. The northern subspecies is critically endangered and on the brink of extinction; its last known male, Sudan, died in March 2018, leaving behind only a very small number of females in captivity. Both subspecies have faced significant threats, primarily from poaching for their horns and habitat loss, which contribute to the species' overall conservation status of Near Threatened. White rhinoceros can run up to 40 mph (64 km/h) for very short bursts. They can maintain speeds of around 30\u201331 mph (48\u201350 km/h) for a good amount of time, and they have good stamina.",
+  "tags": [
+    "conservation",
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/White_rhinoceros",
+  "cleaned_content": "The white rhinoceros, also known as the white rhino or square-lipped rhinoceros, is the largest extant species of rhinoceros and the most social of all rhino species, characterized by its wide mouth adapted for grazing. The species includes two subspecies with dramatically different conservation outlooks: the southern white rhinoceros, with an estimated 17,464 individuals in the wild as of the end of 2023, and the northern white rhinoceros. The northern subspecies is critically endangered and on the brink of extinction; its last known male, Sudan, died in March 2018, leaving behind only a very small number of females in captivity. Both subspecies have faced significant threats, primarily from poaching for their horns and habitat loss, which contribute to the species' overall conservation status of Near Threatened. White rhinoceros can run up to 40 mph (64 km/h) for very short bursts. They can maintain speeds of around 30\u201331 mph (48\u201350 km/h) for a good amount of time, and they have good stamina.",
+  "chunks": [
+    "The white rhinoceros, also known as the white rhino or square-lipped rhinoceros, is the largest extant species of rhinoceros and the most social of all rhino species, characterized by its wide mouth adapted for grazing. The species includes two subspecies with dramatically different conservation outlooks: the southern white rhinoceros, with an estimated 17,464 individuals in the wild as of the end of 2023, and the northern white rhinoceros. The northern subspecies is critically endangered and on the brink of extinction; its last known male, Sudan, died in March 2018, leaving behind only a very small number of females in captivity. Both subspecies have faced significant threats, primarily from poaching for their horns and habitat loss, which contribute to the species' overall conservation status of Near Threatened. White rhinoceros can run up to 40 mph (64 km/h) for very short bursts. They can maintain speeds of around 30\u201331 mph (48\u201350 km/h) for a good amount of time, and they have good stamina."
+  ],
+  "extra": {
+    "page_title": "White_rhinoceros",
+    "canonical_name": "White rhinoceros",
+    "description": "Species of large land mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/White_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/White_rhinoceros?action=history",
+        "edit": "https://en.wikipedia.org/wiki/White_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:White_rhinoceros"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/White_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/White_rhinoceros",
+        "edit": "https://en.wikipedia.org/wiki/White_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:White_rhinoceros"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/109_Male_White_rhinoceros_walking_in_the_Kalahari_Desert_of_Namibia_Photo_by_Giles_Laurent.jpg/330px-109_Male_White_rhinoceros_walking_in_the_Kalahari_Desert_of_Namibia_Photo_by_Giles_Laurent.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/White_rhinoceros",
+    "wikidata_item": null
+  }
+}

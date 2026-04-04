@@ -1,0 +1,40 @@
+{
+  "title": "Indian peafowl",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian peafowl, also known as the common peafowl, or blue peafowl, is a species of peafowl native to the Indian subcontinent. While it originated in the Indian subcontinent, it has since been introduced to many other parts of the world. Male peafowl are referred to as peacocks, and female peafowl are referred to as peahens, although both sexes are often referred to colloquially as a \"peacock\".",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_peafowl",
+  "cleaned_content": "The Indian peafowl, also known as the common peafowl, or blue peafowl, is a species of peafowl native to the Indian subcontinent. While it originated in the Indian subcontinent, it has since been introduced to many other parts of the world. Male peafowl are referred to as peacocks, and female peafowl are referred to as peahens, although both sexes are often referred to colloquially as a \"peacock\".",
+  "chunks": [
+    "The Indian peafowl, also known as the common peafowl, or blue peafowl, is a species of peafowl native to the Indian subcontinent. While it originated in the Indian subcontinent, it has since been introduced to many other parts of the world. Male peafowl are referred to as peacocks, and female peafowl are referred to as peahens, although both sexes are often referred to colloquially as a \"peacock\"."
+  ],
+  "extra": {
+    "page_title": "Indian_peafowl",
+    "canonical_name": "Indian peafowl",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_peafowl",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_peafowl?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_peafowl?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_peafowl"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_peafowl",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_peafowl",
+        "edit": "https://en.wikipedia.org/wiki/Indian_peafowl?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_peafowl"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/330px-Peacock_on_tree_%2852077240794%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_peafowl",
+    "wikidata_item": null
+  }
+}

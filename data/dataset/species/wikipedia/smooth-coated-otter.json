@@ -1,0 +1,41 @@
+{
+  "title": "Smooth-coated otter",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The smooth-coated otter is a freshwater otter species from regions of South and Southwest Asia, with the majority of its numbers found in Southeast Asia. It has been ranked as vulnerable on the IUCN Red List since 1996, as it is threatened by habitat loss, pollution of wetlands and poaching for the illegal wildlife trade. As the common name indicates, its fur is relatively smooth, and somewhat shorter in length than that of other otter species.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Smooth-coated_otter",
+  "cleaned_content": "The smooth-coated otter is a freshwater otter species from regions of South and Southwest Asia, with the majority of its numbers found in Southeast Asia. It has been ranked as vulnerable on the IUCN Red List since 1996, as it is threatened by habitat loss, pollution of wetlands and poaching for the illegal wildlife trade. As the common name indicates, its fur is relatively smooth, and somewhat shorter in length than that of other otter species.",
+  "chunks": [
+    "The smooth-coated otter is a freshwater otter species from regions of South and Southwest Asia, with the majority of its numbers found in Southeast Asia. It has been ranked as vulnerable on the IUCN Red List since 1996, as it is threatened by habitat loss, pollution of wetlands and poaching for the illegal wildlife trade. As the common name indicates, its fur is relatively smooth, and somewhat shorter in length than that of other otter species."
+  ],
+  "extra": {
+    "page_title": "Smooth-coated_otter",
+    "canonical_name": "Smooth-coated otter",
+    "description": "Species of carnivore",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Smooth-coated_otter",
+        "revisions": "https://en.wikipedia.org/wiki/Smooth-coated_otter?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Smooth-coated_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Smooth-coated_otter"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Smooth-coated_otter",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Smooth-coated_otter",
+        "edit": "https://en.wikipedia.org/wiki/Smooth-coated_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Smooth-coated_otter"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Smooth-coated_otter_%28Lutrogale_perspicillata%29_Kota_Kinabatangan.jpg/330px-Smooth-coated_otter_%28Lutrogale_perspicillata%29_Kota_Kinabatangan.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Smooth-coated_otter",
+    "wikidata_item": null
+  }
+}

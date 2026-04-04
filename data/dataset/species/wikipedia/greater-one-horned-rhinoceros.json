@@ -1,0 +1,40 @@
+{
+  "title": "Greater one-horned rhinoceros",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian rhinoceros, also known as the greater one-horned rhinoceros, great Indian rhinoceros or Indian rhino, is a rhinoceros species native to the Indian subcontinent. It is the second largest living rhinoceros and the largest in Asia, with adult males weighing 2.07\u20132.2 t and adult females 1.6 t. Its thick skin is grey-brown with pinkish skin folds. It has a single horn on its snout that grows up to 57.2\u201361.6 cm (22.5\u201324.3 in) long. Its upper legs and shoulders are covered in wart-like bumps, and it is nearly hairless aside from the eyelashes, ear fringes and tail brush.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Greater_one-horned_rhinoceros",
+  "cleaned_content": "The Indian rhinoceros, also known as the greater one-horned rhinoceros, great Indian rhinoceros or Indian rhino, is a rhinoceros species native to the Indian subcontinent. It is the second largest living rhinoceros and the largest in Asia, with adult males weighing 2.07\u20132.2 t and adult females 1.6 t. Its thick skin is grey-brown with pinkish skin folds. It has a single horn on its snout that grows up to 57.2\u201361.6 cm (22.5\u201324.3 in) long. Its upper legs and shoulders are covered in wart-like bumps, and it is nearly hairless aside from the eyelashes, ear fringes and tail brush.",
+  "chunks": [
+    "The Indian rhinoceros, also known as the greater one-horned rhinoceros, great Indian rhinoceros or Indian rhino, is a rhinoceros species native to the Indian subcontinent. It is the second largest living rhinoceros and the largest in Asia, with adult males weighing 2.07\u20132.2 t and adult females 1.6 t. Its thick skin is grey-brown with pinkish skin folds. It has a single horn on its snout that grows up to 57.2\u201361.6 cm (22.5\u201324.3 in) long. Its upper legs and shoulders are covered in wart-like bumps, and it is nearly hairless aside from the eyelashes, ear fringes and tail brush."
+  ],
+  "extra": {
+    "page_title": "Greater_one-horned_rhinoceros",
+    "canonical_name": "Greater one-horned rhinoceros",
+    "description": "Species of rhinoceros",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_rhinoceros?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_rhinoceros"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_rhinoceros",
+        "edit": "https://en.wikipedia.org/wiki/Indian_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_rhinoceros"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Great-Indian-one-horned-rhinoceros-at-Kaziranga-national-park-in-Assam-India.jpg/330px-Great-Indian-one-horned-rhinoceros-at-Kaziranga-national-park-in-Assam-India.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_rhinoceros",
+    "wikidata_item": null
+  }
+}

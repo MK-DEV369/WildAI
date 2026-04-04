@@ -1,0 +1,40 @@
+{
+  "title": "Barasingha",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The barasingha, sometimes barasinghe, also known as the swamp deer, is a deer species distributed in the Indian subcontinent. Populations in northern and central India are fragmented, and two isolated populations occur in southwestern Nepal. It has been extirpated in Pakistan and Bangladesh, and its presence is uncertain in Bhutan.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Barasingha",
+  "cleaned_content": "The barasingha, sometimes barasinghe, also known as the swamp deer, is a deer species distributed in the Indian subcontinent. Populations in northern and central India are fragmented, and two isolated populations occur in southwestern Nepal. It has been extirpated in Pakistan and Bangladesh, and its presence is uncertain in Bhutan.",
+  "chunks": [
+    "The barasingha, sometimes barasinghe, also known as the swamp deer, is a deer species distributed in the Indian subcontinent. Populations in northern and central India are fragmented, and two isolated populations occur in southwestern Nepal. It has been extirpated in Pakistan and Bangladesh, and its presence is uncertain in Bhutan."
+  ],
+  "extra": {
+    "page_title": "Barasingha",
+    "canonical_name": "Barasingha",
+    "description": "Species of deer",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Barasingha",
+        "revisions": "https://en.wikipedia.org/wiki/Barasingha?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Barasingha?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Barasingha"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Barasingha",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Barasingha",
+        "edit": "https://en.wikipedia.org/wiki/Barasingha?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Barasingha"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/The_Swamp_deer_%28Indian_Barahshinga%29.gif/330px-The_Swamp_deer_%28Indian_Barahshinga%29.gif",
+    "page_url": "https://en.wikipedia.org/wiki/Barasingha",
+    "wikidata_item": null
+  }
+}

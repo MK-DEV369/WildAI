@@ -1,0 +1,42 @@
+{
+  "title": "Indian bustard",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The great Indian bustard or Indian bustard is a bustard occurring on the Indian subcontinent. It is a large bird with a horizontal body, long bare legs and is among the heaviest of the flying birds. Once common on the dry grasslands and shrubland in India, as few as 150 individuals were estimated to survive as of 2018, reduced from an estimated 250 individuals in 2011. It is critically endangered due to hunting and habitat loss. It is protected under the Indian Wild Life (Protection) Act, 1972.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "protected",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_bustard",
+  "cleaned_content": "The great Indian bustard or Indian bustard is a bustard occurring on the Indian subcontinent. It is a large bird with a horizontal body, long bare legs and is among the heaviest of the flying birds. Once common on the dry grasslands and shrubland in India, as few as 150 individuals were estimated to survive as of 2018, reduced from an estimated 250 individuals in 2011. It is critically endangered due to hunting and habitat loss. It is protected under the Indian Wild Life (Protection) Act, 1972.",
+  "chunks": [
+    "The great Indian bustard or Indian bustard is a bustard occurring on the Indian subcontinent. It is a large bird with a horizontal body, long bare legs and is among the heaviest of the flying birds. Once common on the dry grasslands and shrubland in India, as few as 150 individuals were estimated to survive as of 2018, reduced from an estimated 250 individuals in 2011. It is critically endangered due to hunting and habitat loss. It is protected under the Indian Wild Life (Protection) Act, 1972."
+  ],
+  "extra": {
+    "page_title": "Indian_bustard",
+    "canonical_name": "Indian bustard",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Great_Indian_bustard",
+        "revisions": "https://en.wikipedia.org/wiki/Great_Indian_bustard?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Great_Indian_bustard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Great_Indian_bustard"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Great_Indian_bustard",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Great_Indian_bustard",
+        "edit": "https://en.wikipedia.org/wiki/Great_Indian_bustard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Great_Indian_bustard"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Ardeotis_nigriceps%2C_Desert_National_Park%2C_Rajasthan%2C_India_1.jpg/330px-Ardeotis_nigriceps%2C_Desert_National_Park%2C_Rajasthan%2C_India_1.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Great_Indian_bustard",
+    "wikidata_item": null
+  }
+}

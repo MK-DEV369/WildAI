@@ -1,0 +1,40 @@
+{
+  "title": "Honey badger",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The honey badger, also known as the ratel, is a mammal widely distributed across Africa, Southwest Asia, and the Indian subcontinent. It is the sole living representative of the Mellivorinae subfamily of the Mustelidae.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Honey_badger",
+  "cleaned_content": "The honey badger, also known as the ratel, is a mammal widely distributed across Africa, Southwest Asia, and the Indian subcontinent. It is the sole living representative of the Mellivorinae subfamily of the Mustelidae.",
+  "chunks": [
+    "The honey badger, also known as the ratel, is a mammal widely distributed across Africa, Southwest Asia, and the Indian subcontinent. It is the sole living representative of the Mellivorinae subfamily of the Mustelidae."
+  ],
+  "extra": {
+    "page_title": "Honey_badger",
+    "canonical_name": "Honey badger",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Honey_badger",
+        "revisions": "https://en.wikipedia.org/wiki/Honey_badger?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Honey_badger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Honey_badger"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Honey_badger",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Honey_badger",
+        "edit": "https://en.wikipedia.org/wiki/Honey_badger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Honey_badger"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Honey_Badger.jpg/330px-Honey_Badger.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Honey_badger",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Golden langur",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "Gee's golden langur, also known as simply the golden langur, is an Old World monkey found in a small region of Western Assam, India and the neighboring foothills of the Black Mountains of Bhutan. Long considered sacred by many Himalayan people, the golden langur was first brought to the attention of the Western world by the naturalist Edward Pritchard Gee in the 1950s. Adult males have a cream to golden coat with darker flanks while the females and juveniles are lighter. The golden langur has a black face and a long tail up to 100 cm (39 in) in length. It lives in high trees and has a herbivorous diet of fruits, leaves, seeds, buds, and flowers. The average group size is eight individuals, with a ratio of several females to each adult male. It is one of the most endangered primate species of India and Bhutan.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Golden_langur",
+  "cleaned_content": "Gee's golden langur, also known as simply the golden langur, is an Old World monkey found in a small region of Western Assam, India and the neighboring foothills of the Black Mountains of Bhutan. Long considered sacred by many Himalayan people, the golden langur was first brought to the attention of the Western world by the naturalist Edward Pritchard Gee in the 1950s. Adult males have a cream to golden coat with darker flanks while the females and juveniles are lighter. The golden langur has a black face and a long tail up to 100 cm (39 in) in length. It lives in high trees and has a herbivorous diet of fruits, leaves, seeds, buds, and flowers. The average group size is eight individuals, with a ratio of several females to each adult male. It is one of the most endangered primate species of India and Bhutan.",
+  "chunks": [
+    "Gee's golden langur, also known as simply the golden langur, is an Old World monkey found in a small region of Western Assam, India and the neighboring foothills of the Black Mountains of Bhutan. Long considered sacred by many Himalayan people, the golden langur was first brought to the attention of the Western world by the naturalist Edward Pritchard Gee in the 1950s. Adult males have a cream to golden coat with darker flanks while the females and juveniles are lighter. The golden langur has a black face and a long tail up to 100 cm (39 in) in length. It lives in high trees and has a herbivorous diet of fruits, leaves, seeds, buds, and flowers. The average group size is eight individuals, with a ratio of several females to each adult male. It is one of the most endangered primate species of India and Bhutan."
+  ],
+  "extra": {
+    "page_title": "Golden_langur",
+    "canonical_name": "Golden langur",
+    "description": "Species of Old World monkey",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Gee's_golden_langur",
+        "revisions": "https://en.wikipedia.org/wiki/Gee's_golden_langur?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Gee's_golden_langur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Gee's_golden_langur"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Gee's_golden_langur",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Gee's_golden_langur",
+        "edit": "https://en.wikipedia.org/wiki/Gee's_golden_langur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Gee's_golden_langur"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Golden_langur.jpg/330px-Golden_langur.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Gee's_golden_langur",
+    "wikidata_item": null
+  }
+}

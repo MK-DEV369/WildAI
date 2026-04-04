@@ -1,0 +1,40 @@
+{
+  "title": "Cheer pheasant",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The cheer pheasant, also known as Wallich's pheasant or chir pheasant, is a vulnerable species of the pheasant family, Phasianidae. It is the only member in the genus Catreus. The scientific name commemorates Danish botanist Nathaniel Wallich.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Cheer_pheasant",
+  "cleaned_content": "The cheer pheasant, also known as Wallich's pheasant or chir pheasant, is a vulnerable species of the pheasant family, Phasianidae. It is the only member in the genus Catreus. The scientific name commemorates Danish botanist Nathaniel Wallich.",
+  "chunks": [
+    "The cheer pheasant, also known as Wallich's pheasant or chir pheasant, is a vulnerable species of the pheasant family, Phasianidae. It is the only member in the genus Catreus. The scientific name commemorates Danish botanist Nathaniel Wallich."
+  ],
+  "extra": {
+    "page_title": "Cheer_pheasant",
+    "canonical_name": "Cheer pheasant",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Cheer_pheasant",
+        "revisions": "https://en.wikipedia.org/wiki/Cheer_pheasant?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Cheer_pheasant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Cheer_pheasant"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Cheer_pheasant",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Cheer_pheasant",
+        "edit": "https://en.wikipedia.org/wiki/Cheer_pheasant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Cheer_pheasant"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Catreus_wallichii_-Kyoto_Zoo-Japan-8a.jpg/330px-Catreus_wallichii_-Kyoto_Zoo-Japan-8a.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Cheer_pheasant",
+    "wikidata_item": null
+  }
+}

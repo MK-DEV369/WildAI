@@ -1,0 +1,41 @@
+{
+  "title": "Eastern lowland gorilla",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The eastern lowland gorilla or Grauer's gorilla is a Critically Endangered subspecies of eastern gorilla endemic to the mountainous forests of eastern Democratic Republic of the Congo. Important populations of this gorilla live in the Kahuzi-Biega and Maiko National Parks and their adjacent forests, the Tayna Gorilla Reserve, the Usala forest and on the Itombwe Massif.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla",
+  "cleaned_content": "The eastern lowland gorilla or Grauer's gorilla is a Critically Endangered subspecies of eastern gorilla endemic to the mountainous forests of eastern Democratic Republic of the Congo. Important populations of this gorilla live in the Kahuzi-Biega and Maiko National Parks and their adjacent forests, the Tayna Gorilla Reserve, the Usala forest and on the Itombwe Massif.",
+  "chunks": [
+    "The eastern lowland gorilla or Grauer's gorilla is a Critically Endangered subspecies of eastern gorilla endemic to the mountainous forests of eastern Democratic Republic of the Congo. Important populations of this gorilla live in the Kahuzi-Biega and Maiko National Parks and their adjacent forests, the Tayna Gorilla Reserve, the Usala forest and on the Itombwe Massif."
+  ],
+  "extra": {
+    "page_title": "Eastern_lowland_gorilla",
+    "canonical_name": "Eastern lowland gorilla",
+    "description": "Subspecies of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla",
+        "revisions": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eastern_lowland_gorilla"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Eastern_lowland_gorilla",
+        "edit": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eastern_lowland_gorilla"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Eastern_lowland_gorilla.jpg/330px-Eastern_lowland_gorilla.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Eastern_lowland_gorilla",
+    "wikidata_item": null
+  }
+}

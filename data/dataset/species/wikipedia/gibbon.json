@@ -1,0 +1,41 @@
+{
+  "title": "Gibbon",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "Gibbons are apes in the family Hylobatidae. The family historically contained one genus, but now is split into four extant genera and 20 species. Gibbons live in subtropical and tropical forests from eastern Bangladesh and Northeast India to Southeast Asia and Indonesia.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Gibbon",
+  "cleaned_content": "Gibbons are apes in the family Hylobatidae. The family historically contained one genus, but now is split into four extant genera and 20 species. Gibbons live in subtropical and tropical forests from eastern Bangladesh and Northeast India to Southeast Asia and Indonesia.",
+  "chunks": [
+    "Gibbons are apes in the family Hylobatidae. The family historically contained one genus, but now is split into four extant genera and 20 species. Gibbons live in subtropical and tropical forests from eastern Bangladesh and Northeast India to Southeast Asia and Indonesia."
+  ],
+  "extra": {
+    "page_title": "Gibbon",
+    "canonical_name": "Gibbon",
+    "description": "Family of apes",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Gibbon",
+        "revisions": "https://en.wikipedia.org/wiki/Gibbon?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Gibbon?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Gibbon"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Gibbon",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Gibbon",
+        "edit": "https://en.wikipedia.org/wiki/Gibbon?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Gibbon"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Hylobates_lar_-_Kaeng_Krachan_WB.jpg/330px-Hylobates_lar_-_Kaeng_Krachan_WB.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Gibbon",
+    "wikidata_item": null
+  }
+}

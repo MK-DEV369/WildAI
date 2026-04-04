@@ -1,0 +1,40 @@
+{
+  "title": "Clouded leopard",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The clouded leopard, also called mainland clouded leopard, is a wild cat that has large dusky-grey blotches and irregular spots and stripes reminiscent of clouds. Its head-and-body length ranges from 68.6 to 108 cm with a 61 to 91 cm long tail, which it uses for balancing when moving in trees.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Clouded_leopard",
+  "cleaned_content": "The clouded leopard, also called mainland clouded leopard, is a wild cat that has large dusky-grey blotches and irregular spots and stripes reminiscent of clouds. Its head-and-body length ranges from 68.6 to 108 cm with a 61 to 91 cm long tail, which it uses for balancing when moving in trees.",
+  "chunks": [
+    "The clouded leopard, also called mainland clouded leopard, is a wild cat that has large dusky-grey blotches and irregular spots and stripes reminiscent of clouds. Its head-and-body length ranges from 68.6 to 108 cm with a 61 to 91 cm long tail, which it uses for balancing when moving in trees."
+  ],
+  "extra": {
+    "page_title": "Clouded_leopard",
+    "canonical_name": "Clouded leopard",
+    "description": "Species of wild cat",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Clouded_leopard",
+        "revisions": "https://en.wikipedia.org/wiki/Clouded_leopard?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Clouded_leopard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Clouded_leopard"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Clouded_leopard",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Clouded_leopard",
+        "edit": "https://en.wikipedia.org/wiki/Clouded_leopard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Clouded_leopard"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Neofelis_nebulosa%2C_Clouded_leopard.jpg/330px-Neofelis_nebulosa%2C_Clouded_leopard.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Clouded_leopard",
+    "wikidata_item": null
+  }
+}

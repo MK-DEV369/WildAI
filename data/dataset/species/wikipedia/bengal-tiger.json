@@ -1,0 +1,41 @@
+{
+  "title": "Bengal tiger",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Bengal tiger is a population of the Panthera tigris tigris subspecies. It ranks among the largest of wild cats. It is distributed from India, southern Nepal, Bangladesh, Bhutan to Southwestern China. Its historical range extended to the Indus Basin until the early 19th century, and it is thought to have been present in the Indian subcontinent since the Late Pleistocene about 12,000 to 16,500 years ago. It is threatened by poaching, habitat loss and habitat fragmentation.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bengal_tiger",
+  "cleaned_content": "The Bengal tiger is a population of the Panthera tigris tigris subspecies. It ranks among the largest of wild cats. It is distributed from India, southern Nepal, Bangladesh, Bhutan to Southwestern China. Its historical range extended to the Indus Basin until the early 19th century, and it is thought to have been present in the Indian subcontinent since the Late Pleistocene about 12,000 to 16,500 years ago. It is threatened by poaching, habitat loss and habitat fragmentation.",
+  "chunks": [
+    "The Bengal tiger is a population of the Panthera tigris tigris subspecies. It ranks among the largest of wild cats. It is distributed from India, southern Nepal, Bangladesh, Bhutan to Southwestern China. Its historical range extended to the Indus Basin until the early 19th century, and it is thought to have been present in the Indian subcontinent since the Late Pleistocene about 12,000 to 16,500 years ago. It is threatened by poaching, habitat loss and habitat fragmentation."
+  ],
+  "extra": {
+    "page_title": "Bengal_tiger",
+    "canonical_name": "Bengal tiger",
+    "description": "Tiger population on the Indian subcontinent",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_tiger",
+        "revisions": "https://en.wikipedia.org/wiki/Bengal_tiger?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_tiger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_tiger"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_tiger",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bengal_tiger",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_tiger?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_tiger"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Bengal_tiger_in_Sanjay_Dubri_Tiger_Reserve_December_2024_by_Tisha_Mukherjee_11.jpg/330px-Bengal_tiger_in_Sanjay_Dubri_Tiger_Reserve_December_2024_by_Tisha_Mukherjee_11.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Bengal_tiger",
+    "wikidata_item": null
+  }
+}

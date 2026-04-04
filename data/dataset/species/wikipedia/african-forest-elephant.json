@@ -1,0 +1,41 @@
+{
+  "title": "African forest elephant",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The African forest elephant is an elephant species native to humid tropical forests in West Africa and the Congo Basin. It was first described in 1900. With an average shoulder height of 2.16 m, it is the smallest of the three living elephants. Both sexes have straight, down-pointing tusks, which begin to grow at the age of 1\u20133 years.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/African_forest_elephant",
+  "cleaned_content": "The African forest elephant is an elephant species native to humid tropical forests in West Africa and the Congo Basin. It was first described in 1900. With an average shoulder height of 2.16 m, it is the smallest of the three living elephants. Both sexes have straight, down-pointing tusks, which begin to grow at the age of 1\u20133 years.",
+  "chunks": [
+    "The African forest elephant is an elephant species native to humid tropical forests in West Africa and the Congo Basin. It was first described in 1900. With an average shoulder height of 2.16 m, it is the smallest of the three living elephants. Both sexes have straight, down-pointing tusks, which begin to grow at the age of 1\u20133 years."
+  ],
+  "extra": {
+    "page_title": "African_forest_elephant",
+    "canonical_name": "African forest elephant",
+    "description": "African elephant species",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/African_forest_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/African_forest_elephant?action=history",
+        "edit": "https://en.wikipedia.org/wiki/African_forest_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:African_forest_elephant"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/African_forest_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/African_forest_elephant",
+        "edit": "https://en.wikipedia.org/wiki/African_forest_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:African_forest_elephant"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Loxodontacyclotis.jpg/330px-Loxodontacyclotis.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/African_forest_elephant",
+    "wikidata_item": null
+  }
+}

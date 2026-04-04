@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wildai-nlp-genai"
+version = "0.1.0"
+description = "Phase 1 data pipeline for multimodal wildlife, policy, and legal datasets"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pyright]
+extraPaths = ["src"]

@@ -1,0 +1,40 @@
+{
+  "title": "Bonobo",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The bonobo, also historically called the pygmy chimpanzee, is an endangered great ape and one of the two species making up the genus Pan. While bonobos are today recognized as a distinct species, they were initially thought to be a subspecies of Pan troglodytes, because of the physical similarities between the two species. Taxonomically, members of the chimpanzee/bonobo subtribe Panina\u2014composed entirely by the genus Pan\u2014are collectively termed panins.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bonobo",
+  "cleaned_content": "The bonobo, also historically called the pygmy chimpanzee, is an endangered great ape and one of the two species making up the genus Pan. While bonobos are today recognized as a distinct species, they were initially thought to be a subspecies of Pan troglodytes, because of the physical similarities between the two species. Taxonomically, members of the chimpanzee/bonobo subtribe Panina\u2014composed entirely by the genus Pan\u2014are collectively termed panins.",
+  "chunks": [
+    "The bonobo, also historically called the pygmy chimpanzee, is an endangered great ape and one of the two species making up the genus Pan. While bonobos are today recognized as a distinct species, they were initially thought to be a subspecies of Pan troglodytes, because of the physical similarities between the two species. Taxonomically, members of the chimpanzee/bonobo subtribe Panina\u2014composed entirely by the genus Pan\u2014are collectively termed panins."
+  ],
+  "extra": {
+    "page_title": "Bonobo",
+    "canonical_name": "Bonobo",
+    "description": "Species of great ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bonobo",
+        "revisions": "https://en.wikipedia.org/wiki/Bonobo?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bonobo?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bonobo"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bonobo",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bonobo",
+        "edit": "https://en.wikipedia.org/wiki/Bonobo?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bonobo"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Apeldoorn_Apenheul_zoo_Bonobo.jpg/330px-Apeldoorn_Apenheul_zoo_Bonobo.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Bonobo",
+    "wikidata_item": null
+  }
+}

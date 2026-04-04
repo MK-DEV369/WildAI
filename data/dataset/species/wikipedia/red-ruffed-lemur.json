@@ -1,0 +1,41 @@
+{
+  "title": "Red-ruffed lemur",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The red ruffed lemur is one of two species in the genus Varecia, the ruffed lemurs; the other is the black-and-white ruffed lemur. Like all lemurs, it is native to Madagascar. It occurs only in the rainforests of Masoala, in the northeast of the island. It is one of the largest primates of Madagascar with a body length of 53 cm, a tail length of 60 cm and a weight of 3.3\u20133.6 kg. Its soft, thick fur is red and black in color and sports a buff or cream colored spot at the nape, but a few are known to have a white or pink patch on the back of the limbs or digits and a ring on the base of the tail in a similar color.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Red-ruffed_lemur",
+  "cleaned_content": "The red ruffed lemur is one of two species in the genus Varecia, the ruffed lemurs; the other is the black-and-white ruffed lemur. Like all lemurs, it is native to Madagascar. It occurs only in the rainforests of Masoala, in the northeast of the island. It is one of the largest primates of Madagascar with a body length of 53 cm, a tail length of 60 cm and a weight of 3.3\u20133.6 kg. Its soft, thick fur is red and black in color and sports a buff or cream colored spot at the nape, but a few are known to have a white or pink patch on the back of the limbs or digits and a ring on the base of the tail in a similar color.",
+  "chunks": [
+    "The red ruffed lemur is one of two species in the genus Varecia, the ruffed lemurs; the other is the black-and-white ruffed lemur. Like all lemurs, it is native to Madagascar. It occurs only in the rainforests of Masoala, in the northeast of the island. It is one of the largest primates of Madagascar with a body length of 53 cm, a tail length of 60 cm and a weight of 3.3\u20133.6 kg. Its soft, thick fur is red and black in color and sports a buff or cream colored spot at the nape, but a few are known to have a white or pink patch on the back of the limbs or digits and a ring on the base of the tail in a similar color."
+  ],
+  "extra": {
+    "page_title": "Red-ruffed_lemur",
+    "canonical_name": "Red-ruffed lemur",
+    "description": "Species of mammal native to Madagascar",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Red_ruffed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Red_ruffed_lemur?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Red_ruffed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Red_ruffed_lemur"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Red_ruffed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Red_ruffed_lemur",
+        "edit": "https://en.wikipedia.org/wiki/Red_ruffed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Red_ruffed_lemur"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Red_ruffed_lemur_%28Varecia_rubra%29.jpg/330px-Red_ruffed_lemur_%28Varecia_rubra%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Red_ruffed_lemur",
+    "wikidata_item": null
+  }
+}

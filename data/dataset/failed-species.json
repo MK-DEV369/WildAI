@@ -1,0 +1,30 @@
+[
+  {
+    "species": "Primate gibbon",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Primate_gibbon"
+  },
+  {
+    "species": "Clouded leopard cat",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Clouded_leopard_cat"
+  },
+  {
+    "species": "Bengal vulture",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Bengal_vulture"
+  },
+  {
+    "species": "Manipur brow antlered deer",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Manipur_brow_antlered_deer"
+  },
+  {
+    "species": "Asian wild boar",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Asian_wild_boar"
+  },
+  {
+    "species": "Oriental civet",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Oriental_civet"
+  },
+  {
+    "species": "Ratufa dwarf squirrel",
+    "error": "404 Client Error: Not Found for url: https://en.wikipedia.org/api/rest_v1/page/summary/Ratufa_dwarf_squirrel"
+  }
+]

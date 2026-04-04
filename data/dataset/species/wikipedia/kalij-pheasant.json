@@ -1,0 +1,41 @@
+{
+  "title": "Kalij pheasant",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The kalij pheasant, or simply kalij, is a pheasant found in forests and thickets, especially in the Himalayan foothills, from Nepal, Pakistan to western Thailand. Males are rather variable depending on the subspecies involved, but all have at least partially glossy bluish-black plumage, while females are overall brownish. Both sexes have a bare red face and greyish legs. It is generally widespread, though three of its eastern subspecies are considered threatened and L. l. moffitti is virtually unknown in the wild.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Kalij_pheasant",
+  "cleaned_content": "The kalij pheasant, or simply kalij, is a pheasant found in forests and thickets, especially in the Himalayan foothills, from Nepal, Pakistan to western Thailand. Males are rather variable depending on the subspecies involved, but all have at least partially glossy bluish-black plumage, while females are overall brownish. Both sexes have a bare red face and greyish legs. It is generally widespread, though three of its eastern subspecies are considered threatened and L. l. moffitti is virtually unknown in the wild.",
+  "chunks": [
+    "The kalij pheasant, or simply kalij, is a pheasant found in forests and thickets, especially in the Himalayan foothills, from Nepal, Pakistan to western Thailand. Males are rather variable depending on the subspecies involved, but all have at least partially glossy bluish-black plumage, while females are overall brownish. Both sexes have a bare red face and greyish legs. It is generally widespread, though three of its eastern subspecies are considered threatened and L. l. moffitti is virtually unknown in the wild."
+  ],
+  "extra": {
+    "page_title": "Kalij_pheasant",
+    "canonical_name": "Kalij pheasant",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Kalij_pheasant",
+        "revisions": "https://en.wikipedia.org/wiki/Kalij_pheasant?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Kalij_pheasant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Kalij_pheasant"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Kalij_pheasant",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Kalij_pheasant",
+        "edit": "https://en.wikipedia.org/wiki/Kalij_pheasant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Kalij_pheasant"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Kalij_pheasant_Prasanna_Mamidala.jpg/330px-Kalij_pheasant_Prasanna_Mamidala.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Kalij_pheasant",
+    "wikidata_item": null
+  }
+}

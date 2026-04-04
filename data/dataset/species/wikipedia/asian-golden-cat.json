@@ -1,0 +1,42 @@
+{
+  "title": "Asian golden cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Asian golden cat is a medium-sized wild cat native to the northeastern Indian subcontinent, Southeast Asia and China. It has been listed as Vulnerable on the IUCN Red List since 2025, and is threatened by poaching and habitat destruction, since Southeast Asian forests are undergoing the world's fastest regional deforestation.",
+  "tags": [
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Asian_golden_cat",
+  "cleaned_content": "The Asian golden cat is a medium-sized wild cat native to the northeastern Indian subcontinent, Southeast Asia and China. It has been listed as Vulnerable on the IUCN Red List since 2025, and is threatened by poaching and habitat destruction, since Southeast Asian forests are undergoing the world's fastest regional deforestation.",
+  "chunks": [
+    "The Asian golden cat is a medium-sized wild cat native to the northeastern Indian subcontinent, Southeast Asia and China. It has been listed as Vulnerable on the IUCN Red List since 2025, and is threatened by poaching and habitat destruction, since Southeast Asian forests are undergoing the world's fastest regional deforestation."
+  ],
+  "extra": {
+    "page_title": "Asian_golden_cat",
+    "canonical_name": "Asian golden cat",
+    "description": "Species of wild cat",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Asian_golden_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Asian_golden_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Asian_golden_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asian_golden_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Asian_golden_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Asian_golden_cat",
+        "edit": "https://en.wikipedia.org/wiki/Asian_golden_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asian_golden_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Asian_Golden_cat.jpg/330px-Asian_Golden_cat.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Asian_golden_cat",
+    "wikidata_item": null
+  }
+}

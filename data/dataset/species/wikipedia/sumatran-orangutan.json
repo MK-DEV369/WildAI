@@ -1,0 +1,41 @@
+{
+  "title": "Sumatran orangutan",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Sumatran orangutan is one of the three species of orangutans. Critically endangered, and found only in the north of the Indonesian island of Sumatra, it is rarer than the Bornean orangutan but more common than the recently identified Tapanuli orangutan, also found in Sumatra. Its common name is based on two separate local words, orang 'people; person' and hutan 'forest', derived from Malay, and translates as 'person of the forest'.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Sumatran_orangutan",
+  "cleaned_content": "The Sumatran orangutan is one of the three species of orangutans. Critically endangered, and found only in the north of the Indonesian island of Sumatra, it is rarer than the Bornean orangutan but more common than the recently identified Tapanuli orangutan, also found in Sumatra. Its common name is based on two separate local words, orang 'people; person' and hutan 'forest', derived from Malay, and translates as 'person of the forest'.",
+  "chunks": [
+    "The Sumatran orangutan is one of the three species of orangutans. Critically endangered, and found only in the north of the Indonesian island of Sumatra, it is rarer than the Bornean orangutan but more common than the recently identified Tapanuli orangutan, also found in Sumatra. Its common name is based on two separate local words, orang 'people; person' and hutan 'forest', derived from Malay, and translates as 'person of the forest'."
+  ],
+  "extra": {
+    "page_title": "Sumatran_orangutan",
+    "canonical_name": "Sumatran orangutan",
+    "description": "Species of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Sumatran_orangutan?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_orangutan"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sumatran_orangutan",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_orangutan"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Sumatra-Orang-Utan_im_Pongoland.jpg/330px-Sumatra-Orang-Utan_im_Pongoland.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Sumatran_orangutan",
+    "wikidata_item": null
+  }
+}

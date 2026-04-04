@@ -1,0 +1,41 @@
+{
+  "title": "Black eagle",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The black eagle is a bird of prey. Like all eagles, it is in the family Accipitridae, and it is the only member of the genus Ictinaetus. It soars over forests in the hilly regions of tropical and subtropical South and Southeast Asia, as well as southeastern China, hunting mammals and birds, particularly at their nests. It is easily identified by its widely splayed and long primary \"fingers\", the characteristic silhouette, slow flight and yellow ceres and legs that contrast with the dark feathers.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Black_eagle",
+  "cleaned_content": "The black eagle is a bird of prey. Like all eagles, it is in the family Accipitridae, and it is the only member of the genus Ictinaetus. It soars over forests in the hilly regions of tropical and subtropical South and Southeast Asia, as well as southeastern China, hunting mammals and birds, particularly at their nests. It is easily identified by its widely splayed and long primary \"fingers\", the characteristic silhouette, slow flight and yellow ceres and legs that contrast with the dark feathers.",
+  "chunks": [
+    "The black eagle is a bird of prey. Like all eagles, it is in the family Accipitridae, and it is the only member of the genus Ictinaetus. It soars over forests in the hilly regions of tropical and subtropical South and Southeast Asia, as well as southeastern China, hunting mammals and birds, particularly at their nests. It is easily identified by its widely splayed and long primary \"fingers\", the characteristic silhouette, slow flight and yellow ceres and legs that contrast with the dark feathers."
+  ],
+  "extra": {
+    "page_title": "Black_eagle",
+    "canonical_name": "Black eagle",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Black_eagle",
+        "revisions": "https://en.wikipedia.org/wiki/Black_eagle?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Black_eagle?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_eagle"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Black_eagle",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Black_eagle",
+        "edit": "https://en.wikipedia.org/wiki/Black_eagle?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_eagle"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Black_eagle.jpg/330px-Black_eagle.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Black_eagle",
+    "wikidata_item": null
+  }
+}

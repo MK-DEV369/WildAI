@@ -1,0 +1,41 @@
+{
+  "title": "Monito del monte",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The monito del monte, or colocolo opossum, is a diminutive species of marsupial native only to south-western South America. It is the only extant species in the ancient order Microbiotheria, and the sole New World representative of the superorder Australidelphia, being more closely related to Australian marsupials than to other American marsupials. The species is nocturnal and arboreal, and lives in thickets of South American mountain bamboo in the Valdivian temperate forests of the southern Andes, aided by its partially prehensile tail. It consumes an omnivorous diet based on insects and fruit.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Monito_del_monte",
+  "cleaned_content": "The monito del monte, or colocolo opossum, is a diminutive species of marsupial native only to south-western South America. It is the only extant species in the ancient order Microbiotheria, and the sole New World representative of the superorder Australidelphia, being more closely related to Australian marsupials than to other American marsupials. The species is nocturnal and arboreal, and lives in thickets of South American mountain bamboo in the Valdivian temperate forests of the southern Andes, aided by its partially prehensile tail. It consumes an omnivorous diet based on insects and fruit.",
+  "chunks": [
+    "The monito del monte, or colocolo opossum, is a diminutive species of marsupial native only to south-western South America. It is the only extant species in the ancient order Microbiotheria, and the sole New World representative of the superorder Australidelphia, being more closely related to Australian marsupials than to other American marsupials. The species is nocturnal and arboreal, and lives in thickets of South American mountain bamboo in the Valdivian temperate forests of the southern Andes, aided by its partially prehensile tail. It consumes an omnivorous diet based on insects and fruit."
+  ],
+  "extra": {
+    "page_title": "Monito_del_monte",
+    "canonical_name": "Monito del monte",
+    "description": "Species of marsupial",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Monito_del_monte",
+        "revisions": "https://en.wikipedia.org/wiki/Monito_del_monte?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Monito_del_monte?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Monito_del_monte"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Monito_del_monte",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Monito_del_monte",
+        "edit": "https://en.wikipedia.org/wiki/Monito_del_monte?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Monito_del_monte"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Monito_del_Monte_ps6.jpg/330px-Monito_del_Monte_ps6.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Monito_del_monte",
+    "wikidata_item": null
+  }
+}

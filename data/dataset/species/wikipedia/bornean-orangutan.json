@@ -1,0 +1,40 @@
+{
+  "title": "Bornean orangutan",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Bornean orangutan is an orangutan species endemic to the island of Borneo. It belongs to the only genus of great apes native to Asia and is the largest of the three Pongo species. It has a coarse, reddish coat and up to 1.5 m long arms. It is sexually dimorphic \u2014 males are larger than females and develop large cheek pads (flanges), for example.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bornean_orangutan",
+  "cleaned_content": "The Bornean orangutan is an orangutan species endemic to the island of Borneo. It belongs to the only genus of great apes native to Asia and is the largest of the three Pongo species. It has a coarse, reddish coat and up to 1.5 m long arms. It is sexually dimorphic \u2014 males are larger than females and develop large cheek pads (flanges), for example.",
+  "chunks": [
+    "The Bornean orangutan is an orangutan species endemic to the island of Borneo. It belongs to the only genus of great apes native to Asia and is the largest of the three Pongo species. It has a coarse, reddish coat and up to 1.5 m long arms. It is sexually dimorphic \u2014 males are larger than females and develop large cheek pads (flanges), for example."
+  ],
+  "extra": {
+    "page_title": "Bornean_orangutan",
+    "canonical_name": "Bornean orangutan",
+    "description": "Species of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bornean_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Bornean_orangutan?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bornean_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bornean_orangutan"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bornean_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bornean_orangutan",
+        "edit": "https://en.wikipedia.org/wiki/Bornean_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bornean_orangutan"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Tanjung_Puting30477.jpg/330px-Tanjung_Puting30477.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Bornean_orangutan",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Indian pangolin",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian pangolin, also called thick-tailed pangolin and scaly anteater, is a pangolin native to the Indian subcontinent. Like other pangolins, it has large, overlapping scales on its body which act as armour. The colour of its scales varies depending on the colour of the earth in its surroundings. It can also curl itself into a ball as self-defence against predators such as the tiger. It is an insectivore feeding on ants and termites, digging them out of mounds and logs using its long claws, which are as long as its fore limbs. It is nocturnal and rests in deep burrows during the day.",
+  "tags": [
+    "endangered",
+    "law",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_pangolin",
+  "cleaned_content": "The Indian pangolin, also called thick-tailed pangolin and scaly anteater, is a pangolin native to the Indian subcontinent. Like other pangolins, it has large, overlapping scales on its body which act as armour. The colour of its scales varies depending on the colour of the earth in its surroundings. It can also curl itself into a ball as self-defence against predators such as the tiger. It is an insectivore feeding on ants and termites, digging them out of mounds and logs using its long claws, which are as long as its fore limbs. It is nocturnal and rests in deep burrows during the day.",
+  "chunks": [
+    "The Indian pangolin, also called thick-tailed pangolin and scaly anteater, is a pangolin native to the Indian subcontinent. Like other pangolins, it has large, overlapping scales on its body which act as armour. The colour of its scales varies depending on the colour of the earth in its surroundings. It can also curl itself into a ball as self-defence against predators such as the tiger. It is an insectivore feeding on ants and termites, digging them out of mounds and logs using its long claws, which are as long as its fore limbs. It is nocturnal and rests in deep burrows during the day."
+  ],
+  "extra": {
+    "page_title": "Indian_pangolin",
+    "canonical_name": "Indian pangolin",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_pangolin",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_pangolin?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_pangolin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_pangolin"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_pangolin",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_pangolin",
+        "edit": "https://en.wikipedia.org/wiki/Indian_pangolin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_pangolin"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Scaly_ant_eater_by_Dushy_Ranetunge_2.jpg/330px-Scaly_ant_eater_by_Dushy_Ranetunge_2.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_pangolin",
+    "wikidata_item": null
+  }
+}

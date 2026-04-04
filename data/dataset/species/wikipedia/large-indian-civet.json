@@ -1,0 +1,40 @@
+{
+  "title": "Large Indian civet",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The large Indian civet is a viverrid native to South and Southeast Asia. It is listed as least concern on the IUCN Red List. The global population is thought to be decreasing due to hunting and trapping driven by the demand for bushmeat.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Large_Indian_civet",
+  "cleaned_content": "The large Indian civet is a viverrid native to South and Southeast Asia. It is listed as least concern on the IUCN Red List. The global population is thought to be decreasing due to hunting and trapping driven by the demand for bushmeat.",
+  "chunks": [
+    "The large Indian civet is a viverrid native to South and Southeast Asia. It is listed as least concern on the IUCN Red List. The global population is thought to be decreasing due to hunting and trapping driven by the demand for bushmeat."
+  ],
+  "extra": {
+    "page_title": "Large_Indian_civet",
+    "canonical_name": "Large Indian civet",
+    "description": "Species of carnivore",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Large_Indian_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Large_Indian_civet?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Large_Indian_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Large_Indian_civet"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Large_Indian_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Large_Indian_civet",
+        "edit": "https://en.wikipedia.org/wiki/Large_Indian_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Large_Indian_civet"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Large_Indian_Civet%2C_Viverra_zibetha_in_Kaeng_Krachan_national_park.jpg/330px-Large_Indian_Civet%2C_Viverra_zibetha_in_Kaeng_Krachan_national_park.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Large_Indian_civet",
+    "wikidata_item": null
+  }
+}

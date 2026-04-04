@@ -1,0 +1,42 @@
+{
+  "title": "Green peafowl",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The green peafowl is a peafowl species native to the tropical forests of Southeast Asia and Southern China. It is the national bird of Myanmar. Formerly common throughout Southeast Asia, only a few isolated populations survive in Cambodia and adjacent areas of Vietnam. It has been listed as endangered on the IUCN Red List since 2009. This is primarily due to widespread deforestation, agriculture and loss of suitable habitat, severely fragmenting populations and contributing to an overall decline in numbers. The green peafowl is in demand for private and home aviculture and threatened by the pet trade, feather collectors and hunters for meat and targeted.",
+  "tags": [
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Green_peafowl",
+  "cleaned_content": "The green peafowl is a peafowl species native to the tropical forests of Southeast Asia and Southern China. It is the national bird of Myanmar. Formerly common throughout Southeast Asia, only a few isolated populations survive in Cambodia and adjacent areas of Vietnam. It has been listed as endangered on the IUCN Red List since 2009. This is primarily due to widespread deforestation, agriculture and loss of suitable habitat, severely fragmenting populations and contributing to an overall decline in numbers. The green peafowl is in demand for private and home aviculture and threatened by the pet trade, feather collectors and hunters for meat and targeted.",
+  "chunks": [
+    "The green peafowl is a peafowl species native to the tropical forests of Southeast Asia and Southern China. It is the national bird of Myanmar. Formerly common throughout Southeast Asia, only a few isolated populations survive in Cambodia and adjacent areas of Vietnam. It has been listed as endangered on the IUCN Red List since 2009. This is primarily due to widespread deforestation, agriculture and loss of suitable habitat, severely fragmenting populations and contributing to an overall decline in numbers. The green peafowl is in demand for private and home aviculture and threatened by the pet trade, feather collectors and hunters for meat and targeted."
+  ],
+  "extra": {
+    "page_title": "Green_peafowl",
+    "canonical_name": "Green peafowl",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Green_peafowl",
+        "revisions": "https://en.wikipedia.org/wiki/Green_peafowl?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Green_peafowl?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Green_peafowl"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Green_peafowl",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Green_peafowl",
+        "edit": "https://en.wikipedia.org/wiki/Green_peafowl?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Green_peafowl"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Javan_Green_Peafowl_in_Baluran_National_Park.jpg/330px-Javan_Green_Peafowl_in_Baluran_National_Park.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Green_peafowl",
+    "wikidata_item": null
+  }
+}

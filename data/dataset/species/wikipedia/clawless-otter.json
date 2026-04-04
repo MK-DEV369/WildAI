@@ -1,0 +1,42 @@
+{
+  "title": "Clawless otter",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The African clawless otter, also known as the Cape clawless otter or groot otter, is the second-largest freshwater otter species. It inhabits permanent water bodies in savannah and lowland forest areas through most of sub-Saharan Africa. It is characterised by partly webbed and clawless feet, from which their name is derived. The word 'aonyx' means clawless, derived from the prefix a- (\"without\") and onyx (\"claw/hoof\").",
+  "tags": [
+    "endangered",
+    "forest",
+    "law",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Clawless_otter",
+  "cleaned_content": "The African clawless otter, also known as the Cape clawless otter or groot otter, is the second-largest freshwater otter species. It inhabits permanent water bodies in savannah and lowland forest areas through most of sub-Saharan Africa. It is characterised by partly webbed and clawless feet, from which their name is derived. The word 'aonyx' means clawless, derived from the prefix a- (\"without\") and onyx (\"claw/hoof\").",
+  "chunks": [
+    "The African clawless otter, also known as the Cape clawless otter or groot otter, is the second-largest freshwater otter species. It inhabits permanent water bodies in savannah and lowland forest areas through most of sub-Saharan Africa. It is characterised by partly webbed and clawless feet, from which their name is derived. The word 'aonyx' means clawless, derived from the prefix a- (\"without\") and onyx (\"claw/hoof\")."
+  ],
+  "extra": {
+    "page_title": "Clawless_otter",
+    "canonical_name": "Clawless otter",
+    "description": "Species of carnivore",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/African_clawless_otter",
+        "revisions": "https://en.wikipedia.org/wiki/African_clawless_otter?action=history",
+        "edit": "https://en.wikipedia.org/wiki/African_clawless_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:African_clawless_otter"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/African_clawless_otter",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/African_clawless_otter",
+        "edit": "https://en.wikipedia.org/wiki/African_clawless_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:African_clawless_otter"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Aonyx_capensis%2C_male%2C_Shamvura.jpg/330px-Aonyx_capensis%2C_male%2C_Shamvura.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/African_clawless_otter",
+    "wikidata_item": null
+  }
+}

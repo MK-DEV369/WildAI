@@ -1,0 +1,40 @@
+{
+  "title": "Eastern chimpanzee",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The eastern chimpanzee is a subspecies of the common chimpanzee. It is native to the Central African Republic, South Sudan, the Democratic Republic of the Congo, Uganda, Rwanda, Burundi, and Tanzania.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Eastern_chimpanzee",
+  "cleaned_content": "The eastern chimpanzee is a subspecies of the common chimpanzee. It is native to the Central African Republic, South Sudan, the Democratic Republic of the Congo, Uganda, Rwanda, Burundi, and Tanzania.",
+  "chunks": [
+    "The eastern chimpanzee is a subspecies of the common chimpanzee. It is native to the Central African Republic, South Sudan, the Democratic Republic of the Congo, Uganda, Rwanda, Burundi, and Tanzania."
+  ],
+  "extra": {
+    "page_title": "Eastern_chimpanzee",
+    "canonical_name": "Eastern chimpanzee",
+    "description": "Subspecies of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Eastern_chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Eastern_chimpanzee?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Eastern_chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eastern_chimpanzee"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Eastern_chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Eastern_chimpanzee",
+        "edit": "https://en.wikipedia.org/wiki/Eastern_chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eastern_chimpanzee"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Gombe_Stream_NP_Mutter_und_Kind.jpg/330px-Gombe_Stream_NP_Mutter_und_Kind.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Eastern_chimpanzee",
+    "wikidata_item": null
+  }
+}

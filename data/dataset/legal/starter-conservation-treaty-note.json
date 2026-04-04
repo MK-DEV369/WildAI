@@ -1,0 +1,14 @@
+{
+  "title": "Conservation Treaty Note",
+  "year": 1992,
+  "category": "legal",
+  "source": "Starter",
+  "type": "text",
+  "url": "https://example.org/conservation-treaty-note",
+  "content": "International biodiversity treaties define cooperation for habitat protection, species monitoring, and shared conservation reporting. Legal references also include penalties, compliance, and reporting obligations.",
+  "cleaned_content": "International biodiversity treaties define cooperation for habitat protection, species monitoring, and shared conservation reporting. Legal references also include penalties, compliance, and reporting obligations.",
+  "chunks": [
+    "International biodiversity treaties define cooperation for habitat protection, species monitoring, and shared conservation reporting. Legal references also include penalties, compliance, and reporting obligations."
+  ],
+  "tags": ["treaty", "law", "policy"]
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Chimpanzee",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The chimpanzee, also simply known as the chimp, is an endangered species of great ape native to the forests and savannahs of tropical Africa. It has four confirmed subspecies and a fifth proposed one. When its close relative, the bonobo, was more commonly known as the pygmy chimpanzee, this species was often called the common chimpanzee or the robust chimpanzee. The chimpanzee and the bonobo are the only species in the genus Pan.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Chimpanzee",
+  "cleaned_content": "The chimpanzee, also simply known as the chimp, is an endangered species of great ape native to the forests and savannahs of tropical Africa. It has four confirmed subspecies and a fifth proposed one. When its close relative, the bonobo, was more commonly known as the pygmy chimpanzee, this species was often called the common chimpanzee or the robust chimpanzee. The chimpanzee and the bonobo are the only species in the genus Pan.",
+  "chunks": [
+    "The chimpanzee, also simply known as the chimp, is an endangered species of great ape native to the forests and savannahs of tropical Africa. It has four confirmed subspecies and a fifth proposed one. When its close relative, the bonobo, was more commonly known as the pygmy chimpanzee, this species was often called the common chimpanzee or the robust chimpanzee. The chimpanzee and the bonobo are the only species in the genus Pan."
+  ],
+  "extra": {
+    "page_title": "Chimpanzee",
+    "canonical_name": "Chimpanzee",
+    "description": "Species of great ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Chimpanzee?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Chimpanzee"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Chimpanzee",
+        "edit": "https://en.wikipedia.org/wiki/Chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Chimpanzee"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/015_Chimpanzee_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg/330px-015_Chimpanzee_at_Kibale_forest_National_Park_Photo_by_Giles_Laurent.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Chimpanzee",
+    "wikidata_item": null
+  }
+}

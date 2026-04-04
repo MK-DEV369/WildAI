@@ -1,0 +1,14 @@
+{
+  "title": "Forest Reserve Overview",
+  "year": 2023,
+  "category": "ecosystems",
+  "source": "Starter",
+  "type": "text",
+  "url": "https://example.org/forest-reserve-overview",
+  "content": "Forest reserves preserve habitat connectivity, support carbon storage, and reduce fragmentation for mammals, birds, and reptiles. Ecosystem documents often describe vegetation, climate, and land use pressure.",
+  "cleaned_content": "Forest reserves preserve habitat connectivity, support carbon storage, and reduce fragmentation for mammals, birds, and reptiles. Ecosystem documents often describe vegetation, climate, and land use pressure.",
+  "chunks": [
+    "Forest reserves preserve habitat connectivity, support carbon storage, and reduce fragmentation for mammals, birds, and reptiles. Ecosystem documents often describe vegetation, climate, and land use pressure."
+  ],
+  "tags": ["forest", "habitat", "ecosystem"]
+}

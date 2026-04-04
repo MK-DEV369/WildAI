@@ -1,0 +1,40 @@
+{
+  "title": "Javan rhinoceros",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Javan rhinoceros, also called Javan rhino, Sunda rhinoceros and lesser one-horned rhinoceros is a critically endangered member of the genus Rhinoceros, of the rhinoceros family Rhinocerotidae, and one of the five remaining extant rhinoceros species. It has a plate-like skin with protective folds and is one of the smallest rhinoceros species with a body length of 3.1\u20133.2 m (10.2\u201310.5 ft) and a 1.4\u20131.7 m (4.6\u20135.6 ft) long tail. The heaviest specimens weigh around 2,300 kg (5,100 lb). Its horn is usually shorter than 25 cm (9.8 in).",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Javan_rhinoceros",
+  "cleaned_content": "The Javan rhinoceros, also called Javan rhino, Sunda rhinoceros and lesser one-horned rhinoceros is a critically endangered member of the genus Rhinoceros, of the rhinoceros family Rhinocerotidae, and one of the five remaining extant rhinoceros species. It has a plate-like skin with protective folds and is one of the smallest rhinoceros species with a body length of 3.1\u20133.2 m (10.2\u201310.5 ft) and a 1.4\u20131.7 m (4.6\u20135.6 ft) long tail. The heaviest specimens weigh around 2,300 kg (5,100 lb). Its horn is usually shorter than 25 cm (9.8 in).",
+  "chunks": [
+    "The Javan rhinoceros, also called Javan rhino, Sunda rhinoceros and lesser one-horned rhinoceros is a critically endangered member of the genus Rhinoceros, of the rhinoceros family Rhinocerotidae, and one of the five remaining extant rhinoceros species. It has a plate-like skin with protective folds and is one of the smallest rhinoceros species with a body length of 3.1\u20133.2 m (10.2\u201310.5 ft) and a 1.4\u20131.7 m (4.6\u20135.6 ft) long tail. The heaviest specimens weigh around 2,300 kg (5,100 lb). Its horn is usually shorter than 25 cm (9.8 in)."
+  ],
+  "extra": {
+    "page_title": "Javan_rhinoceros",
+    "canonical_name": "Javan rhinoceros",
+    "description": "Rare species of rhinoceros from Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Javan_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Javan_rhinoceros?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Javan_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Javan_rhinoceros"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Javan_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Javan_rhinoceros",
+        "edit": "https://en.wikipedia.org/wiki/Javan_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Javan_rhinoceros"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Rhinoceros_sondaicus_in_London_Zoo.jpg/330px-Rhinoceros_sondaicus_in_London_Zoo.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Javan_rhinoceros",
+    "wikidata_item": null
+  }
+}

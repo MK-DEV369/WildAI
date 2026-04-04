@@ -1,0 +1,40 @@
+{
+  "title": "Tapanuli orangutan",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Tapanuli orangutan is a species of orangutan restricted to South Tapanuli in the island of Sumatra in Indonesia. It is one of three known living species of orangutan, alongside the Sumatran orangutan, found farther northwest on the island, and the Bornean orangutan. It was described as a distinct species in 2017. As of 2018, there are roughly 800 individuals of this species and it is currently on the critically endangered species list.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Tapanuli_orangutan",
+  "cleaned_content": "The Tapanuli orangutan is a species of orangutan restricted to South Tapanuli in the island of Sumatra in Indonesia. It is one of three known living species of orangutan, alongside the Sumatran orangutan, found farther northwest on the island, and the Bornean orangutan. It was described as a distinct species in 2017. As of 2018, there are roughly 800 individuals of this species and it is currently on the critically endangered species list.",
+  "chunks": [
+    "The Tapanuli orangutan is a species of orangutan restricted to South Tapanuli in the island of Sumatra in Indonesia. It is one of three known living species of orangutan, alongside the Sumatran orangutan, found farther northwest on the island, and the Bornean orangutan. It was described as a distinct species in 2017. As of 2018, there are roughly 800 individuals of this species and it is currently on the critically endangered species list."
+  ],
+  "extra": {
+    "page_title": "Tapanuli_orangutan",
+    "canonical_name": "Tapanuli orangutan",
+    "description": "Species of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Tapanuli_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Tapanuli_orangutan?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Tapanuli_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Tapanuli_orangutan"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Tapanuli_orangutan",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Tapanuli_orangutan",
+        "edit": "https://en.wikipedia.org/wiki/Tapanuli_orangutan?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Tapanuli_orangutan"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Pongo_tapanuliensis.jpg/330px-Pongo_tapanuliensis.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Tapanuli_orangutan",
+    "wikidata_item": null
+  }
+}

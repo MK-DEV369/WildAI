@@ -1,0 +1,41 @@
+{
+  "title": "Sloth bear",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The sloth bear, also known as the Indian bear, is a myrmecophagous bear species native to the Indian subcontinent. It feeds on fruits, ants and termites. It is listed as vulnerable on the IUCN Red List, mainly because of habitat loss and degradation. It is the only species in the genus Melursus.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Sloth_bear",
+  "cleaned_content": "The sloth bear, also known as the Indian bear, is a myrmecophagous bear species native to the Indian subcontinent. It feeds on fruits, ants and termites. It is listed as vulnerable on the IUCN Red List, mainly because of habitat loss and degradation. It is the only species in the genus Melursus.",
+  "chunks": [
+    "The sloth bear, also known as the Indian bear, is a myrmecophagous bear species native to the Indian subcontinent. It feeds on fruits, ants and termites. It is listed as vulnerable on the IUCN Red List, mainly because of habitat loss and degradation. It is the only species in the genus Melursus."
+  ],
+  "extra": {
+    "page_title": "Sloth_bear",
+    "canonical_name": "Sloth bear",
+    "description": "Species of bear",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sloth_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Sloth_bear?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sloth_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sloth_bear"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sloth_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sloth_bear",
+        "edit": "https://en.wikipedia.org/wiki/Sloth_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sloth_bear"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Sloth_bear_stand.jpg/330px-Sloth_bear_stand.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Sloth_bear",
+    "wikidata_item": null
+  }
+}

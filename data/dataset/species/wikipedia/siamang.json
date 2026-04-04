@@ -1,0 +1,41 @@
+{
+  "title": "Siamang",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The siamang is an endangered arboreal, black-furred gibbon native to the forests of Indonesia, Malaysia, and Thailand. The largest of the gibbons, the siamang can be twice the size of other gibbons, reaching 1 m (3.3 ft) in height, and weighing up to 14 kg (31 lb). It is the only species in the genus Symphalangus. Fossils of siamangs date back to the Middle Pleistocene.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Siamang",
+  "cleaned_content": "The siamang is an endangered arboreal, black-furred gibbon native to the forests of Indonesia, Malaysia, and Thailand. The largest of the gibbons, the siamang can be twice the size of other gibbons, reaching 1 m (3.3 ft) in height, and weighing up to 14 kg (31 lb). It is the only species in the genus Symphalangus. Fossils of siamangs date back to the Middle Pleistocene.",
+  "chunks": [
+    "The siamang is an endangered arboreal, black-furred gibbon native to the forests of Indonesia, Malaysia, and Thailand. The largest of the gibbons, the siamang can be twice the size of other gibbons, reaching 1 m (3.3 ft) in height, and weighing up to 14 kg (31 lb). It is the only species in the genus Symphalangus. Fossils of siamangs date back to the Middle Pleistocene."
+  ],
+  "extra": {
+    "page_title": "Siamang",
+    "canonical_name": "Siamang",
+    "description": "Species of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Siamang",
+        "revisions": "https://en.wikipedia.org/wiki/Siamang?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Siamang?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Siamang"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Siamang",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Siamang",
+        "edit": "https://en.wikipedia.org/wiki/Siamang?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Siamang"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Siamang_Tierpark_Hellabrunn-4.jpg/330px-Siamang_Tierpark_Hellabrunn-4.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Siamang",
+    "wikidata_item": null
+  }
+}

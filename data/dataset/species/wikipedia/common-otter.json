@@ -1,0 +1,40 @@
+{
+  "title": "Common otter",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Eurasian otter, also known as the European otter, Eurasian river otter, European river otter, common otter, and Old World otter, is a semiaquatic mammal native to Eurasia and the Maghreb. it is the most widely distributed member of the otter subfamily (Lutrinae) of the weasel family (Mustelidae) and is found in the waterways and on the coasts of Europe, much of Asia, and parts of North Africa. The Eurasian otter eats mainly of fish, and is strongly territorial. It is endangered in some parts of its range, but is recovering in others.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Common_otter",
+  "cleaned_content": "The Eurasian otter, also known as the European otter, Eurasian river otter, European river otter, common otter, and Old World otter, is a semiaquatic mammal native to Eurasia and the Maghreb. it is the most widely distributed member of the otter subfamily (Lutrinae) of the weasel family (Mustelidae) and is found in the waterways and on the coasts of Europe, much of Asia, and parts of North Africa. The Eurasian otter eats mainly of fish, and is strongly territorial. It is endangered in some parts of its range, but is recovering in others.",
+  "chunks": [
+    "The Eurasian otter, also known as the European otter, Eurasian river otter, European river otter, common otter, and Old World otter, is a semiaquatic mammal native to Eurasia and the Maghreb. it is the most widely distributed member of the otter subfamily (Lutrinae) of the weasel family (Mustelidae) and is found in the waterways and on the coasts of Europe, much of Asia, and parts of North Africa. The Eurasian otter eats mainly of fish, and is strongly territorial. It is endangered in some parts of its range, but is recovering in others."
+  ],
+  "extra": {
+    "page_title": "Common_otter",
+    "canonical_name": "Common otter",
+    "description": "Species of carnivore",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Eurasian_otter",
+        "revisions": "https://en.wikipedia.org/wiki/Eurasian_otter?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Eurasian_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eurasian_otter"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Eurasian_otter",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Eurasian_otter",
+        "edit": "https://en.wikipedia.org/wiki/Eurasian_otter?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Eurasian_otter"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Fischotter%2C_Lutra_Lutra.JPG/330px-Fischotter%2C_Lutra_Lutra.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Eurasian_otter",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "title": "Grizzled giant squirrel",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The grizzled giant squirrel is a large tree squirrel in the genus Ratufa found in the highlands of the Central and Uva provinces of Sri Lanka, and in patches of riparian forest along the Kaveri River and in the hill forests of Karnataka, Tamil Nadu and Kerala states of southern India. The International Union for Conservation of Nature (IUCN) lists the species as near threatened due to habitat loss and hunting.",
+  "tags": [
+    "conservation",
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel",
+  "cleaned_content": "The grizzled giant squirrel is a large tree squirrel in the genus Ratufa found in the highlands of the Central and Uva provinces of Sri Lanka, and in patches of riparian forest along the Kaveri River and in the hill forests of Karnataka, Tamil Nadu and Kerala states of southern India. The International Union for Conservation of Nature (IUCN) lists the species as near threatened due to habitat loss and hunting.",
+  "chunks": [
+    "The grizzled giant squirrel is a large tree squirrel in the genus Ratufa found in the highlands of the Central and Uva provinces of Sri Lanka, and in patches of riparian forest along the Kaveri River and in the hill forests of Karnataka, Tamil Nadu and Kerala states of southern India. The International Union for Conservation of Nature (IUCN) lists the species as near threatened due to habitat loss and hunting."
+  ],
+  "extra": {
+    "page_title": "Grizzled_giant_squirrel",
+    "canonical_name": "Grizzled giant squirrel",
+    "description": "Species of rodent",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Grizzled_giant_squirrel"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Grizzled_giant_squirrel",
+        "edit": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Grizzled_giant_squirrel"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Flickr_-_Rainbirder_-_Giant_Squirrel_%28Ratufa_macroura%29.jpg/330px-Flickr_-_Rainbirder_-_Giant_Squirrel_%28Ratufa_macroura%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Grizzled_giant_squirrel",
+    "wikidata_item": null
+  }
+}

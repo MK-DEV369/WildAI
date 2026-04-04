@@ -1,0 +1,40 @@
+{
+  "title": "Fishing cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The fishing cat is a medium-sized wild cat of South and Southeast Asia. It has a deep yellowish-grey fur with black lines and spots. Adults have a head-to-body length of 57 to 78 cm, with a 20 to 30 cm long tail. Males are larger than females, weighing 8 to 17 kg, while females average 5 to 9 kg. It lives mostly in the vicinity of wetlands, along rivers, streams, oxbow lakes, in swamps and mangroves where it preys mostly on fish. Other prey items include birds, insects, small rodents, molluscs, reptiles including snakes, amphibians and carrion of cattle. The fishing cat is thought to be primarily nocturnal. It is a good swimmer and can swim long distances, even underwater.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Fishing_cat",
+  "cleaned_content": "The fishing cat is a medium-sized wild cat of South and Southeast Asia. It has a deep yellowish-grey fur with black lines and spots. Adults have a head-to-body length of 57 to 78 cm, with a 20 to 30 cm long tail. Males are larger than females, weighing 8 to 17 kg, while females average 5 to 9 kg. It lives mostly in the vicinity of wetlands, along rivers, streams, oxbow lakes, in swamps and mangroves where it preys mostly on fish. Other prey items include birds, insects, small rodents, molluscs, reptiles including snakes, amphibians and carrion of cattle. The fishing cat is thought to be primarily nocturnal. It is a good swimmer and can swim long distances, even underwater.",
+  "chunks": [
+    "The fishing cat is a medium-sized wild cat of South and Southeast Asia. It has a deep yellowish-grey fur with black lines and spots. Adults have a head-to-body length of 57 to 78 cm, with a 20 to 30 cm long tail. Males are larger than females, weighing 8 to 17 kg, while females average 5 to 9 kg. It lives mostly in the vicinity of wetlands, along rivers, streams, oxbow lakes, in swamps and mangroves where it preys mostly on fish. Other prey items include birds, insects, small rodents, molluscs, reptiles including snakes, amphibians and carrion of cattle. The fishing cat is thought to be primarily nocturnal. It is a good swimmer and can swim long distances, even underwater."
+  ],
+  "extra": {
+    "page_title": "Fishing_cat",
+    "canonical_name": "Fishing cat",
+    "description": "Small wild cat",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Fishing_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Fishing_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Fishing_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Fishing_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Fishing_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Fishing_cat",
+        "edit": "https://en.wikipedia.org/wiki/Fishing_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Fishing_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Prionailurus_viverrinus_01.jpg/330px-Prionailurus_viverrinus_01.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Fishing_cat",
+    "wikidata_item": null
+  }
+}

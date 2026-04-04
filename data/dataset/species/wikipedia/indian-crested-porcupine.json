@@ -1,0 +1,40 @@
+{
+  "title": "Indian crested porcupine",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian crested porcupine is a hystricomorph rodent species native to southern Asia and the Middle East. It is listed as Least Concern on the IUCN Red List. It belongs to the Old World porcupine family, Hystricidae.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_crested_porcupine",
+  "cleaned_content": "The Indian crested porcupine is a hystricomorph rodent species native to southern Asia and the Middle East. It is listed as Least Concern on the IUCN Red List. It belongs to the Old World porcupine family, Hystricidae.",
+  "chunks": [
+    "The Indian crested porcupine is a hystricomorph rodent species native to southern Asia and the Middle East. It is listed as Least Concern on the IUCN Red List. It belongs to the Old World porcupine family, Hystricidae."
+  ],
+  "extra": {
+    "page_title": "Indian_crested_porcupine",
+    "canonical_name": "Indian crested porcupine",
+    "description": "Species of rodent",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_crested_porcupine",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_crested_porcupine?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_crested_porcupine?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_crested_porcupine"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_crested_porcupine",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_crested_porcupine",
+        "edit": "https://en.wikipedia.org/wiki/Indian_crested_porcupine?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_crested_porcupine"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Weissschwanzstachelschwein_Hystrix_indica_Tierpark_Hellabrunn-12_%28cropped%29.jpg/330px-Weissschwanzstachelschwein_Hystrix_indica_Tierpark_Hellabrunn-12_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_crested_porcupine",
+    "wikidata_item": null
+  }
+}

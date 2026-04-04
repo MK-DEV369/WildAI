@@ -1,0 +1,40 @@
+{
+  "title": "Asiatic buffalo",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The wild water buffalo, also called Asian buffalo, Asiatic buffalo and wild buffalo, is a large bovine native to the Indian subcontinent and Southeast Asia. It was first described in 1792.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Asiatic_buffalo",
+  "cleaned_content": "The wild water buffalo, also called Asian buffalo, Asiatic buffalo and wild buffalo, is a large bovine native to the Indian subcontinent and Southeast Asia. It was first described in 1792.",
+  "chunks": [
+    "The wild water buffalo, also called Asian buffalo, Asiatic buffalo and wild buffalo, is a large bovine native to the Indian subcontinent and Southeast Asia. It was first described in 1792."
+  ],
+  "extra": {
+    "page_title": "Asiatic_buffalo",
+    "canonical_name": "Asiatic buffalo",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Wild_water_buffalo",
+        "revisions": "https://en.wikipedia.org/wiki/Wild_water_buffalo?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Wild_water_buffalo?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Wild_water_buffalo"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Wild_water_buffalo",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Wild_water_buffalo",
+        "edit": "https://en.wikipedia.org/wiki/Wild_water_buffalo?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Wild_water_buffalo"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Indian_Water_Buffalo_Bubalus_arnee_by_Dr_Raju_Kasambe_IMG_0347_%2811%29_%28cropped%29.jpg/330px-Indian_Water_Buffalo_Bubalus_arnee_by_Dr_Raju_Kasambe_IMG_0347_%2811%29_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Wild_water_buffalo",
+    "wikidata_item": null
+  }
+}

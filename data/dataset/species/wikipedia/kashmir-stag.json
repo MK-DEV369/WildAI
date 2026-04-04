@@ -1,0 +1,42 @@
+{
+  "title": "Kashmir stag",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Kashmir stag, also called hangul, is a subspecies of Central Asian red deer found in dense riverine forests in the valleys and mountains of Jammu and Kashmir and northern Himachal Pradesh in India. In the Kashmir Valley, it is found primarily in the Dachigam National Park and in Tral Wildlife Sanctuary where it receives protection, and elsewhere it is more at risk. In the 1940s, the population was between 3000 and 5000 individuals, but since then habitat destruction, over-grazing by domestic livestock and poaching have reduced population dramatically. Its population is now grown marginally to 323 in 2025 from 197 in 2004. It is the state animal of Jammu and Kashmir. It is the only surviving Asiatic sub-species of the Red deer family.",
+  "tags": [
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Kashmir_stag",
+  "cleaned_content": "The Kashmir stag, also called hangul, is a subspecies of Central Asian red deer found in dense riverine forests in the valleys and mountains of Jammu and Kashmir and northern Himachal Pradesh in India. In the Kashmir Valley, it is found primarily in the Dachigam National Park and in Tral Wildlife Sanctuary where it receives protection, and elsewhere it is more at risk. In the 1940s, the population was between 3000 and 5000 individuals, but since then habitat destruction, over-grazing by domestic livestock and poaching have reduced population dramatically. Its population is now grown marginally to 323 in 2025 from 197 in 2004. It is the state animal of Jammu and Kashmir. It is the only surviving Asiatic sub-species of the Red deer family.",
+  "chunks": [
+    "The Kashmir stag, also called hangul, is a subspecies of Central Asian red deer found in dense riverine forests in the valleys and mountains of Jammu and Kashmir and northern Himachal Pradesh in India. In the Kashmir Valley, it is found primarily in the Dachigam National Park and in Tral Wildlife Sanctuary where it receives protection, and elsewhere it is more at risk. In the 1940s, the population was between 3000 and 5000 individuals, but since then habitat destruction, over-grazing by domestic livestock and poaching have reduced population dramatically. Its population is now grown marginally to 323 in 2025 from 197 in 2004. It is the state animal of Jammu and Kashmir. It is the only surviving Asiatic sub-species of the Red deer family."
+  ],
+  "extra": {
+    "page_title": "Kashmir_stag",
+    "canonical_name": "Kashmir stag",
+    "description": "Deer subspecies",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Kashmir_stag",
+        "revisions": "https://en.wikipedia.org/wiki/Kashmir_stag?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Kashmir_stag?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Kashmir_stag"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Kashmir_stag",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Kashmir_stag",
+        "edit": "https://en.wikipedia.org/wiki/Kashmir_stag?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Kashmir_stag"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cervus_cashmeerianus_Smit.jpg/330px-Cervus_cashmeerianus_Smit.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Kashmir_stag",
+    "wikidata_item": null
+  }
+}

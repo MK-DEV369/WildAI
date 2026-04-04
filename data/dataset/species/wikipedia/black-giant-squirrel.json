@@ -1,0 +1,41 @@
+{
+  "title": "Black giant squirrel",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The black giant squirrel or Malayan giant squirrel is a large tree squirrel in the genus Ratufa native to the Indomalayan zootope. It is found in forests from northern Bangladesh, northeast India, eastern Nepal, Bhutan, southern China, Myanmar, Laos, Thailand, West Malaysia, Cambodia, Vietnam, and western Indonesia.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Black_giant_squirrel",
+  "cleaned_content": "The black giant squirrel or Malayan giant squirrel is a large tree squirrel in the genus Ratufa native to the Indomalayan zootope. It is found in forests from northern Bangladesh, northeast India, eastern Nepal, Bhutan, southern China, Myanmar, Laos, Thailand, West Malaysia, Cambodia, Vietnam, and western Indonesia.",
+  "chunks": [
+    "The black giant squirrel or Malayan giant squirrel is a large tree squirrel in the genus Ratufa native to the Indomalayan zootope. It is found in forests from northern Bangladesh, northeast India, eastern Nepal, Bhutan, southern China, Myanmar, Laos, Thailand, West Malaysia, Cambodia, Vietnam, and western Indonesia."
+  ],
+  "extra": {
+    "page_title": "Black_giant_squirrel",
+    "canonical_name": "Black giant squirrel",
+    "description": "Species of rodent",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Black_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Black_giant_squirrel?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Black_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_giant_squirrel"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Black_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Black_giant_squirrel",
+        "edit": "https://en.wikipedia.org/wiki/Black_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_giant_squirrel"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Ratufa_bicolor_6237.jpg/330px-Ratufa_bicolor_6237.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Black_giant_squirrel",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Nilgiri tahr",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Nilgiri tahr is an ungulate that is endemic to the Nilgiri Hills and the southern portion of the Western Ghats in the Indian states of Tamil Nadu and Kerala. It is the only species in the genus Nilgiritragus. The species is classified as endangered in the IUCN Red List. It is the state animal of Tamil Nadu.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Nilgiri_tahr",
+  "cleaned_content": "The Nilgiri tahr is an ungulate that is endemic to the Nilgiri Hills and the southern portion of the Western Ghats in the Indian states of Tamil Nadu and Kerala. It is the only species in the genus Nilgiritragus. The species is classified as endangered in the IUCN Red List. It is the state animal of Tamil Nadu.",
+  "chunks": [
+    "The Nilgiri tahr is an ungulate that is endemic to the Nilgiri Hills and the southern portion of the Western Ghats in the Indian states of Tamil Nadu and Kerala. It is the only species in the genus Nilgiritragus. The species is classified as endangered in the IUCN Red List. It is the state animal of Tamil Nadu."
+  ],
+  "extra": {
+    "page_title": "Nilgiri_tahr",
+    "canonical_name": "Nilgiri tahr",
+    "description": "Species of goat endemic to South India",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Nilgiri_tahr",
+        "revisions": "https://en.wikipedia.org/wiki/Nilgiri_tahr?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Nilgiri_tahr?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Nilgiri_tahr"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Nilgiri_tahr",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Nilgiri_tahr",
+        "edit": "https://en.wikipedia.org/wiki/Nilgiri_tahr?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Nilgiri_tahr"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Nilgiri_Tahr_at_Eravikulam_National_Park.jpg/330px-Nilgiri_Tahr_at_Eravikulam_National_Park.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Nilgiri_tahr",
+    "wikidata_item": null
+  }
+}

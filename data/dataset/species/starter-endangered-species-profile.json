@@ -1,0 +1,14 @@
+{
+  "title": "Endangered Species Profile",
+  "year": 2024,
+  "category": "species",
+  "source": "Starter",
+  "type": "text",
+  "url": "https://example.org/endangered-species-profile",
+  "content": "Endangered species profiles describe conservation status, major threats, distribution, and recovery actions. These records are useful for biodiversity monitoring, habitat planning, and policy comparison.",
+  "cleaned_content": "Endangered species profiles describe conservation status, major threats, distribution, and recovery actions. These records are useful for biodiversity monitoring, habitat planning, and policy comparison.",
+  "chunks": [
+    "Endangered species profiles describe conservation status, major threats, distribution, and recovery actions. These records are useful for biodiversity monitoring, habitat planning, and policy comparison."
+  ],
+  "tags": ["species", "endangered", "biodiversity"]
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Indian vulture",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian vulture or long-billed vulture is a bird of prey native to the Indian subcontinent. It is an Old World vulture belonging to the family of Accipitridae. It is a medium-sized vulture with a small, semi-bald head with little feathers, long beak, and wide dark colored wings. It breeds mainly on small cliffs and hilly crags in central India and south India.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_vulture",
+  "cleaned_content": "The Indian vulture or long-billed vulture is a bird of prey native to the Indian subcontinent. It is an Old World vulture belonging to the family of Accipitridae. It is a medium-sized vulture with a small, semi-bald head with little feathers, long beak, and wide dark colored wings. It breeds mainly on small cliffs and hilly crags in central India and south India.",
+  "chunks": [
+    "The Indian vulture or long-billed vulture is a bird of prey native to the Indian subcontinent. It is an Old World vulture belonging to the family of Accipitridae. It is a medium-sized vulture with a small, semi-bald head with little feathers, long beak, and wide dark colored wings. It breeds mainly on small cliffs and hilly crags in central India and south India."
+  ],
+  "extra": {
+    "page_title": "Indian_vulture",
+    "canonical_name": "Indian vulture",
+    "description": "Species of vulture",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_vulture",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_vulture?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_vulture?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_vulture"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_vulture",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_vulture",
+        "edit": "https://en.wikipedia.org/wiki/Indian_vulture?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_vulture"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Indian_vulture_%28Gyps_indicus%29_Photograph_by_Shantanu_Kuveskar.jpg/330px-Indian_vulture_%28Gyps_indicus%29_Photograph_by_Shantanu_Kuveskar.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_vulture",
+    "wikidata_item": null
+  }
+}

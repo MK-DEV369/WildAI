@@ -1,0 +1,40 @@
+{
+  "title": "Snow leopard",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The snow leopard is a species of large cat in the genus Panthera of the family Felidae. It is native to the mountain ranges of Central and South Asia, ranging from eastern Afghanistan, the Himalayas and the Tibetan Plateau to southern Siberia, Mongolia and Western China. It inhabits alpine and subalpine zones at elevations of 3,000\u20134,500 m (9,800\u201314,800 ft), but also lives at lower elevations in the northern part of its range.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Snow_leopard",
+  "cleaned_content": "The snow leopard is a species of large cat in the genus Panthera of the family Felidae. It is native to the mountain ranges of Central and South Asia, ranging from eastern Afghanistan, the Himalayas and the Tibetan Plateau to southern Siberia, Mongolia and Western China. It inhabits alpine and subalpine zones at elevations of 3,000\u20134,500 m (9,800\u201314,800 ft), but also lives at lower elevations in the northern part of its range.",
+  "chunks": [
+    "The snow leopard is a species of large cat in the genus Panthera of the family Felidae. It is native to the mountain ranges of Central and South Asia, ranging from eastern Afghanistan, the Himalayas and the Tibetan Plateau to southern Siberia, Mongolia and Western China. It inhabits alpine and subalpine zones at elevations of 3,000\u20134,500 m (9,800\u201314,800 ft), but also lives at lower elevations in the northern part of its range."
+  ],
+  "extra": {
+    "page_title": "Snow_leopard",
+    "canonical_name": "Snow leopard",
+    "description": "Species of large felid",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Snow_leopard",
+        "revisions": "https://en.wikipedia.org/wiki/Snow_leopard?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Snow_leopard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Snow_leopard"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Snow_leopard",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Snow_leopard",
+        "edit": "https://en.wikipedia.org/wiki/Snow_leopard?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Snow_leopard"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Irbis4.JPG/330px-Irbis4.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Snow_leopard",
+    "wikidata_item": null
+  }
+}

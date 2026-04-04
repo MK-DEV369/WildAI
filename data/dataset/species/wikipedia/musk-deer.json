@@ -1,0 +1,40 @@
+{
+  "title": "Musk deer",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "Musk deer can refer to any one, or all eight, of the species that make up Moschus, the only extant genus of the family Moschidae. Despite being commonly called deer, they are not true deer belonging to the family Cervidae, but rather their family is closely related to Bovidae, the group that contains antelopes, bovines, sheep, and goats. The musk deer family differs from cervids, or true deer, by lacking antlers and preorbital glands also, possessing only a single pair of teats, a gallbladder, a caudal gland, a pair of canine tusks and\u2014of particular economic importance to humans\u2014a musk gland.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Musk_deer",
+  "cleaned_content": "Musk deer can refer to any one, or all eight, of the species that make up Moschus, the only extant genus of the family Moschidae. Despite being commonly called deer, they are not true deer belonging to the family Cervidae, but rather their family is closely related to Bovidae, the group that contains antelopes, bovines, sheep, and goats. The musk deer family differs from cervids, or true deer, by lacking antlers and preorbital glands also, possessing only a single pair of teats, a gallbladder, a caudal gland, a pair of canine tusks and\u2014of particular economic importance to humans\u2014a musk gland.",
+  "chunks": [
+    "Musk deer can refer to any one, or all eight, of the species that make up Moschus, the only extant genus of the family Moschidae. Despite being commonly called deer, they are not true deer belonging to the family Cervidae, but rather their family is closely related to Bovidae, the group that contains antelopes, bovines, sheep, and goats. The musk deer family differs from cervids, or true deer, by lacking antlers and preorbital glands also, possessing only a single pair of teats, a gallbladder, a caudal gland, a pair of canine tusks and\u2014of particular economic importance to humans\u2014a musk gland."
+  ],
+  "extra": {
+    "page_title": "Musk_deer",
+    "canonical_name": "Musk deer",
+    "description": "Genus of mammals",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Musk_deer",
+        "revisions": "https://en.wikipedia.org/wiki/Musk_deer?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Musk_deer?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Musk_deer"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Musk_deer",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Musk_deer",
+        "edit": "https://en.wikipedia.org/wiki/Musk_deer?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Musk_deer"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Musk_deer_in_Edinburgh_Zoo.jpg/330px-Musk_deer_in_Edinburgh_Zoo.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Musk_deer",
+    "wikidata_item": null
+  }
+}

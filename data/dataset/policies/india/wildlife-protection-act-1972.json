@@ -1,0 +1,14 @@
+{
+  "title": "Wildlife Protection Act 1972",
+  "year": 1972,
+  "category": "policy",
+  "source": "Starter",
+  "type": "text",
+  "url": "https://example.org/wildlife-protection-act-1972",
+  "content": "The Wildlife Protection Act is a foundational policy framework for conserving wildlife, regulating hunting, and protecting habitats. It establishes protected areas, legal safeguards for endangered species, and enforcement mechanisms for illegal trade.",
+  "cleaned_content": "The Wildlife Protection Act is a foundational policy framework for conserving wildlife, regulating hunting, and protecting habitats. It establishes protected areas, legal safeguards for endangered species, and enforcement mechanisms for illegal trade.",
+  "chunks": [
+    "The Wildlife Protection Act is a foundational policy framework for conserving wildlife, regulating hunting, and protecting habitats. It establishes protected areas, legal safeguards for endangered species, and enforcement mechanisms for illegal trade."
+  ],
+  "tags": ["wildlife", "law", "conservation", "tiger"]
+}

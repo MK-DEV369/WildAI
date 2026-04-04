@@ -1,0 +1,41 @@
+{
+  "title": "Red panda",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The red panda, also known as the lesser panda, is a small mammal native to the eastern Himalayas and southwestern China. It has dense reddish-brown fur with a black belly and legs, white-lined ears, a mostly white muzzle and a ringed tail. Its head-to-body length is 51\u201363.5 cm (20.1\u201325.0 in) with a 28\u201348.5 cm (11.0\u201319.1 in) tail, and it weighs between 3.2 and 15 kg. It is well adapted to climbing due to its flexible joints and curved semi-retractile claws.",
+  "tags": [
+    "endangered",
+    "law",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Red_panda",
+  "cleaned_content": "The red panda, also known as the lesser panda, is a small mammal native to the eastern Himalayas and southwestern China. It has dense reddish-brown fur with a black belly and legs, white-lined ears, a mostly white muzzle and a ringed tail. Its head-to-body length is 51\u201363.5 cm (20.1\u201325.0 in) with a 28\u201348.5 cm (11.0\u201319.1 in) tail, and it weighs between 3.2 and 15 kg. It is well adapted to climbing due to its flexible joints and curved semi-retractile claws.",
+  "chunks": [
+    "The red panda, also known as the lesser panda, is a small mammal native to the eastern Himalayas and southwestern China. It has dense reddish-brown fur with a black belly and legs, white-lined ears, a mostly white muzzle and a ringed tail. Its head-to-body length is 51\u201363.5 cm (20.1\u201325.0 in) with a 28\u201348.5 cm (11.0\u201319.1 in) tail, and it weighs between 3.2 and 15 kg. It is well adapted to climbing due to its flexible joints and curved semi-retractile claws."
+  ],
+  "extra": {
+    "page_title": "Red_panda",
+    "canonical_name": "Red panda",
+    "description": "Species of mammal in Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Red_panda",
+        "revisions": "https://en.wikipedia.org/wiki/Red_panda?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Red_panda?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Red_panda"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Red_panda",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Red_panda",
+        "edit": "https://en.wikipedia.org/wiki/Red_panda?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Red_panda"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Red_Panda%2C_Gentle_Tree-Dweller_of_the_Himalayas.jpg/330px-Red_Panda%2C_Gentle_Tree-Dweller_of_the_Himalayas.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Red_panda",
+    "wikidata_item": null
+  }
+}

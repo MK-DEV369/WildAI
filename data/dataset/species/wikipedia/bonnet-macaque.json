@@ -1,0 +1,41 @@
+{
+  "title": "Bonnet macaque",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The bonnet macaque, also known as zati, is a species of macaque endemic to southern India. Its distribution is limited by the Indian Ocean on three sides and the Godavari and Tapti rivers, along with that of the rhesus macaque, its related competitor to the north. Land use changes in the last few decades have resulted in changes in its distribution boundaries with the rhesus macaque, raising concern for its conservation status in the wild.",
+  "tags": [
+    "conservation",
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bonnet_macaque",
+  "cleaned_content": "The bonnet macaque, also known as zati, is a species of macaque endemic to southern India. Its distribution is limited by the Indian Ocean on three sides and the Godavari and Tapti rivers, along with that of the rhesus macaque, its related competitor to the north. Land use changes in the last few decades have resulted in changes in its distribution boundaries with the rhesus macaque, raising concern for its conservation status in the wild.",
+  "chunks": [
+    "The bonnet macaque, also known as zati, is a species of macaque endemic to southern India. Its distribution is limited by the Indian Ocean on three sides and the Godavari and Tapti rivers, along with that of the rhesus macaque, its related competitor to the north. Land use changes in the last few decades have resulted in changes in its distribution boundaries with the rhesus macaque, raising concern for its conservation status in the wild."
+  ],
+  "extra": {
+    "page_title": "Bonnet_macaque",
+    "canonical_name": "Bonnet macaque",
+    "description": "Species of Old World monkey",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bonnet_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Bonnet_macaque?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bonnet_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bonnet_macaque"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bonnet_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bonnet_macaque",
+        "edit": "https://en.wikipedia.org/wiki/Bonnet_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bonnet_macaque"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Bonnet_macaque_%28Macaca_radiata%29_Photograph_By_Shantanu_Kuveskar.jpg/330px-Bonnet_macaque_%28Macaca_radiata%29_Photograph_By_Shantanu_Kuveskar.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Bonnet_macaque",
+    "wikidata_item": null
+  }
+}

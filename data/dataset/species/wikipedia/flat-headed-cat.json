@@ -1,0 +1,40 @@
+{
+  "title": "Flat-headed cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The flat-headed cat is a small wild cat with short reddish-brown fur. Its head is elongated, and its ears are rounded. Its slender body is 41 to 50 cm long with a tail of 13 to 15 cm, and it weighs 1.5 to 2.5 kg.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Flat-headed_cat",
+  "cleaned_content": "The flat-headed cat is a small wild cat with short reddish-brown fur. Its head is elongated, and its ears are rounded. Its slender body is 41 to 50 cm long with a tail of 13 to 15 cm, and it weighs 1.5 to 2.5 kg.",
+  "chunks": [
+    "The flat-headed cat is a small wild cat with short reddish-brown fur. Its head is elongated, and its ears are rounded. Its slender body is 41 to 50 cm long with a tail of 13 to 15 cm, and it weighs 1.5 to 2.5 kg."
+  ],
+  "extra": {
+    "page_title": "Flat-headed_cat",
+    "canonical_name": "Flat-headed cat",
+    "description": "Small wild cat",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Flat-headed_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Flat-headed_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Flat-headed_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Flat-headed_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Flat-headed_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Flat-headed_cat",
+        "edit": "https://en.wikipedia.org/wiki/Flat-headed_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Flat-headed_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Flat-headed_cat_1_Jim_Sanderson.JPG/330px-Flat-headed_cat_1_Jim_Sanderson.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Flat-headed_cat",
+    "wikidata_item": null
+  }
+}

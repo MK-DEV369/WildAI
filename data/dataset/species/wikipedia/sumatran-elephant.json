@@ -1,0 +1,43 @@
+{
+  "title": "Sumatran elephant",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Sumatran elephant is one of three recognized subspecies of the Asian elephant, and native to the Indonesian island of Sumatra. In 2011, IUCN upgraded the conservation status of the Sumatran elephant from endangered to critically endangered in its Red List as the population had declined by at least 80% during the past three generations, estimated to be about 75 years. The subspecies is preeminently threatened by habitat loss, degradation and fragmentation, and poaching; over 69% of potential elephant habitat has been lost within the last 25 years. Much of the remaining forest cover is in blocks smaller than 250 km2 (97 sq mi), which are too small to contain viable elephant populations.",
+  "tags": [
+    "conservation",
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Sumatran_elephant",
+  "cleaned_content": "The Sumatran elephant is one of three recognized subspecies of the Asian elephant, and native to the Indonesian island of Sumatra. In 2011, IUCN upgraded the conservation status of the Sumatran elephant from endangered to critically endangered in its Red List as the population had declined by at least 80% during the past three generations, estimated to be about 75 years. The subspecies is preeminently threatened by habitat loss, degradation and fragmentation, and poaching; over 69% of potential elephant habitat has been lost within the last 25 years. Much of the remaining forest cover is in blocks smaller than 250 km2 (97 sq mi), which are too small to contain viable elephant populations.",
+  "chunks": [
+    "The Sumatran elephant is one of three recognized subspecies of the Asian elephant, and native to the Indonesian island of Sumatra. In 2011, IUCN upgraded the conservation status of the Sumatran elephant from endangered to critically endangered in its Red List as the population had declined by at least 80% during the past three generations, estimated to be about 75 years. The subspecies is preeminently threatened by habitat loss, degradation and fragmentation, and poaching; over 69% of potential elephant habitat has been lost within the last 25 years. Much of the remaining forest cover is in blocks smaller than 250 km2 (97 sq mi), which are too small to contain viable elephant populations."
+  ],
+  "extra": {
+    "page_title": "Sumatran_elephant",
+    "canonical_name": "Sumatran elephant",
+    "description": "Subspecies of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/Sumatran_elephant?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_elephant"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sumatran_elephant",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_elephant"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Elephant_Sumatra_ProfilG.jpg/330px-Elephant_Sumatra_ProfilG.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Sumatran_elephant",
+    "wikidata_item": null
+  }
+}

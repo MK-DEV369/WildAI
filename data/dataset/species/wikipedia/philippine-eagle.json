@@ -1,0 +1,41 @@
+{
+  "title": "Philippine eagle",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Philippine eagle, also known as the monkey-eating eagle or great Philippine eagle, is a critically endangered species of eagle of the family Accipitridae which is endemic to forests in the Philippines. It has brown and white-colored plumage, a shaggy crest, and generally measures 86 to 102 cm in length and weighs 4.04 to 8.0 kg.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Philippine_eagle",
+  "cleaned_content": "The Philippine eagle, also known as the monkey-eating eagle or great Philippine eagle, is a critically endangered species of eagle of the family Accipitridae which is endemic to forests in the Philippines. It has brown and white-colored plumage, a shaggy crest, and generally measures 86 to 102 cm in length and weighs 4.04 to 8.0 kg.",
+  "chunks": [
+    "The Philippine eagle, also known as the monkey-eating eagle or great Philippine eagle, is a critically endangered species of eagle of the family Accipitridae which is endemic to forests in the Philippines. It has brown and white-colored plumage, a shaggy crest, and generally measures 86 to 102 cm in length and weighs 4.04 to 8.0 kg."
+  ],
+  "extra": {
+    "page_title": "Philippine_eagle",
+    "canonical_name": "Philippine eagle",
+    "description": "Endangered species of eagle in the Philippines",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Philippine_eagle",
+        "revisions": "https://en.wikipedia.org/wiki/Philippine_eagle?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Philippine_eagle?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Philippine_eagle"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Philippine_eagle",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Philippine_eagle",
+        "edit": "https://en.wikipedia.org/wiki/Philippine_eagle?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Philippine_eagle"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Pamarayeg_IIIx2_%28cropped%29.jpg/330px-Pamarayeg_IIIx2_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Philippine_eagle",
+    "wikidata_item": null
+  }
+}

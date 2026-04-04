@@ -1,0 +1,42 @@
+{
+  "title": "Rusty-spotted cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The rusty-spotted cat is one of the cat family's smallest members. It is native to India, Nepal and Sri Lanka. Since 2016, it has been listed as Near Threatened on the IUCN Red List as the global population is affected by loss and destruction of its prime habitat, deciduous forests.",
+  "tags": [
+    "endangered",
+    "forest",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Rusty-spotted_cat",
+  "cleaned_content": "The rusty-spotted cat is one of the cat family's smallest members. It is native to India, Nepal and Sri Lanka. Since 2016, it has been listed as Near Threatened on the IUCN Red List as the global population is affected by loss and destruction of its prime habitat, deciduous forests.",
+  "chunks": [
+    "The rusty-spotted cat is one of the cat family's smallest members. It is native to India, Nepal and Sri Lanka. Since 2016, it has been listed as Near Threatened on the IUCN Red List as the global population is affected by loss and destruction of its prime habitat, deciduous forests."
+  ],
+  "extra": {
+    "page_title": "Rusty-spotted_cat",
+    "canonical_name": "Rusty-spotted cat",
+    "description": "Small wild cat species native to South Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Rusty-spotted_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Rusty-spotted_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Rusty-spotted_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Rusty-spotted_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Rusty-spotted_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Rusty-spotted_cat",
+        "edit": "https://en.wikipedia.org/wiki/Rusty-spotted_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Rusty-spotted_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Rusty_spotted_cat_1.jpg/330px-Rusty_spotted_cat_1.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Rusty-spotted_cat",
+    "wikidata_item": null
+  }
+}

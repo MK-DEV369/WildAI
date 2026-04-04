@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Forest Survey of India Annual Report",
+    "url": "https://fsi.nic.in/documents/annualreport.pdf",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /documents/annualreport.pdf (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2023",
+    "url": "https://fsi.nic.in/forest-report-2023",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2023 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2021",
+    "url": "https://fsi.nic.in/forest-report-2021",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2021 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2019",
+    "url": "https://fsi.nic.in/forest-report-2019",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2019 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Annual Report",
+    "url": "https://fsi.nic.in/documents/annualreport.pdf",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /documents/annualreport.pdf (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2023",
+    "url": "https://fsi.nic.in/forest-report-2023",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2023 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2021",
+    "url": "https://fsi.nic.in/forest-report-2021",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2021 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  },
+  {
+    "title": "Forest Survey of India Forest Report 2019",
+    "url": "https://fsi.nic.in/forest-report-2019",
+    "error": "HTTPSConnectionPool(host='fsi.nic.in', port=443): Max retries exceeded with url: /forest-report-2019 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)')))"
+  }
+]

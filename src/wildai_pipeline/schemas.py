@@ -1,0 +1,37 @@
+from __future__ import annotations
+
+from pydantic import BaseModel, Field
+
+
+class QueryRequest(BaseModel):
+    query: str = Field(min_length=1, max_length=500)
+    top_k: int = Field(default=5, ge=1, le=12)
+    category: str | None = None
+    source: str | None = None
+    year: int | None = None
+
+
+class BuildIndexResponse(BaseModel):
+    total_documents: int
+    total_chunks: int
+    index_path: str
+
+
+class SearchHit(BaseModel):
+    score: float
+    chunk_id: str
+    title: str
+    year: int | None
+    category: str
+    source: str
+    document_type: str
+    url: str
+    text: str
+    tags: list[str]
+
+
+class QueryResponse(BaseModel):
+    query: str
+    answer: str
+    total_hits: int
+    hits: list[SearchHit]

@@ -1,0 +1,40 @@
+{
+  "title": "Hippopotamus",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The hippopotamus, often shortened to hippo, further qualified as the common hippopotamus, Nile hippopotamus and river hippopotamus, is a large semiaquatic mammal native to sub-Saharan Africa. It is one of only two extant species in the family Hippopotamidae, the other being the pygmy hippopotamus. Its name comes from the Ancient Greek for \"river horse\" (\u1f31\u03c0\u03c0\u03bf\u03c0\u03cc\u03c4\u03b1\u03bc\u03bf\u03c2).",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Hippopotamus",
+  "cleaned_content": "The hippopotamus, often shortened to hippo, further qualified as the common hippopotamus, Nile hippopotamus and river hippopotamus, is a large semiaquatic mammal native to sub-Saharan Africa. It is one of only two extant species in the family Hippopotamidae, the other being the pygmy hippopotamus. Its name comes from the Ancient Greek for \"river horse\" (\u1f31\u03c0\u03c0\u03bf\u03c0\u03cc\u03c4\u03b1\u03bc\u03bf\u03c2).",
+  "chunks": [
+    "The hippopotamus, often shortened to hippo, further qualified as the common hippopotamus, Nile hippopotamus and river hippopotamus, is a large semiaquatic mammal native to sub-Saharan Africa. It is one of only two extant species in the family Hippopotamidae, the other being the pygmy hippopotamus. Its name comes from the Ancient Greek for \"river horse\" (\u1f31\u03c0\u03c0\u03bf\u03c0\u03cc\u03c4\u03b1\u03bc\u03bf\u03c2)."
+  ],
+  "extra": {
+    "page_title": "Hippopotamus",
+    "canonical_name": "Hippopotamus",
+    "description": "Large semi-aquatic mammal native to sub-Saharan Africa",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Hippopotamus",
+        "revisions": "https://en.wikipedia.org/wiki/Hippopotamus?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Hippopotamus?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Hippopotamus"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Hippopotamus",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Hippopotamus",
+        "edit": "https://en.wikipedia.org/wiki/Hippopotamus?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Hippopotamus"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Portrait_Hippopotamus_in_the_water.jpg/330px-Portrait_Hippopotamus_in_the_water.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Hippopotamus",
+    "wikidata_item": null
+  }
+}

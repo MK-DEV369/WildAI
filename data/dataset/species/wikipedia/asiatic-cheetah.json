@@ -1,0 +1,40 @@
+{
+  "title": "Asiatic cheetah",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Asiatic cheetah is a critically endangered cheetah subspecies currently surviving in Iran. Its range once spread from the Arabian Peninsula and the Near East to the Caspian region, Transcaucasus, Kyzylkum Desert and northern South Asia, but was extirpated in these regions during the 20th century. The Asiatic cheetah diverged from the cheetah population in Africa between 32,000 and 67,000 years ago.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Asiatic_cheetah",
+  "cleaned_content": "The Asiatic cheetah is a critically endangered cheetah subspecies currently surviving in Iran. Its range once spread from the Arabian Peninsula and the Near East to the Caspian region, Transcaucasus, Kyzylkum Desert and northern South Asia, but was extirpated in these regions during the 20th century. The Asiatic cheetah diverged from the cheetah population in Africa between 32,000 and 67,000 years ago.",
+  "chunks": [
+    "The Asiatic cheetah is a critically endangered cheetah subspecies currently surviving in Iran. Its range once spread from the Arabian Peninsula and the Near East to the Caspian region, Transcaucasus, Kyzylkum Desert and northern South Asia, but was extirpated in these regions during the 20th century. The Asiatic cheetah diverged from the cheetah population in Africa between 32,000 and 67,000 years ago."
+  ],
+  "extra": {
+    "page_title": "Asiatic_cheetah",
+    "canonical_name": "Asiatic cheetah",
+    "description": "Subspecies of cheetah in Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Asiatic_cheetah",
+        "revisions": "https://en.wikipedia.org/wiki/Asiatic_cheetah?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Asiatic_cheetah?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asiatic_cheetah"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Asiatic_cheetah",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Asiatic_cheetah",
+        "edit": "https://en.wikipedia.org/wiki/Asiatic_cheetah?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asiatic_cheetah"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Delbar_%28Iranian_Cheetah%29_01_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Asiatic_cheetah",
+    "wikidata_item": null
+  }
+}

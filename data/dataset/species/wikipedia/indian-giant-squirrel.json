@@ -1,0 +1,41 @@
+{
+  "title": "Indian giant squirrel",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian giant squirrel or Malabar giant squirrel is a large multi-coloured tree squirrel species endemic to forests and woodlands in India. It is a diurnal, arboreal, and mainly herbivorous squirrel.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_giant_squirrel",
+  "cleaned_content": "The Indian giant squirrel or Malabar giant squirrel is a large multi-coloured tree squirrel species endemic to forests and woodlands in India. It is a diurnal, arboreal, and mainly herbivorous squirrel.",
+  "chunks": [
+    "The Indian giant squirrel or Malabar giant squirrel is a large multi-coloured tree squirrel species endemic to forests and woodlands in India. It is a diurnal, arboreal, and mainly herbivorous squirrel."
+  ],
+  "extra": {
+    "page_title": "Indian_giant_squirrel",
+    "canonical_name": "Indian giant squirrel",
+    "description": "Species of squirrel",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_giant_squirrel?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_giant_squirrel"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_giant_squirrel",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_giant_squirrel",
+        "edit": "https://en.wikipedia.org/wiki/Indian_giant_squirrel?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_giant_squirrel"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/The_Indian_giant_squirrel.jpg/330px-The_Indian_giant_squirrel.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_giant_squirrel",
+    "wikidata_item": null
+  }
+}

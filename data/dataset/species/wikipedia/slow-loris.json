@@ -1,0 +1,40 @@
+{
+  "title": "Slow loris",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "Slow lorises are a group of several species of nocturnal strepsirrhine primates that make up the genus Nycticebus. Found in Southeast Asia and nearby areas, they range from Bangladesh and Northeast India in the west to the Sulu Archipelago in the Philippines in the east, and from Yunnan province in China in the north to the island of Java in the south.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Slow_loris",
+  "cleaned_content": "Slow lorises are a group of several species of nocturnal strepsirrhine primates that make up the genus Nycticebus. Found in Southeast Asia and nearby areas, they range from Bangladesh and Northeast India in the west to the Sulu Archipelago in the Philippines in the east, and from Yunnan province in China in the north to the island of Java in the south.",
+  "chunks": [
+    "Slow lorises are a group of several species of nocturnal strepsirrhine primates that make up the genus Nycticebus. Found in Southeast Asia and nearby areas, they range from Bangladesh and Northeast India in the west to the Sulu Archipelago in the Philippines in the east, and from Yunnan province in China in the north to the island of Java in the south."
+  ],
+  "extra": {
+    "page_title": "Slow_loris",
+    "canonical_name": "Slow loris",
+    "description": "Genus of primates from Southeast Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Slow_loris?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Slow_loris"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Slow_loris",
+        "edit": "https://en.wikipedia.org/wiki/Slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Slow_loris"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nycticebus_coucang_002.jpg/330px-Nycticebus_coucang_002.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Slow_loris",
+    "wikidata_item": null
+  }
+}

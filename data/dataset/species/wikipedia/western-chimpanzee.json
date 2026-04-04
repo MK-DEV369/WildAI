@@ -1,0 +1,40 @@
+{
+  "title": "Western chimpanzee",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The western chimpanzee or West African chimpanzee is a critically endangered subspecies of the common chimpanzee. It inhabits western Africa, specifically C\u00f4te d'Ivoire, Guinea, Liberia, Mali, Senegal, Ghana, Guinea-Bissau, but has been extirpated in three countries: Benin, Burkina Faso, and Togo.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Western_chimpanzee",
+  "cleaned_content": "The western chimpanzee or West African chimpanzee is a critically endangered subspecies of the common chimpanzee. It inhabits western Africa, specifically C\u00f4te d'Ivoire, Guinea, Liberia, Mali, Senegal, Ghana, Guinea-Bissau, but has been extirpated in three countries: Benin, Burkina Faso, and Togo.",
+  "chunks": [
+    "The western chimpanzee or West African chimpanzee is a critically endangered subspecies of the common chimpanzee. It inhabits western Africa, specifically C\u00f4te d'Ivoire, Guinea, Liberia, Mali, Senegal, Ghana, Guinea-Bissau, but has been extirpated in three countries: Benin, Burkina Faso, and Togo."
+  ],
+  "extra": {
+    "page_title": "Western_chimpanzee",
+    "canonical_name": "Western chimpanzee",
+    "description": "Subspecies of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Western_chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Western_chimpanzee?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Western_chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Western_chimpanzee"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Western_chimpanzee",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Western_chimpanzee",
+        "edit": "https://en.wikipedia.org/wiki/Western_chimpanzee?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Western_chimpanzee"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Chimpanz%C3%A9_de_Bossou_27.jpg/330px-Chimpanz%C3%A9_de_Bossou_27.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Western_chimpanzee",
+    "wikidata_item": null
+  }
+}

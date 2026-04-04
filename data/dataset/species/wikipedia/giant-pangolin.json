@@ -1,0 +1,40 @@
+{
+  "title": "Giant pangolin",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The giant pangolin is a species of pangolin from genus Smutsia of subfamily Smutsiinae within the family Manidae. It is the largest living species of pangolins. Members of the species inhabit Africa with a range stretching along the equator from West Africa to Uganda. It subsists almost entirely on ants and termites.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Giant_pangolin",
+  "cleaned_content": "The giant pangolin is a species of pangolin from genus Smutsia of subfamily Smutsiinae within the family Manidae. It is the largest living species of pangolins. Members of the species inhabit Africa with a range stretching along the equator from West Africa to Uganda. It subsists almost entirely on ants and termites.",
+  "chunks": [
+    "The giant pangolin is a species of pangolin from genus Smutsia of subfamily Smutsiinae within the family Manidae. It is the largest living species of pangolins. Members of the species inhabit Africa with a range stretching along the equator from West Africa to Uganda. It subsists almost entirely on ants and termites."
+  ],
+  "extra": {
+    "page_title": "Giant_pangolin",
+    "canonical_name": "Giant pangolin",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Giant_pangolin",
+        "revisions": "https://en.wikipedia.org/wiki/Giant_pangolin?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Giant_pangolin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Giant_pangolin"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Giant_pangolin",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Giant_pangolin",
+        "edit": "https://en.wikipedia.org/wiki/Giant_pangolin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Giant_pangolin"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Giant_pangolin_%28Manis_gigantea%29%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG/330px-Giant_pangolin_%28Manis_gigantea%29%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Giant_pangolin",
+    "wikidata_item": null
+  }
+}

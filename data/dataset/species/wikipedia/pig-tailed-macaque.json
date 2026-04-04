@@ -1,0 +1,40 @@
+{
+  "title": "Pig-tailed macaque",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The pig-tailed macaques are two macaque sister species. They appear similar and are best distinguished by their parapatric ranges:Northern pig-tailed macaque, inhabiting Bangladesh to Vietnam, south to northern Malaysia Southern pig-tailed macaque, also called beruk, inhabiting Northern Malaysia and southern Thailand to Borneo and western Indonesia",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Pig-tailed_macaque",
+  "cleaned_content": "The pig-tailed macaques are two macaque sister species. They appear similar and are best distinguished by their parapatric ranges:Northern pig-tailed macaque, inhabiting Bangladesh to Vietnam, south to northern Malaysia Southern pig-tailed macaque, also called beruk, inhabiting Northern Malaysia and southern Thailand to Borneo and western Indonesia",
+  "chunks": [
+    "The pig-tailed macaques are two macaque sister species. They appear similar and are best distinguished by their parapatric ranges:Northern pig-tailed macaque, inhabiting Bangladesh to Vietnam, south to northern Malaysia Southern pig-tailed macaque, also called beruk, inhabiting Northern Malaysia and southern Thailand to Borneo and western Indonesia"
+  ],
+  "extra": {
+    "page_title": "Pig-tailed_macaque",
+    "canonical_name": "Pig-tailed macaque",
+    "description": "Index of animals with the same common name",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Pig-tailed_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Pig-tailed_macaque?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Pig-tailed_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Pig-tailed_macaque"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Pig-tailed_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Pig-tailed_macaque",
+        "edit": "https://en.wikipedia.org/wiki/Pig-tailed_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Pig-tailed_macaque"
+      }
+    },
+    "thumbnail_source": null,
+    "page_url": "https://en.wikipedia.org/wiki/Pig-tailed_macaque",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Himalayan brown bear",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Himalayan brown bear, also known as the Himalayan red bear or isabelline bear, is a subspecies of the brown bear occurring in the western Himalayas. It is the largest mammal in the region, males reaching up to 2.2 m long, while females are a little smaller. It is omnivorous and hibernates in dens during the winter.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Himalayan_brown_bear",
+  "cleaned_content": "The Himalayan brown bear, also known as the Himalayan red bear or isabelline bear, is a subspecies of the brown bear occurring in the western Himalayas. It is the largest mammal in the region, males reaching up to 2.2 m long, while females are a little smaller. It is omnivorous and hibernates in dens during the winter.",
+  "chunks": [
+    "The Himalayan brown bear, also known as the Himalayan red bear or isabelline bear, is a subspecies of the brown bear occurring in the western Himalayas. It is the largest mammal in the region, males reaching up to 2.2 m long, while females are a little smaller. It is omnivorous and hibernates in dens during the winter."
+  ],
+  "extra": {
+    "page_title": "Himalayan_brown_bear",
+    "canonical_name": "Himalayan brown bear",
+    "description": "Subspecies of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Himalayan_brown_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Himalayan_brown_bear?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Himalayan_brown_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Himalayan_brown_bear"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Himalayan_brown_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Himalayan_brown_bear",
+        "edit": "https://en.wikipedia.org/wiki/Himalayan_brown_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Himalayan_brown_bear"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Medv%C4%9Bd_plav%C3%BD_%28Ursus_arctos_isabellinus%29.jpg/330px-Medv%C4%9Bd_plav%C3%BD_%28Ursus_arctos_isabellinus%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Himalayan_brown_bear",
+    "wikidata_item": null
+  }
+}

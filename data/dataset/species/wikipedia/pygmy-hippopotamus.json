@@ -1,0 +1,41 @@
+{
+  "title": "Pygmy hippopotamus",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The pygmy hippopotamus or pygmy hippo is a small hippopotamid which is native to the forests and swamps of West Africa, primarily in Liberia, with small populations in Sierra Leone, Guinea, and Ivory Coast. It has been extirpated from Nigeria and possibly Guinea-Bissau.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus",
+  "cleaned_content": "The pygmy hippopotamus or pygmy hippo is a small hippopotamid which is native to the forests and swamps of West Africa, primarily in Liberia, with small populations in Sierra Leone, Guinea, and Ivory Coast. It has been extirpated from Nigeria and possibly Guinea-Bissau.",
+  "chunks": [
+    "The pygmy hippopotamus or pygmy hippo is a small hippopotamid which is native to the forests and swamps of West Africa, primarily in Liberia, with small populations in Sierra Leone, Guinea, and Ivory Coast. It has been extirpated from Nigeria and possibly Guinea-Bissau."
+  ],
+  "extra": {
+    "page_title": "Pygmy_hippopotamus",
+    "canonical_name": "Pygmy hippopotamus",
+    "description": "Small species of hippopotamus",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus",
+        "revisions": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Pygmy_hippopotamus"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Pygmy_hippopotamus",
+        "edit": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Pygmy_hippopotamus"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Hexaprotodon_liberiensis_in_Edinburgh_Zoo.JPG/330px-Hexaprotodon_liberiensis_in_Edinburgh_Zoo.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Pygmy_hippopotamus",
+    "wikidata_item": null
+  }
+}

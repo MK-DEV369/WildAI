@@ -1,0 +1,41 @@
+{
+  "title": "Marbled cat",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The marbled cat is a small wild cat native from the eastern Himalayas to Southeast Asia, where it inhabits forests up to an elevation of 2,500 m (8,200 ft). As it is present in a large range, it has been listed as Near Threatened on the IUCN Red List since 2015.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Marbled_cat",
+  "cleaned_content": "The marbled cat is a small wild cat native from the eastern Himalayas to Southeast Asia, where it inhabits forests up to an elevation of 2,500 m (8,200 ft). As it is present in a large range, it has been listed as Near Threatened on the IUCN Red List since 2015.",
+  "chunks": [
+    "The marbled cat is a small wild cat native from the eastern Himalayas to Southeast Asia, where it inhabits forests up to an elevation of 2,500 m (8,200 ft). As it is present in a large range, it has been listed as Near Threatened on the IUCN Red List since 2015."
+  ],
+  "extra": {
+    "page_title": "Marbled_cat",
+    "canonical_name": "Marbled cat",
+    "description": "Species of feline",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Marbled_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Marbled_cat?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Marbled_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Marbled_cat"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Marbled_cat",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Marbled_cat",
+        "edit": "https://en.wikipedia.org/wiki/Marbled_cat?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Marbled_cat"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Marbled_cat_borneo.jpg/330px-Marbled_cat_borneo.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Marbled_cat",
+    "wikidata_item": null
+  }
+}

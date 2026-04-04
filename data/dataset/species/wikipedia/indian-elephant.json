@@ -1,0 +1,40 @@
+{
+  "title": "Indian elephant",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian elephant is one of three extant recognized subspecies of the Asian elephant, native to mainland Asia. The species is smaller than the African elephant species with a convex back and the highest body point on its head. The species exhibits significant sexual dimorphism with a male reaching an average shoulder height of about 2.75 m and weighing 4,000 kg (8,800 lb) whereas a female reaches an average shoulder height of about 2.4 m and weighs 2,700 kg (6,000 lb). It has a broader skull with a concave forehead, two large laterally folded ears and a large trunk. It has smooth grey skin with four large legs and a long tail.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_elephant",
+  "cleaned_content": "The Indian elephant is one of three extant recognized subspecies of the Asian elephant, native to mainland Asia. The species is smaller than the African elephant species with a convex back and the highest body point on its head. The species exhibits significant sexual dimorphism with a male reaching an average shoulder height of about 2.75 m and weighing 4,000 kg (8,800 lb) whereas a female reaches an average shoulder height of about 2.4 m and weighs 2,700 kg (6,000 lb). It has a broader skull with a concave forehead, two large laterally folded ears and a large trunk. It has smooth grey skin with four large legs and a long tail.",
+  "chunks": [
+    "The Indian elephant is one of three extant recognized subspecies of the Asian elephant, native to mainland Asia. The species is smaller than the African elephant species with a convex back and the highest body point on its head. The species exhibits significant sexual dimorphism with a male reaching an average shoulder height of about 2.75 m and weighing 4,000 kg (8,800 lb) whereas a female reaches an average shoulder height of about 2.4 m and weighs 2,700 kg (6,000 lb). It has a broader skull with a concave forehead, two large laterally folded ears and a large trunk. It has smooth grey skin with four large legs and a long tail."
+  ],
+  "extra": {
+    "page_title": "Indian_elephant",
+    "canonical_name": "Indian elephant",
+    "description": "Most widespread subspecies of Asian elephant",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_elephant?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_elephant"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_elephant",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_elephant",
+        "edit": "https://en.wikipedia.org/wiki/Indian_elephant?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_elephant"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Elephas_maximus_%28Bandipur%29.jpg/330px-Elephas_maximus_%28Bandipur%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_elephant",
+    "wikidata_item": null
+  }
+}

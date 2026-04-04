@@ -1,0 +1,40 @@
+{
+  "title": "White-rumped vulture",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The white-rumped vulture is an Old World vulture native to South and Southeast Asia. It has been listed as Critically Endangered on the IUCN Red List since 2000, as the population severely declined. White-rumped vultures are threatened by diclofenac poisoning, which kills them by causing kidney failure. As of 2021, the global population was estimated at less than 6,000 mature individuals. In comparison, during the 1980s, the global population was estimated at several million individuals, and it was thought to be \"the most abundant large bird of prey in the world\".",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/White-rumped_vulture",
+  "cleaned_content": "The white-rumped vulture is an Old World vulture native to South and Southeast Asia. It has been listed as Critically Endangered on the IUCN Red List since 2000, as the population severely declined. White-rumped vultures are threatened by diclofenac poisoning, which kills them by causing kidney failure. As of 2021, the global population was estimated at less than 6,000 mature individuals. In comparison, during the 1980s, the global population was estimated at several million individuals, and it was thought to be \"the most abundant large bird of prey in the world\".",
+  "chunks": [
+    "The white-rumped vulture is an Old World vulture native to South and Southeast Asia. It has been listed as Critically Endangered on the IUCN Red List since 2000, as the population severely declined. White-rumped vultures are threatened by diclofenac poisoning, which kills them by causing kidney failure. As of 2021, the global population was estimated at less than 6,000 mature individuals. In comparison, during the 1980s, the global population was estimated at several million individuals, and it was thought to be \"the most abundant large bird of prey in the world\"."
+  ],
+  "extra": {
+    "page_title": "White-rumped_vulture",
+    "canonical_name": "White-rumped vulture",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/White-rumped_vulture",
+        "revisions": "https://en.wikipedia.org/wiki/White-rumped_vulture?action=history",
+        "edit": "https://en.wikipedia.org/wiki/White-rumped_vulture?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:White-rumped_vulture"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/White-rumped_vulture",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/White-rumped_vulture",
+        "edit": "https://en.wikipedia.org/wiki/White-rumped_vulture?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:White-rumped_vulture"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/White_rumped_vulture_in_chitwan_national_park.jpg/330px-White_rumped_vulture_in_chitwan_national_park.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/White-rumped_vulture",
+    "wikidata_item": null
+  }
+}

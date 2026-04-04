@@ -1,0 +1,42 @@
+{
+  "title": "Sun bear",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The sun bear is a bear species in the family Ursidae found in the tropical forests of Southeast Asia. It is the only species in the genus Helarctos and the smallest bear species, standing nearly 70 cm (28 in) at the shoulder and weighing 25\u201365 kg (55\u2013143 lb). It is stockily built, with large paws, strongly curved claws, small, rounded ears and a short snout. The fur is generally short and jet black, but can vary from grey to red. The sun bear gets its name from its characteristic orange to cream-coloured chest patch.",
+  "tags": [
+    "endangered",
+    "forest",
+    "law",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Sun_bear",
+  "cleaned_content": "The sun bear is a bear species in the family Ursidae found in the tropical forests of Southeast Asia. It is the only species in the genus Helarctos and the smallest bear species, standing nearly 70 cm (28 in) at the shoulder and weighing 25\u201365 kg (55\u2013143 lb). It is stockily built, with large paws, strongly curved claws, small, rounded ears and a short snout. The fur is generally short and jet black, but can vary from grey to red. The sun bear gets its name from its characteristic orange to cream-coloured chest patch.",
+  "chunks": [
+    "The sun bear is a bear species in the family Ursidae found in the tropical forests of Southeast Asia. It is the only species in the genus Helarctos and the smallest bear species, standing nearly 70 cm (28 in) at the shoulder and weighing 25\u201365 kg (55\u2013143 lb). It is stockily built, with large paws, strongly curved claws, small, rounded ears and a short snout. The fur is generally short and jet black, but can vary from grey to red. The sun bear gets its name from its characteristic orange to cream-coloured chest patch."
+  ],
+  "extra": {
+    "page_title": "Sun_bear",
+    "canonical_name": "Sun bear",
+    "description": "Tropical species of bear",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sun_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Sun_bear?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sun_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sun_bear"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sun_bear",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sun_bear",
+        "edit": "https://en.wikipedia.org/wiki/Sun_bear?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sun_bear"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Sun-bear.jpg/330px-Sun-bear.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Sun_bear",
+    "wikidata_item": null
+  }
+}

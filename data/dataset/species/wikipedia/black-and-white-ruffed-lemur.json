@@ -1,0 +1,40 @@
+{
+  "title": "Black-and-white ruffed lemur",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The black-and-white ruffed lemur is an endangered species of ruffed lemur, one of two which are endemic to the island of Madagascar. Despite having a larger range than the red ruffed lemur, it has a much smaller population that is spread out, living in lower population densities and reproductively isolated. It also has less coverage and protection in large national parks than the red ruffed lemur. Three subspecies of black-and-white ruffed lemur have been recognized since the red ruffed lemur was elevated to species status in 2001.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur",
+  "cleaned_content": "The black-and-white ruffed lemur is an endangered species of ruffed lemur, one of two which are endemic to the island of Madagascar. Despite having a larger range than the red ruffed lemur, it has a much smaller population that is spread out, living in lower population densities and reproductively isolated. It also has less coverage and protection in large national parks than the red ruffed lemur. Three subspecies of black-and-white ruffed lemur have been recognized since the red ruffed lemur was elevated to species status in 2001.",
+  "chunks": [
+    "The black-and-white ruffed lemur is an endangered species of ruffed lemur, one of two which are endemic to the island of Madagascar. Despite having a larger range than the red ruffed lemur, it has a much smaller population that is spread out, living in lower population densities and reproductively isolated. It also has less coverage and protection in large national parks than the red ruffed lemur. Three subspecies of black-and-white ruffed lemur have been recognized since the red ruffed lemur was elevated to species status in 2001."
+  ],
+  "extra": {
+    "page_title": "Black-and-white_ruffed_lemur",
+    "canonical_name": "Black-and-white ruffed lemur",
+    "description": "Species of lemur",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black-and-white_ruffed_lemur"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Black-and-white_ruffed_lemur",
+        "edit": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black-and-white_ruffed_lemur"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/1_black_and_white_ruffed_lemur.jpg/330px-1_black_and_white_ruffed_lemur.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Black-and-white_ruffed_lemur",
+    "wikidata_item": null
+  }
+}

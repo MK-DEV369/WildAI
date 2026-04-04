@@ -1,0 +1,40 @@
+{
+  "title": "Ganges river dolphin",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Ganges river dolphin is a species of freshwater dolphin classified in the family Platanistidae. It lives in the Ganges and related rivers of South Asia, namely in the countries of India, Nepal, and Bangladesh. It is related to the much smaller Indus river dolphin which lives in the rivers of the Indus Basin in Pakistan and northwestern India.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Ganges_river_dolphin",
+  "cleaned_content": "The Ganges river dolphin is a species of freshwater dolphin classified in the family Platanistidae. It lives in the Ganges and related rivers of South Asia, namely in the countries of India, Nepal, and Bangladesh. It is related to the much smaller Indus river dolphin which lives in the rivers of the Indus Basin in Pakistan and northwestern India.",
+  "chunks": [
+    "The Ganges river dolphin is a species of freshwater dolphin classified in the family Platanistidae. It lives in the Ganges and related rivers of South Asia, namely in the countries of India, Nepal, and Bangladesh. It is related to the much smaller Indus river dolphin which lives in the rivers of the Indus Basin in Pakistan and northwestern India."
+  ],
+  "extra": {
+    "page_title": "Ganges_river_dolphin",
+    "canonical_name": "Ganges river dolphin",
+    "description": "Species of toothed whale",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Ganges_river_dolphin",
+        "revisions": "https://en.wikipedia.org/wiki/Ganges_river_dolphin?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Ganges_river_dolphin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Ganges_river_dolphin"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Ganges_river_dolphin",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Ganges_river_dolphin",
+        "edit": "https://en.wikipedia.org/wiki/Ganges_river_dolphin?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Ganges_river_dolphin"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Ganges_River_Dolphin_cropped.jpg/330px-Ganges_River_Dolphin_cropped.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Ganges_river_dolphin",
+    "wikidata_item": null
+  }
+}

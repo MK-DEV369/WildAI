@@ -1,0 +1,40 @@
+{
+  "title": "Sumatran rhinoceros",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Sumatran rhinoceros, also known as the Sumatran rhino, hairy rhinoceros or Asian two-horned rhinoceros, is a rare member of the family Rhinocerotidae and one of five extant species of rhinoceros; it is the only extant species of the genus Dicerorhinus. It is the smallest rhinoceros, although it is still a large mammal; it stands 112\u2013145 cm (44\u201357 in) high at the shoulder, with a head-and-body length of 2.36\u20133.18 m and a tail of 35\u201370 cm (14\u201328 in). The weight is reported to range from 500\u20131,000 kg (1,100\u20132,200 lb), averaging 700\u2013800 kg (1,540\u20131,760 lb). Like both African species, it has two horns; the larger is the nasal horn, typically 15\u201325 cm (5.9\u20139.8 in), while the other horn is typically a stub. A coat of reddish-brown hair covers most of the Sumatran rhino's body.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros",
+  "cleaned_content": "The Sumatran rhinoceros, also known as the Sumatran rhino, hairy rhinoceros or Asian two-horned rhinoceros, is a rare member of the family Rhinocerotidae and one of five extant species of rhinoceros; it is the only extant species of the genus Dicerorhinus. It is the smallest rhinoceros, although it is still a large mammal; it stands 112\u2013145 cm (44\u201357 in) high at the shoulder, with a head-and-body length of 2.36\u20133.18 m and a tail of 35\u201370 cm (14\u201328 in). The weight is reported to range from 500\u20131,000 kg (1,100\u20132,200 lb), averaging 700\u2013800 kg (1,540\u20131,760 lb). Like both African species, it has two horns; the larger is the nasal horn, typically 15\u201325 cm (5.9\u20139.8 in), while the other horn is typically a stub. A coat of reddish-brown hair covers most of the Sumatran rhino's body.",
+  "chunks": [
+    "The Sumatran rhinoceros, also known as the Sumatran rhino, hairy rhinoceros or Asian two-horned rhinoceros, is a rare member of the family Rhinocerotidae and one of five extant species of rhinoceros; it is the only extant species of the genus Dicerorhinus. It is the smallest rhinoceros, although it is still a large mammal; it stands 112\u2013145 cm (44\u201357 in) high at the shoulder, with a head-and-body length of 2.36\u20133.18 m and a tail of 35\u201370 cm (14\u201328 in). The weight is reported to range from 500\u20131,000 kg (1,100\u20132,200 lb), averaging 700\u2013800 kg (1,540\u20131,760 lb). Like both African species, it has two horns; the larger is the nasal horn, typically 15\u201325 cm (5.9\u20139.8 in), while the other horn is typically a stub. A coat of reddish-brown hair covers most of the Sumatran rhino's body."
+  ],
+  "extra": {
+    "page_title": "Sumatran_rhinoceros",
+    "canonical_name": "Sumatran rhinoceros",
+    "description": "Endangered species of Asian rhinoceros",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_rhinoceros"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sumatran_rhinoceros",
+        "edit": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sumatran_rhinoceros"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Sumatran_Rhinoceros_at_Sumatran_Rhino_Sanctuary_Lampung_Indonesia_2013.JPG/330px-Sumatran_Rhinoceros_at_Sumatran_Rhino_Sanctuary_Lampung_Indonesia_2013.JPG",
+    "page_url": "https://en.wikipedia.org/wiki/Sumatran_rhinoceros",
+    "wikidata_item": null
+  }
+}

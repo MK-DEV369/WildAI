@@ -1,0 +1,41 @@
+{
+  "title": "Small Indian civet",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The small Indian civet is a civet native to South and Southeast Asia. It is listed as least concern on the IUCN Red List because of its widespread distribution, widespread habitat use and healthy populations living in agricultural and secondary landscapes of many range states.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Small_Indian_civet",
+  "cleaned_content": "The small Indian civet is a civet native to South and Southeast Asia. It is listed as least concern on the IUCN Red List because of its widespread distribution, widespread habitat use and healthy populations living in agricultural and secondary landscapes of many range states.",
+  "chunks": [
+    "The small Indian civet is a civet native to South and Southeast Asia. It is listed as least concern on the IUCN Red List because of its widespread distribution, widespread habitat use and healthy populations living in agricultural and secondary landscapes of many range states."
+  ],
+  "extra": {
+    "page_title": "Small_Indian_civet",
+    "canonical_name": "Small Indian civet",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Small_Indian_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Small_Indian_civet?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Small_Indian_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Small_Indian_civet"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Small_Indian_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Small_Indian_civet",
+        "edit": "https://en.wikipedia.org/wiki/Small_Indian_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Small_Indian_civet"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Small_Indian_Civet%2C_Silchar%2C_Assam%2C_India.jpg/330px-Small_Indian_Civet%2C_Silchar%2C_Assam%2C_India.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Small_Indian_civet",
+    "wikidata_item": null
+  }
+}

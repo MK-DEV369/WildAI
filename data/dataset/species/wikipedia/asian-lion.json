@@ -1,0 +1,41 @@
+{
+  "title": "Asian lion",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Asiatic lion is a lion that belongs to the subspecies Panthera leo leo. The surviving population of these lions is restricted to the Indian state of Gujarat. It is classified as endangered in the IUCN Red List, is included on CITES Appendix I, and is legally protected in India.",
+  "tags": [
+    "endangered",
+    "protected",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Asian_lion",
+  "cleaned_content": "The Asiatic lion is a lion that belongs to the subspecies Panthera leo leo. The surviving population of these lions is restricted to the Indian state of Gujarat. It is classified as endangered in the IUCN Red List, is included on CITES Appendix I, and is legally protected in India.",
+  "chunks": [
+    "The Asiatic lion is a lion that belongs to the subspecies Panthera leo leo. The surviving population of these lions is restricted to the Indian state of Gujarat. It is classified as endangered in the IUCN Red List, is included on CITES Appendix I, and is legally protected in India."
+  ],
+  "extra": {
+    "page_title": "Asian_lion",
+    "canonical_name": "Asian lion",
+    "description": "Lion population in India",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Asiatic_lion",
+        "revisions": "https://en.wikipedia.org/wiki/Asiatic_lion?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Asiatic_lion?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asiatic_lion"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Asiatic_lion",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Asiatic_lion",
+        "edit": "https://en.wikipedia.org/wiki/Asiatic_lion?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asiatic_lion"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Lions.Gir5_%28cropped%29.jpg/330px-Lions.Gir5_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Asiatic_lion",
+    "wikidata_item": null
+  }
+}

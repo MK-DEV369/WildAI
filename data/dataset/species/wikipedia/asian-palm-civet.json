@@ -1,0 +1,41 @@
+{
+  "title": "Asian palm civet",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Asian palm civet, also called common palm civet, toddy cat and musang, is a viverrid native to South and Southeast Asia. Since 2008, it is IUCN Red Listed as least concern as it accommodates to a broad range of habitats. It is widely distributed with large populations that in 2008 were thought unlikely to be declining. It is threatened by poaching for the illegal wildlife trade.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Asian_palm_civet",
+  "cleaned_content": "The Asian palm civet, also called common palm civet, toddy cat and musang, is a viverrid native to South and Southeast Asia. Since 2008, it is IUCN Red Listed as least concern as it accommodates to a broad range of habitats. It is widely distributed with large populations that in 2008 were thought unlikely to be declining. It is threatened by poaching for the illegal wildlife trade.",
+  "chunks": [
+    "The Asian palm civet, also called common palm civet, toddy cat and musang, is a viverrid native to South and Southeast Asia. Since 2008, it is IUCN Red Listed as least concern as it accommodates to a broad range of habitats. It is widely distributed with large populations that in 2008 were thought unlikely to be declining. It is threatened by poaching for the illegal wildlife trade."
+  ],
+  "extra": {
+    "page_title": "Asian_palm_civet",
+    "canonical_name": "Asian palm civet",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Asian_palm_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Asian_palm_civet?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Asian_palm_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asian_palm_civet"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Asian_palm_civet",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Asian_palm_civet",
+        "edit": "https://en.wikipedia.org/wiki/Asian_palm_civet?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Asian_palm_civet"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Common_Palm_Civet_%28Paradoxurus_hermaphroditus%29_%287781509830%29.jpg/330px-Common_Palm_Civet_%28Paradoxurus_hermaphroditus%29_%287781509830%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Asian_palm_civet",
+    "wikidata_item": null
+  }
+}

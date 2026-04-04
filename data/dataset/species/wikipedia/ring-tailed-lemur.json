@@ -1,0 +1,41 @@
+{
+  "title": "Ring-tailed lemur",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The ring-tailed lemur is a medium- to larger-sized strepsirrhine (wet-nosed) primate and the most internationally recognized lemur species, owing to its long, black-and-white, ringed tail. It belongs to Lemuridae, one of five lemur families, and is the only member of the Lemur genus. Like all lemurs, it is endemic to the island of Madagascar, where it is endangered. Known locally in Malagasy as maky or hira, it ranges from gallery forests to spiny scrub in the southern regions of the island. It is omnivorous, as well as the most adapted to living terrestrially of the extant lemurs.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Ring-tailed_lemur",
+  "cleaned_content": "The ring-tailed lemur is a medium- to larger-sized strepsirrhine (wet-nosed) primate and the most internationally recognized lemur species, owing to its long, black-and-white, ringed tail. It belongs to Lemuridae, one of five lemur families, and is the only member of the Lemur genus. Like all lemurs, it is endemic to the island of Madagascar, where it is endangered. Known locally in Malagasy as maky or hira, it ranges from gallery forests to spiny scrub in the southern regions of the island. It is omnivorous, as well as the most adapted to living terrestrially of the extant lemurs.",
+  "chunks": [
+    "The ring-tailed lemur is a medium- to larger-sized strepsirrhine (wet-nosed) primate and the most internationally recognized lemur species, owing to its long, black-and-white, ringed tail. It belongs to Lemuridae, one of five lemur families, and is the only member of the Lemur genus. Like all lemurs, it is endemic to the island of Madagascar, where it is endangered. Known locally in Malagasy as maky or hira, it ranges from gallery forests to spiny scrub in the southern regions of the island. It is omnivorous, as well as the most adapted to living terrestrially of the extant lemurs."
+  ],
+  "extra": {
+    "page_title": "Ring-tailed_lemur",
+    "canonical_name": "Ring-tailed lemur",
+    "description": "Species of mammal from Madagascar",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Ring-tailed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Ring-tailed_lemur?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Ring-tailed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Ring-tailed_lemur"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Ring-tailed_lemur",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Ring-tailed_lemur",
+        "edit": "https://en.wikipedia.org/wiki/Ring-tailed_lemur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Ring-tailed_lemur"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Ring-tailed_lemur_%28Lemur_catta%29.jpg/330px-Ring-tailed_lemur_%28Lemur_catta%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Ring-tailed_lemur",
+    "wikidata_item": null
+  }
+}

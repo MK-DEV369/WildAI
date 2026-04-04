@@ -1,0 +1,40 @@
+{
+  "title": "Bengal florican",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Bengal florican, also called the Bengal bustard, is a bustard species native to the Indian subcontinent, Cambodia, and Vietnam. It is listed as Critically Endangered on the IUCN Red List because fewer than 1,000 individuals were estimated to be alive as of 2017. It is the only member of the genus Houbaropsis.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Bengal_florican",
+  "cleaned_content": "The Bengal florican, also called the Bengal bustard, is a bustard species native to the Indian subcontinent, Cambodia, and Vietnam. It is listed as Critically Endangered on the IUCN Red List because fewer than 1,000 individuals were estimated to be alive as of 2017. It is the only member of the genus Houbaropsis.",
+  "chunks": [
+    "The Bengal florican, also called the Bengal bustard, is a bustard species native to the Indian subcontinent, Cambodia, and Vietnam. It is listed as Critically Endangered on the IUCN Red List because fewer than 1,000 individuals were estimated to be alive as of 2017. It is the only member of the genus Houbaropsis."
+  ],
+  "extra": {
+    "page_title": "Bengal_florican",
+    "canonical_name": "Bengal florican",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_florican",
+        "revisions": "https://en.wikipedia.org/wiki/Bengal_florican?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_florican?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_florican"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Bengal_florican",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Bengal_florican",
+        "edit": "https://en.wikipedia.org/wiki/Bengal_florican?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Bengal_florican"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Bengal_Florican_Houbaropsis_bengalensis_bengalensis_%28cropped%29.jpg/330px-Bengal_Florican_Houbaropsis_bengalensis_bengalensis_%28cropped%29.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Bengal_florican",
+    "wikidata_item": null
+  }
+}

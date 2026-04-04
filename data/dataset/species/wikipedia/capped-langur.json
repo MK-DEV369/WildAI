@@ -1,0 +1,41 @@
+{
+  "title": "Capped langur",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The capped langur is a primate species in the family Cercopithecidae native to subtropical and tropical dry forests in northeast India, Bhutan, Bangladesh and Myanmar. It is arboreal and feeds on 43 plant species.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Capped_langur",
+  "cleaned_content": "The capped langur is a primate species in the family Cercopithecidae native to subtropical and tropical dry forests in northeast India, Bhutan, Bangladesh and Myanmar. It is arboreal and feeds on 43 plant species.",
+  "chunks": [
+    "The capped langur is a primate species in the family Cercopithecidae native to subtropical and tropical dry forests in northeast India, Bhutan, Bangladesh and Myanmar. It is arboreal and feeds on 43 plant species."
+  ],
+  "extra": {
+    "page_title": "Capped_langur",
+    "canonical_name": "Capped langur",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Capped_langur",
+        "revisions": "https://en.wikipedia.org/wiki/Capped_langur?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Capped_langur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Capped_langur"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Capped_langur",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Capped_langur",
+        "edit": "https://en.wikipedia.org/wiki/Capped_langur?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Capped_langur"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/%27tenebricus%27_Capped_Langur_from_Manas.jpg/330px-%27tenebricus%27_Capped_Langur_from_Manas.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Capped_langur",
+    "wikidata_item": null
+  }
+}

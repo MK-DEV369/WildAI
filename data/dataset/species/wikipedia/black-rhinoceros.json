@@ -1,0 +1,41 @@
+{
+  "title": "Black rhinoceros",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The black rhinoceros, also called the black rhino or the hooked-lip rhinoceros, is a species of rhinoceros native to East and Southern Africa, including Angola, Botswana, Eswatini, Kenya, Lesotho, Malawi, Mozambique, Namibia, South Africa, Tanzania, Zambia, and Zimbabwe. Although the species is referred to as black, its colours vary from brown to grey. It is the only extant species of the genus Diceros.",
+  "tags": [
+    "endangered",
+    "law",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Black_rhinoceros",
+  "cleaned_content": "The black rhinoceros, also called the black rhino or the hooked-lip rhinoceros, is a species of rhinoceros native to East and Southern Africa, including Angola, Botswana, Eswatini, Kenya, Lesotho, Malawi, Mozambique, Namibia, South Africa, Tanzania, Zambia, and Zimbabwe. Although the species is referred to as black, its colours vary from brown to grey. It is the only extant species of the genus Diceros.",
+  "chunks": [
+    "The black rhinoceros, also called the black rhino or the hooked-lip rhinoceros, is a species of rhinoceros native to East and Southern Africa, including Angola, Botswana, Eswatini, Kenya, Lesotho, Malawi, Mozambique, Namibia, South Africa, Tanzania, Zambia, and Zimbabwe. Although the species is referred to as black, its colours vary from brown to grey. It is the only extant species of the genus Diceros."
+  ],
+  "extra": {
+    "page_title": "Black_rhinoceros",
+    "canonical_name": "Black rhinoceros",
+    "description": "Species of mammal",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Black_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Black_rhinoceros?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Black_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_rhinoceros"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Black_rhinoceros",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Black_rhinoceros",
+        "edit": "https://en.wikipedia.org/wiki/Black_rhinoceros?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Black_rhinoceros"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Black_Rhino_at_Working_with_Wildlife.jpg/330px-Black_Rhino_at_Working_with_Wildlife.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Black_rhinoceros",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Proboscis monkey",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The proboscis monkey or long-nosed monkey is an arboreal Old World monkey with an unusually large nose, a reddish-brown skin color and a long tail. It is endemic to the Southeast Asian island of Borneo and is found mostly in mangrove forests and on the coastal areas of the island.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Proboscis_monkey",
+  "cleaned_content": "The proboscis monkey or long-nosed monkey is an arboreal Old World monkey with an unusually large nose, a reddish-brown skin color and a long tail. It is endemic to the Southeast Asian island of Borneo and is found mostly in mangrove forests and on the coastal areas of the island.",
+  "chunks": [
+    "The proboscis monkey or long-nosed monkey is an arboreal Old World monkey with an unusually large nose, a reddish-brown skin color and a long tail. It is endemic to the Southeast Asian island of Borneo and is found mostly in mangrove forests and on the coastal areas of the island."
+  ],
+  "extra": {
+    "page_title": "Proboscis_monkey",
+    "canonical_name": "Proboscis monkey",
+    "description": "Primate species",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Proboscis_monkey",
+        "revisions": "https://en.wikipedia.org/wiki/Proboscis_monkey?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Proboscis_monkey?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Proboscis_monkey"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Proboscis_monkey",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Proboscis_monkey",
+        "edit": "https://en.wikipedia.org/wiki/Proboscis_monkey?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Proboscis_monkey"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Proboscis_Monkey_in_Borneo.jpg/330px-Proboscis_Monkey_in_Borneo.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Proboscis_monkey",
+    "wikidata_item": null
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Western lowland gorilla",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The western lowland gorilla is one of two critically endangered subspecies of the western gorilla that lives in montane, primary and secondary forest and lowland swampland in central Africa in Angola, Cameroon, Central African Republic, Republic of the Congo, Democratic Republic of the Congo, Equatorial Guinea and Gabon. It is the nominate subspecies of the western gorilla, and the smallest of the four gorilla subspecies.",
+  "tags": [
+    "endangered",
+    "forest",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Western_lowland_gorilla",
+  "cleaned_content": "The western lowland gorilla is one of two critically endangered subspecies of the western gorilla that lives in montane, primary and secondary forest and lowland swampland in central Africa in Angola, Cameroon, Central African Republic, Republic of the Congo, Democratic Republic of the Congo, Equatorial Guinea and Gabon. It is the nominate subspecies of the western gorilla, and the smallest of the four gorilla subspecies.",
+  "chunks": [
+    "The western lowland gorilla is one of two critically endangered subspecies of the western gorilla that lives in montane, primary and secondary forest and lowland swampland in central Africa in Angola, Cameroon, Central African Republic, Republic of the Congo, Democratic Republic of the Congo, Equatorial Guinea and Gabon. It is the nominate subspecies of the western gorilla, and the smallest of the four gorilla subspecies."
+  ],
+  "extra": {
+    "page_title": "Western_lowland_gorilla",
+    "canonical_name": "Western lowland gorilla",
+    "description": "Subspecies of ape",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Western_lowland_gorilla",
+        "revisions": "https://en.wikipedia.org/wiki/Western_lowland_gorilla?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Western_lowland_gorilla?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Western_lowland_gorilla"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Western_lowland_gorilla",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Western_lowland_gorilla",
+        "edit": "https://en.wikipedia.org/wiki/Western_lowland_gorilla?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Western_lowland_gorilla"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/WesternLowlandGorilla03.jpg/330px-WesternLowlandGorilla03.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Western_lowland_gorilla",
+    "wikidata_item": null
+  }
+}

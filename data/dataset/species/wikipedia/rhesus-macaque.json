@@ -1,0 +1,41 @@
+{
+  "title": "Rhesus macaque",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The rhesus macaque, colloquially rhesus monkey, is a species of Old World monkey in the Macaca genus. There are between six and nine recognised subspecies split between two groups, the Chinese-derived and the Indian-derived. Generally brown or grey in colour, it is 47\u201353 cm (19\u201321 in) in length with a 20.7\u201322.9 cm (8.1\u20139.0 in) tail and weighs 5.3\u20137.7 kg (12\u201317 lb). It is native to South, Central, and Southeast Asia and has the widest geographic range of all non-human primates, occupying a great diversity of altitudes and habitats.",
+  "tags": [
+    "endangered",
+    "habitat",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Rhesus_macaque",
+  "cleaned_content": "The rhesus macaque, colloquially rhesus monkey, is a species of Old World monkey in the Macaca genus. There are between six and nine recognised subspecies split between two groups, the Chinese-derived and the Indian-derived. Generally brown or grey in colour, it is 47\u201353 cm (19\u201321 in) in length with a 20.7\u201322.9 cm (8.1\u20139.0 in) tail and weighs 5.3\u20137.7 kg (12\u201317 lb). It is native to South, Central, and Southeast Asia and has the widest geographic range of all non-human primates, occupying a great diversity of altitudes and habitats.",
+  "chunks": [
+    "The rhesus macaque, colloquially rhesus monkey, is a species of Old World monkey in the Macaca genus. There are between six and nine recognised subspecies split between two groups, the Chinese-derived and the Indian-derived. Generally brown or grey in colour, it is 47\u201353 cm (19\u201321 in) in length with a 20.7\u201322.9 cm (8.1\u20139.0 in) tail and weighs 5.3\u20137.7 kg (12\u201317 lb). It is native to South, Central, and Southeast Asia and has the widest geographic range of all non-human primates, occupying a great diversity of altitudes and habitats."
+  ],
+  "extra": {
+    "page_title": "Rhesus_macaque",
+    "canonical_name": "Rhesus macaque",
+    "description": "Species of Old World monkey",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Rhesus_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Rhesus_macaque?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Rhesus_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Rhesus_macaque"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Rhesus_macaque",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Rhesus_macaque",
+        "edit": "https://en.wikipedia.org/wiki/Rhesus_macaque?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Rhesus_macaque"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Rhesus_macaque_%28Macaca_mulatta_mulatta%29%2C_male%2C_Gokarna.jpg/330px-Rhesus_macaque_%28Macaca_mulatta_mulatta%29%2C_male%2C_Gokarna.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Rhesus_macaque",
+    "wikidata_item": null
+  }
+}

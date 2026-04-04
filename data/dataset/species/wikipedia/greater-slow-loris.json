@@ -1,0 +1,40 @@
+{
+  "title": "Greater slow loris",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Sunda slow loris, or greater slow loris, is a strepsirrhine primate and a species of slow loris native to Indonesia, West Malaysia, southern Thailand and Singapore. It measures 27 to 38 cm from head to tail and weighs between 599 and 685 g. Like other slow lorises, it has a wet nose (rhinarium), a round head, small ears hidden in thick fur, a flat face, large eyes and a vestigial tail.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Greater_slow_loris",
+  "cleaned_content": "The Sunda slow loris, or greater slow loris, is a strepsirrhine primate and a species of slow loris native to Indonesia, West Malaysia, southern Thailand and Singapore. It measures 27 to 38 cm from head to tail and weighs between 599 and 685 g. Like other slow lorises, it has a wet nose (rhinarium), a round head, small ears hidden in thick fur, a flat face, large eyes and a vestigial tail.",
+  "chunks": [
+    "The Sunda slow loris, or greater slow loris, is a strepsirrhine primate and a species of slow loris native to Indonesia, West Malaysia, southern Thailand and Singapore. It measures 27 to 38 cm from head to tail and weighs between 599 and 685 g. Like other slow lorises, it has a wet nose (rhinarium), a round head, small ears hidden in thick fur, a flat face, large eyes and a vestigial tail."
+  ],
+  "extra": {
+    "page_title": "Greater_slow_loris",
+    "canonical_name": "Greater slow loris",
+    "description": "Species of primate found in South East Asia",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Sunda_slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Sunda_slow_loris?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Sunda_slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sunda_slow_loris"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Sunda_slow_loris",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Sunda_slow_loris",
+        "edit": "https://en.wikipedia.org/wiki/Sunda_slow_loris?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Sunda_slow_loris"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Nycticebus_coucang_004.jpg/330px-Nycticebus_coucang_004.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Sunda_slow_loris",
+    "wikidata_item": null
+  }
+}

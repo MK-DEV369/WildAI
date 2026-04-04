@@ -1,0 +1,40 @@
+{
+  "title": "Indian skimmer",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Indian skimmer or Indian scissors-bill is one of the three species that belong to the skimmer genus Rynchops in the family Laridae. They are somewhat tern-like but like other skimmers, have a short upper mandible and the longer lower mandible that is ploughed along the surface of water as the bird flies over the water to pick aquatic prey. It is found in southern Asia, where it is patchily distributed and declining in numbers. They are mainly found in rivers or estuaries. They are very brightly marked in black, white and orange, making them difficult to miss.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Indian_skimmer",
+  "cleaned_content": "The Indian skimmer or Indian scissors-bill is one of the three species that belong to the skimmer genus Rynchops in the family Laridae. They are somewhat tern-like but like other skimmers, have a short upper mandible and the longer lower mandible that is ploughed along the surface of water as the bird flies over the water to pick aquatic prey. It is found in southern Asia, where it is patchily distributed and declining in numbers. They are mainly found in rivers or estuaries. They are very brightly marked in black, white and orange, making them difficult to miss.",
+  "chunks": [
+    "The Indian skimmer or Indian scissors-bill is one of the three species that belong to the skimmer genus Rynchops in the family Laridae. They are somewhat tern-like but like other skimmers, have a short upper mandible and the longer lower mandible that is ploughed along the surface of water as the bird flies over the water to pick aquatic prey. It is found in southern Asia, where it is patchily distributed and declining in numbers. They are mainly found in rivers or estuaries. They are very brightly marked in black, white and orange, making them difficult to miss."
+  ],
+  "extra": {
+    "page_title": "Indian_skimmer",
+    "canonical_name": "Indian skimmer",
+    "description": "Species of bird",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Indian_skimmer",
+        "revisions": "https://en.wikipedia.org/wiki/Indian_skimmer?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Indian_skimmer?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_skimmer"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Indian_skimmer",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Indian_skimmer",
+        "edit": "https://en.wikipedia.org/wiki/Indian_skimmer?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Indian_skimmer"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Skimmer1.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Indian_skimmer",
+    "wikidata_item": null
+  }
+}

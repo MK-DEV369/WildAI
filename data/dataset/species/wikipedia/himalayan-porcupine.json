@@ -1,0 +1,40 @@
+{
+  "title": "Himalayan porcupine",
+  "year": 2024,
+  "category": "species",
+  "source": "Wikipedia",
+  "type": "html",
+  "content": "The Malayan porcupine or Himalayan porcupine is a species of rodent in the family Hystricidae. Three subspecies are extant in South and Southeast Asia.",
+  "tags": [
+    "endangered",
+    "species",
+    "wildlife"
+  ],
+  "url": "https://en.wikipedia.org/wiki/Himalayan_porcupine",
+  "cleaned_content": "The Malayan porcupine or Himalayan porcupine is a species of rodent in the family Hystricidae. Three subspecies are extant in South and Southeast Asia.",
+  "chunks": [
+    "The Malayan porcupine or Himalayan porcupine is a species of rodent in the family Hystricidae. Three subspecies are extant in South and Southeast Asia."
+  ],
+  "extra": {
+    "page_title": "Himalayan_porcupine",
+    "canonical_name": "Himalayan porcupine",
+    "description": "Species of rodent",
+    "content_urls": {
+      "desktop": {
+        "page": "https://en.wikipedia.org/wiki/Malayan_porcupine",
+        "revisions": "https://en.wikipedia.org/wiki/Malayan_porcupine?action=history",
+        "edit": "https://en.wikipedia.org/wiki/Malayan_porcupine?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Malayan_porcupine"
+      },
+      "mobile": {
+        "page": "https://en.wikipedia.org/wiki/Malayan_porcupine",
+        "revisions": "https://en.wikipedia.org/wiki/Special:History/Malayan_porcupine",
+        "edit": "https://en.wikipedia.org/wiki/Malayan_porcupine?action=edit",
+        "talk": "https://en.wikipedia.org/wiki/Talk:Malayan_porcupine"
+      }
+    },
+    "thumbnail_source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Hystrix_brachyura%2C_Malayan_porcupine.jpg/330px-Hystrix_brachyura%2C_Malayan_porcupine.jpg",
+    "page_url": "https://en.wikipedia.org/wiki/Malayan_porcupine",
+    "wikidata_item": null
+  }
+}
