@@ -110,8 +110,8 @@ def main() -> None:
         rag_engine = RAGEngine(config)
         
         # Force rebuild
-        index_path = ROOT / "data" / "indices" / "rag.index"
-        chunks_path = ROOT / "data" / "indices" / "rag_chunks.json"
+        index_path = config.index_path
+        chunks_path = config.metadata_path
         
         if index_path.exists():
             index_path.unlink()
@@ -148,7 +148,7 @@ def main() -> None:
     
     for query_idx, query in enumerate(test_queries, 1):
         try:
-            results = rag_engine.retrieve(query, top_k=3)
+            results = rag_engine.search(query, top_k=3)
             logger.info(f"  Query {query_idx}: '{query}'")
             if results:
                 logger.info(f"    → Retrieved {len(results)} results")

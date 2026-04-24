@@ -34,4 +34,5 @@ class QueryResponse(BaseModel):
     query: str
     answer: str
     total_hits: int
+    highlight_terms: list[str] = Field(default_factory=list)
     hits: list[SearchHit]

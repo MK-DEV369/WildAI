@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Bot, Database, RefreshCw, Search, ShieldCheck, Sparkles, TreePine, Users, Home } from 'lucide-react'
+import { ArrowRight, Bot, Database, Download, RefreshCw, Search, ShieldCheck, Sparkles, TreePine, Users, Home } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Dock from '@/components/ui/dock'
+import ChromaGrid from '@/components/ChromaGrid'
 
 type SearchHit = {
   score: number
@@ -19,13 +21,8 @@ type QueryResponse = {
   query: string
   answer: string
   total_hits: number
+  highlight_terms: string[]
   hits: SearchHit[]
-}
-
-type TeamMember = {
-  name: string
-  role: string
-  bio: string
 }
 
 const categories = [
@@ -77,40 +74,63 @@ const exampleQueries = [
   },
 ]
 
-const teamMembers: TeamMember[] = [
+const teamGridItems = [
   {
-    name: 'Team Member 1',
-    role: 'Lead Researcher',
-    bio: 'Specialized in wildlife conservation policies and ecosystem management.',
+    image: '/Morya.jpeg',
+    title: 'L Moryakantha',
+    subtitle: '1RV24AI406',
+    description: 'lmoryakantha.ai24@rvce.edu.in',
+    borderColor: '#7ef0a8',
+    gradient: 'linear-gradient(165deg, #0f3d31, #07110f 72%)',
   },
   {
-    name: 'Team Member 2',
-    role: 'ML Engineer',
-    bio: 'Expert in RAG systems, embeddings, and semantic search architectures.',
+    image: '/Vineet.jpeg',
+    title: 'Vineet Raj',
+    subtitle: '1RV23AI132',
+    description: 'vineetraj.ai23@rvce.edu.in',
+    borderColor: '#ffc857',
+    gradient: 'linear-gradient(165deg, #463410, #07110f 72%)',
   },
   {
-    name: 'Team Member 3',
-    role: 'Data Specialist',
-    bio: 'Focused on data curation, quality assurance, and corpus management.',
+    image: '/Srihari.jpeg',
+    title: 'Srihari S',
+    subtitle: '1RV23AI106',
+    description: 'sriharis.ai23@rvce.edu.in',
+    borderColor: '#6ea7ff',
+    gradient: 'linear-gradient(165deg, #12304a, #07110f 72%)',
   },
 ]
 
-function highlightQuery(text: string, query: string): JSX.Element | string {
-  if (!query || query.length < 2) return text
+function escapeRegex(term: string): string {
+  return term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function highlightText(text: string, terms: string[]): JSX.Element | string {
+  const cleanTerms = terms
+    .map((term) => term.trim())
+    .filter((term) => term.length >= 2)
+
+  if (!cleanTerms.length) {
+    return text
+  }
+
   try {
-    const regex = new RegExp(`(${query.split(/\s+/).join('|')})`, 'gi')
+    const regex = new RegExp(`(${cleanTerms.map(escapeRegex).join('|')})`, 'gi')
     const parts = text.split(regex)
+    const termSet = new Set(cleanTerms.map((term) => term.toLowerCase()))
+
     return (
       <>
-        {parts.map((part, i) =>
-          regex.test(part) ? (
-            <mark key={i} style={{ backgroundColor: '#fbbf24', padding: '0 2px' }}>
+        {parts.map((part, idx) => {
+          const isMatch = termSet.has(part.toLowerCase())
+          return isMatch ? (
+            <mark key={`${part}-${idx}`} style={{ backgroundColor: '#fbbf24', padding: '0 2px' }}>
               {part}
             </mark>
           ) : (
-            <span key={i}>{part}</span>
+            <span key={`${part}-${idx}`}>{part}</span>
           )
-        )}
+        })}
       </>
     )
   } catch {
@@ -155,6 +175,8 @@ function ResearchConsole({
   runQuery: (e: React.FormEvent<HTMLFormElement>) => void
   rebuildIndex: () => void
 }) {
+  const [selectedExample, setSelectedExample] = useState(exampleQueries[0]?.query ?? '')
+
   const metrics = [
     { label: 'Status', value: health?.status ?? 'offline' },
     { label: 'Index', value: health?.index_ready ? 'ready' : 'not built' },
@@ -168,6 +190,56 @@ function ResearchConsole({
     }
     return b.score - a.score
   })
+
+  function downloadSummary() {
+    if (!result?.answer) return
+
+    const referenceSection = sortedHits.length
+      ? sortedHits
+          .map((hit, idx) => {
+            const yearText = hit.year ? ` (${hit.year})` : ''
+            const scoreText = `${Math.round(hit.score * 100)}%`
+            return [
+              `${idx + 1}. ${hit.title}${yearText}`,
+              `   - Category: ${hit.category}`,
+              `   - Source: ${hit.source}`,
+              `   - Type: ${hit.document_type}`,
+              `   - Relevance: ${scoreText}`,
+              `   - URL: ${hit.url || 'N/A'}`,
+            ].join('\n')
+          })
+          .join('\n\n')
+      : 'No references available for this query.'
+
+    const fileBody = [
+      '# WILDAI Query Report',
+      '',
+      `Generated: ${new Date().toLocaleString()}`,
+      '',
+      '## Query',
+      result.query,
+      '',
+      '## Answer Summary',
+      result.answer,
+      '',
+      '## Retrieval Summary',
+      `Total Hits: ${result.total_hits}`,
+      '',
+      '## References',
+      referenceSection,
+    ].join('\n')
+
+    const blob = new Blob([fileBody], { type: 'text/markdown;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const stamp = new Date().toISOString().replace(/[:.]/g, '-')
+    link.href = url
+    link.download = `wildai-query-report-${stamp}.md`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
 
   return (
     <div className="layout">
@@ -302,18 +374,25 @@ function ResearchConsole({
               <h3>Top example queries</h3>
               <p>Use these to explore different parts of the corpus.</p>
             </div>
-            <div className="example-list">
-              {exampleQueries.map((item) => (
-                <button
-                  key={item.label}
-                  type="button"
-                  className="example-chip"
-                  onClick={() => setQuery(item.query)}
+            <div className="example-picker">
+              <label>
+                Example Query
+                <select
+                  className="example-select"
+                  value={selectedExample}
+                  onChange={(event) => setSelectedExample(event.target.value)}
                 >
-                  <span>{item.label}</span>
-                  <small>{item.query}</small>
-                </button>
-              ))}
+                  {exampleQueries.map((item) => (
+                    <option key={item.label} value={item.query}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button className="secondary-button" type="button" onClick={() => setQuery(selectedExample)}>
+                Apply Selected Query
+              </button>
+              <p className="example-preview">{selectedExample}</p>
             </div>
           </aside>
         </div>
@@ -332,9 +411,20 @@ function ResearchConsole({
           transition={{ duration: 0.4 }}
         >
           <div className="panel answer-panel">
-            <div className="section-heading">
-              <h2>Answer synthesis</h2>
-              <p>Concise explanation generated from the highest-scoring retrieved chunks.</p>
+            <div className="answer-header">
+              <div className="section-heading">
+                <h2>Answer synthesis</h2>
+                <p>Concise explanation generated from the highest-scoring retrieved chunks.</p>
+              </div>
+              <button
+                className="secondary-button answer-download"
+                type="button"
+                onClick={downloadSummary}
+                disabled={!result?.answer}
+              >
+                Download Summary
+                <Download size={16} />
+              </button>
             </div>
             <div className="answer-text">
               {(result?.answer ?? 'Run a query to see the retrieval answer and source grounding here.')
@@ -368,7 +458,7 @@ function ResearchConsole({
                     <strong className="score-badge">{Math.round(hit.score * 100)}%</strong>
                   </div>
                   <h3>{hit.title}</h3>
-                  <p className="result-text">{highlightQuery(hit.text, query)}</p>
+                  <p className="result-text">{highlightText(hit.text, result?.highlight_terms ?? [])}</p>
                   <div className="result-meta-info">
                     <span className="source-meta">📄 {hit.source}</span>
                     <span className="type-meta">📋 {hit.document_type}</span>
@@ -401,44 +491,19 @@ function TeamPage() {
     >
       <section className="hero panel">
         <div className="hero-copy">
-          <div className="eyebrow">
-            <Users size={16} />
-            WILDAI Project
-          </div>
           <h1>Meet the Team</h1>
           <p>Dedicated professionals working on wildlife conservation through AI and RAG technology.</p>
         </div>
       </section>
 
-      <section className="panel">
-        <div className="section-heading">
-          <h2>Our Team</h2>
-          <p>Combining expertise in conservation, machine learning, and data science.</p>
-        </div>
+      <section className="panel team-chroma-panel">
 
-        <div className="team-grid">
-          {teamMembers.map((member, index) => (
-            <motion.article
-              key={member.name}
-              className="team-card"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <div className="team-avatar">
-                <div className="avatar-placeholder">{member.name.charAt(0)}</div>
-              </div>
-              <div className="team-content">
-                <h3>{member.name}</h3>
-                <p className="team-role">{member.role}</p>
-                <p className="team-bio">{member.bio}</p>
-              </div>
-            </motion.article>
-          ))}
+        <div className="team-chroma-shell">
+          <ChromaGrid items={teamGridItems} radius={260} columns={3} rows={1} damping={0.45} fadeOut={0.6} />
         </div>
       </section>
 
-      <section className="panel">
+      <section className="panel stats-panel">
         <div className="section-heading">
           <h2>Project Statistics</h2>
           <p>Key metrics about the WILDAI corpus and system.</p>
@@ -487,6 +552,35 @@ function App() {
   const [health, setHealth] = useState<{ status: string; index_ready: boolean } | null>(null)
   const [result, setResult] = useState<QueryResponse | null>(null)
   const [error, setError] = useState('')
+
+  const dockItems = [
+    {
+      icon: <Home size={18} />,
+      label: 'Research',
+      active: currentPage === 'research',
+      onClick: () => setCurrentPage('research'),
+    },
+    {
+      icon: <Users size={18} />,
+      label: 'Team',
+      active: currentPage === 'team',
+      onClick: () => setCurrentPage('team'),
+    },
+    {
+      icon: <RefreshCw size={18} />,
+      label: reindexing ? 'Rebuilding' : 'Rebuild',
+      onClick: rebuildIndex,
+      disabled: reindexing,
+    },
+    {
+      icon: <Sparkles size={18} />,
+      label: 'Example',
+      onClick: () => {
+        setCurrentPage('research')
+        setQuery(exampleQuery)
+      },
+    },
+  ]
 
   useEffect(() => {
     void loadHealth()
@@ -556,30 +650,25 @@ function App() {
       <div className="orb orb-two" />
       <div className="orb orb-three" />
 
-      <nav className="navbar">
-        <div className="navbar-content">
-          <div className="navbar-brand">
-            <TreePine size={24} />
+      <header className="navbar-shell">
+        <div className="navbar-brand">
+          <TreePine size={24} />
+          <div>
             <span>WILDAI</span>
-          </div>
-          <div className="navbar-links">
-            <button
-              className={`nav-link ${currentPage === 'research' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('research')}
-            >
-              <Home size={18} />
-              Research Console
-            </button>
-            <button
-              className={`nav-link ${currentPage === 'team' ? 'active' : ''}`}
-              onClick={() => setCurrentPage('team')}
-            >
-              <Users size={18} />
-              Team
-            </button>
+            <small>Research Console</small>
           </div>
         </div>
-      </nav>
+
+        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+
+        <div className="navbar-status" data-ready={Boolean(health?.index_ready)}>
+          <span className="status-dot" />
+          <div>
+            <strong>{health?.status ?? 'offline'}</strong>
+            <small>{health?.index_ready ? 'Index ready' : 'Index warming up'}</small>
+          </div>
+        </div>
+      </header>
 
       <main className="layout-wrapper">
         <AnimatePresence mode="wait">

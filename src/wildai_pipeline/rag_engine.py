@@ -66,9 +66,20 @@ class RAGEngine:
                 logger.info(f"Loading embedding model: {self.config.embedding_model_name} on {self._device}")
                 self._model = SentenceTransformer(self.config.embedding_model_name, device=self._device)
             except Exception as exc:
-                logger.warning(f"Failed to load sentence-transformers model: {exc}, falling back to hashing")
-                self._encoder_mode = "hashing"
-                self._model = None
+                logger.warning(f"Failed to load sentence-transformers model on {self._device}: {exc}")
+                if self._device != "cpu":
+                    try:
+                        logger.info(f"Retrying embedding model on cpu: {self.config.embedding_model_name}")
+                        self._model = SentenceTransformer(self.config.embedding_model_name, device="cpu")
+                        self._device = "cpu"
+                    except Exception as cpu_exc:
+                        logger.warning(f"Failed to load sentence-transformers model on cpu: {cpu_exc}, falling back to hashing")
+                        self._encoder_mode = "hashing"
+                        self._model = None
+                else:
+                    logger.warning("Falling back to hashing")
+                    self._encoder_mode = "hashing"
+                    self._model = None
         return self._model
 
     def _encode_batch(self, texts: list[str], batch_size: int | None = None) -> np.ndarray:
@@ -564,7 +575,15 @@ class RAGEngine:
                 year=year,
             )
 
-        results = self._dedupe_hits(ranked_results)[:top_k]
+        results = self._dedupe_hits(ranked_results)
+
+        if latest_query and year is None:
+            recent_floor = 2023
+            recent_hits = [hit for hit in results if (hit.get("year") or 0) >= recent_floor]
+            older_hits = [hit for hit in results if (hit.get("year") or 0) < recent_floor]
+            results = recent_hits + older_hits
+
+        results = results[:top_k]
 
         return results
 
@@ -601,14 +620,17 @@ class RAGEngine:
             "protocol",
         }
         policy_like_categories = {"policy", "policies", "legal", "legislative", "national-policy", "state-policy", "species-plan"}
-        top = next(
-            (
-                hit
-                for hit in sorted_hits
-                if hit.get("document_type") in policy_like_types or hit.get("category") in policy_like_categories
-            ),
-            sorted_hits[0],
-        )
+        if latest_query and not compare_query:
+            top = sorted_hits[0]
+        else:
+            top = next(
+                (
+                    hit
+                    for hit in sorted_hits
+                    if hit.get("document_type") in policy_like_types or hit.get("category") in policy_like_categories
+                ),
+                sorted_hits[0],
+            )
         years = [hit["year"] for hit in sorted_hits if isinstance(hit.get("year"), int)]
         sources = sorted({hit["source"] for hit in sorted_hits[:6]})
 

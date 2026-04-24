@@ -1,11 +1,72 @@
 from __future__ import annotations
 
+import re
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import PipelineConfig
 from .rag_engine import RAGEngine
 from .schemas import BuildIndexResponse, QueryRequest, QueryResponse, SearchHit
+
+
+HIGHLIGHT_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "how",
+    "in",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "to",
+    "was",
+    "what",
+    "when",
+    "where",
+    "which",
+    "who",
+    "why",
+    "with",
+}
+
+
+def extract_highlight_terms(query: str, max_terms: int = 12) -> list[str]:
+    """Return de-duplicated query tokens suitable for safe regex highlighting."""
+    if not query.strip():
+        return []
+
+    # Keep words, numbers, and common internal separators (hyphen/apostrophe/slash).
+    raw_terms = re.findall(r"[A-Za-z0-9]+(?:[-'/][A-Za-z0-9]+)*", query)
+
+    unique_terms: list[str] = []
+    seen_terms: set[str] = set()
+
+    for term in raw_terms:
+        normalized = term.lower()
+        if len(normalized) < 2:
+            continue
+        if normalized in HIGHLIGHT_STOPWORDS:
+            continue
+        if normalized in seen_terms:
+            continue
+
+        seen_terms.add(normalized)
+        unique_terms.append(term)
+
+    unique_terms.sort(key=len, reverse=True)
+    return unique_terms[:max_terms]
 
 
 def create_app() -> FastAPI:
@@ -44,10 +105,12 @@ def create_app() -> FastAPI:
             year=request.year,
         )
         answer = engine.answer(request.query, hits)
+        highlight_terms = extract_highlight_terms(request.query)
         return QueryResponse(
             query=request.query,
             answer=answer,
             total_hits=len(hits),
+            highlight_terms=highlight_terms,
             hits=[SearchHit(**hit) for hit in hits],
         )
 
