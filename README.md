@@ -1,103 +1,111 @@
 # WILDAI NLP GenAI - Multimodal Wildlife + RAG + Agentic System
 
-A comprehensive full-stack wildlife information retrieval and conservation system with AI-powered generation. Designed for learning advanced NLP, embeddings, RAG, and modern web technologies.
+A comprehensive full-stack wildlife information retrieval, conservation policy analysis, and chatbot system with AI-powered generation. Designed for learning advanced NLP, vector search, embeddings, RAG, and modern web technologies.
 
-## 🎯 Features
+---
 
-✅ **100+ Endangered Species** with Wikipedia profiles and thumbnail images
-✅ **Historical Policy Versions** across multiple years for temporal comparison
-✅ **State & National Regulations** from India (expandable to other regions)
-✅ **Intelligent Chunking** using sentence-boundary-aware adaptive splitting
-✅ **Large Embedding Model** (768-dim mpnet-base-v2) for better semantics
-✅ **GPU Optimization** with batched encoding and aggressive memory cleanup
-✅ **145 Curated Documents** in only 6.6 MB (9.9 GB storage available)
-✅ **Full Stack**: FastAPI backend, FAISS vector search, React animated UI
+## 🎯 Features & Capabilities
 
-## 📊 Corpus Statistics
+✅ **364 Curated Documents** across **34 categories** and **21 sources** spanning **155+ years** (1871-2026).
+✅ **High-Authority Sources** including full texts of India's Wildlife Protection Act (1972 with amendments), Forest Rights Act (2006), National Wildlife Action Plans (2002-2031 & 2017-2031), CITES, and Ramsar Convention.
+✅ **Intelligent Chunking** using sentence-boundary-aware adaptive splitting (max 500 words per chunk).
+✅ **FAISS Vector Search** with 768-dim `nomic-embed-text` embeddings (605.1 MB index, 206,529 chunks).
+✅ **Heuristic Query Re-ranking** combining semantic embeddings, lexical overlap keyword matching, and recency/policy intent boosting.
+✅ **Local Chatbot Experience** integrating RAG-grounded prompts with a local Ollama model (`llama3.2:3b`).
+✅ **Dynamic Data Exports** generating cited query reports in **Markdown (`.md`)**, **PDF (`.pdf`)**, or **Word (`.docx`)** formats, embedding a dynamically generated word cloud.
+✅ **Rich Visual Console** incorporating interactive SVG word clouds, analytics charts (yearly trends & categories), a document viewer, and visual micro-animations.
 
-- **Total Documents**: 145
-- **Species Profiles**: 96+ endangered animals (Wikipedia)
-- **Species Images**: 19+ thumbnail images
-- **Zoo Profiles**: 15 zoo/conservation center documents
-- **Policies**: National, state-level, and historical versions
-- **Legal Documents**: Treaties, acts, regulations
-- **Ecosystems**: Habitat and biodiversity reports
-- **Storage Used**: 6.61 MB / 10,000 MB (10 GB allocated)
-- **Embedding Dimension**: 768 (all-mpnet-base-v2) vs 384 (all-MiniLM-L6-v2)
+---
 
-## 🏗️ Architecture
+## 📊 Corpus Statistics (v4.1)
+
+- **Total Documents:** 364
+- **Total Indexed Chunks:** 206,529
+- **FAISS Index Size:** 605.1 MB
+- **Corpus Size on Disk:** 2.089 GB (exceeding the 2GB project target)
+- **Metadata Completeness:** 98.9% (fully populated year fields, tags, and categories)
+- **Year Range:** 1871 - 2026
+- **Categories Mix:**
+  - Species: 105 documents
+  - Policies: 48 documents
+  - Ecosystems: 16 documents
+  - International Treaties: 16 documents
+  - Zoo Networks: 15 documents
+  - Biodiversity: 11 documents
+  - Legal Documents: 11 documents
+  - and 27 other categories.
+
+---
+
+## 🏗️ System Architecture
 
 ### Backend Stack
-- **Python 3.11** with venv
-- **FastAPI** for REST API
-- **FAISS** for vector similarity search (768-dim vectors)
-- **sentence-transformers** for semantic embeddings (with hashing fallback)
-- **PyMuPDF** for PDF text extraction
-- **BeautifulSoup + requests** for web scraping
-- **Pillow + pytesseract** for OCR on images
+- **Python 3.11** with virtual environment (`venv`)
+- **FastAPI** for HTTP REST API
+- **FAISS** for vector similarity search
+- **Sentence-Transformers / Ollama** for 768-dim embeddings (`nomic-embed-text`)
+- **PyMuPDF** for PDF parsing
+- **BeautifulSoup + requests** for web scraping and cleanups
+- **Pillow + pytesseract** for image OCR fallbacks
+- **ReportLab & python-docx** for on-the-fly PDF and DOCX generation
+- **WordCloud & Matplotlib** for server-side word cloud PNG generation
 
 ### Frontend Stack  
-- **React 18** with TypeScript
-- **Vite** for blazingly fast development
-- **Framer Motion** for smooth animations
-- **Lucide icons** for a polished UI
-- **Tailwind CSS** for responsive styling
+- **React 18** with **TypeScript**
+- **Vite** for blazingly fast builds
+- **Framer Motion** for smooth glassmorphic page transitions
+- **Lucide Icons** for a premium icon system
+- **D3 Cloud** for interactive, client-rendered word clouds
+- **Vanilla CSS** (`styles.css`) for layout, responsive breaks, and glowing background effects
 
 ### Dataset Layout
-
 ```
 data/
 └── dataset/
-    ├── policies/
-    │   ├── india/           # National & state policies
-    │   └── global/
-    ├── species/             # 96+ endangered animal profiles
-    │   ├── endangered/
-    │   └── wiki/
-    ├── zoos/                # Zoo and conservation center profiles
-    ├── ecosystems/          # Forest, coral, grassland reports
-    ├── legal/               # Acts, treaties, regulations
-    │   ├── india/           # 1972-2002 acts
-    │   └── global/          # CBD, UNEP, etc.
-    ├── images/
-    │   └── species/         # Thumbnail images (19+)
-    └── failed-downloads.json # Retry log
+    ├── biodiversity/
+    ├── ecosystems/
+    ├── legal/
+    ├── national-policy/         # High-authority national policies
+    ├── international-convention/ # Treaties (CITES, Ramsar, CBD)
+    ├── state-policy/            # State-level policies (Karnataka, MP, etc.)
+    ├── species/                 # Species profiles & endangered animals
+    ├── species-plan/            # Species-specific recovery programs (Project Tiger, Project Elephant)
+    ├── protected-area-plan/     # Sanctuary and national park management plans
+    ├── zoos/                    # Zoo profiles and histories
+    └── zoos-policy/             # Zoo regulatory policies
 ```
+
+---
 
 ## 🚀 Quick Start
 
 ### 1. Setup & Activate Environment
-
 ```bash
-cd e:\6th\ SEM\ Data\Projects\WILDAI_NLP_GENAI
+cd e:\6th_SEM_Data\Projects\WILDAI_NLP_GENAI
 .\venv\Scripts\Activate.ps1  # Windows
 source venv/bin/activate     # Linux/Mac
 ```
 
-### 2. Install & Build Corpus
-
+### 2. Install Dependencies
 ```bash
-# Install Python dependencies
 pip install -r requirements.txt
-
-# Option A: Use existing corpus
-python scripts/populate_corpus.py              # ~15 documents, basic
-python scripts/populate_corpus_extended.py     # 100+ animals, policies, state regs
-
-# Option B: Rebuild FAISS index after adding documents
-python scripts/run_phase1.py
 ```
 
-### 3. Start Backend API
+### 3. Build/Rebuild FAISS Index
+To ingest files from `data/dataset/` and rebuild the FAISS vector database:
+```bash
+python scripts/run_phase1.py
+```
+*(Or click "Rebuild FAISS Index" in the frontend Research Console).*
 
+### 4. Start Backend API
 ```bash
 python scripts/run_api.py
 # API runs on http://127.0.0.1:8000
 ```
 
-### 4. Start Frontend
-
-In another terminal:
+### 5. Start Frontend
+In a separate terminal:
 ```bash
 cd frontend
 npm install
@@ -105,168 +113,49 @@ npm run dev
 # Frontend runs on http://127.0.0.1:5173
 ```
 
-### 5. Query via UI or API
-
-**UI**: Open http://127.0.0.1:5173
-- Type queries like "endangered tigers", "forest policy" 
-- Click "Rebuild Index" to refresh after adding documents
-
-**Direct API**:
-```bash
-curl -X POST http://127.0.0.1:8000/api/query \
-  -H "Content-Type: application/json" \
-  -d '{"query": "wildlife protection laws", "top_k": 5}'
-```
-
-## 📚 Key Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `scripts/populate_corpus.py` | Download ~15 policy/legal docs + 5 species |
-| `scripts/populate_corpus_extended.py` | Download 100+ animals + comprehensive policies |
-| `scripts/run_phase1.py` | Build FAISS index from dataset/ |
-| `scripts/run_api.py` | Start FastAPI backend |
-| `scripts/test_expanded_corpus.py` | Test retrieval with sample queries |
-| `scripts/corpus_management.py` | View stats, clean old docs, verify integrity |
-
-## 🎓 Learning Path
-
-### Week 1-2: Data Collection
-- Explore `populate_corpus_extended.py` for web scraping patterns
-- Study `src/wildai_pipeline/extractors.py` for PDF/HTML/image extraction
-- Understand cleaning and chunking in `src/wildai_pipeline/cleaning.py`
-
-### Week 2-3: Embeddings & Indexing  
-- Review `src/wildai_pipeline/rag_engine.py` for FAISS integration
-- Experiment with different embedding models (all-MiniLM-L6-v2, all-mpnet-base-v2)
-- Observe GPU memory management and batching strategies
-
-### Week 3-4: API & UI
-- Study FastAPI endpoints in `src/wildai_pipeline/api.py`
-- Explore React components in `frontend/src/App.tsx`
-- Try modifying the UI or adding new retrieval strategies
-
-### Week 4+: Production & Scale
-- Add state management (Redux/Zustand) for complex queries
-- Implement LLM-based answer generation  
-- Add user authentication and audit logging
-- Deploy to cloud (Azure, AWS, GCP)
-
-## 🧭 Next Feature Set
-
-The repository already contains the zoo corpus, retrieval pipeline, and a Markdown download for answers. The next useful additions are:
-
-- **Zoo policy / zoo intelligence layer**: treat `data/dataset/zoos/` as a first-class category, add zoo-specific metadata like `zoo_type`, `state`, `species_maintained`, `breeding_programs`, and expose zoo filters and zoo-focused result cards in the UI.
-- **Download as document**: extend the current Markdown export into server-side export formats such as `md`, `pdf`, and `docx`, including query, answer, citations, and metadata.
-- **Inference / chatbot**: move from retrieval-only to retrieval + generation with a `/api/chat` or `/api/answer` endpoint, conversation IDs, and an optional local model backend such as Ollama.
-- **Agentic AI**: add a small planner layer that can break a user request into search, filter, retrieve, summarize, and export steps, then log each step for traceability.
-- **Word cloud and visualizations**: add analytics endpoints for terms, categories, years, sources, and result counts; render them in the frontend with charts and a word cloud panel.
-
-## What Is Still Missing
-
-- Dynamic corpus and system stats from the backend; the current stats cards in the frontend should not stay hardcoded.
-- A backend export API; the current download only creates a local Markdown file in the browser.
-- A chat session model; there is no conversation memory or multi-turn state yet.
-- A proper analytics API for charts, trends, and word clouds.
-- A source metadata normalization pass so zoo, policy, legal, and ecosystem documents expose the same fields consistently.
-- An evaluation/monitoring loop so you can measure retrieval quality, generation quality, and failure cases after each change.
-
-## Recommended Build Order
-
-1. Make backend stats and source metadata dynamic.
-2. Add zoo-specific filtering and detail views.
-3. Add export endpoints for Markdown/PDF/DOCX.
-4. Add retrieval-augmented generation and a simple chatbot UI.
-5. Add analytics endpoints and visual dashboards.
-6. Add agentic orchestration only after the retrieval and export paths are stable.
-
-## 🔧 Configuration
-
-Edit `src/wildai_pipeline/config.py`:
-
-```python
-@dataclass(slots=True)
-class PipelineConfig:
-    embedding_model_name: str = "nomic-embed-text"  # Ollama embedding model
-    chunk_target_words: int = 400  # Adaptive chunking target
-    use_gpu: bool = True  # GPU for embeddings
-    max_batch_size: int = 32  # Batch encoding
-    aggressive_cleanup: bool = True  # GPU memory management
-```
-
-## 💾 Storage & Memory Management
-
-**Storage Budget**: 10 GB
-- **Current Usage**: 6.61 MB (140 documents)
-- **Remaining**: 9.9 GB for expansion
-
-**Memory Optimization**:
-- ✅ Batched encoding (32 chunks per batch on GPU)
-- ✅ Adaptive chunking (respects sentence boundaries)
-- ✅ Aggressive GPU cache cleanup between batches
-- ✅ Fallback to hashing when CUDA unavailable
-- ✅ Index metadata stored separately (2.1 MB JSON)
-
-## 📝 Example Document
-
-```json
-{
-  "title": "Bengal Tiger",
-  "year": 2024,
-  "category": "species",
-  "source": "Wikipedia",
-  "type": "html",
-  "content": "The Bengal tiger (Panthera tigris)...",
-  "cleaned_content": "The Bengal tiger Panthera tigris...",
-  "chunks": [
-    "The Bengal tiger Panthera tigris is a tiger population in the Indian subcontinent...",
-    "Bengal tigers are larger than other tiger subspecies...",
-    "Conservation efforts have shown mixed success..."
-  ],
-  "tags": ["tiger", "endangered", "species", "wildlife"],
-  "url": "https://en.wikipedia.org/wiki/Bengal_tiger",
-  "extra": {
-    "page_title": "Bengal_tiger",
-    "thumbnail_source": "https://...",
-    "wikidata_item": "Q4981"
-  }
-}
-```
+---
 
 ## 🌐 API Endpoints
 
-```
-GET  /api/health               # Health check
-POST /api/query                # Search & retrieve
-POST /api/index/rebuild        # Rebuild FAISS index
-GET  /api/corpus/stats         # Corpus statistics
-```
-
-## 🛠️ Troubleshooting
-
-**"ModuleNotFoundError: No module named 'wildai_pipeline'"**
-→ Set `PYTHONPATH=./src` or run from project root
-
-**"Torch not compiled with CUDA enabled"**  
-→ Falls back to hashing embeddings; install `torch` with CUDA for GPU speedup
-
-**"SslError: certificate verify failed"**  
-→ Scripts set `verify=False` for development; use proper certs in production
-
-**"FAISS IndexFlatIP dimension mismatch"**
-→ Index was built with different embedding model; run `python scripts/run_phase1.py` to rebuild
-
-## 📖 References
-
-- FAISS: https://github.com/facebookresearch/faiss
-- Sentence Transformers: https://huggingface.co/sentence-transformers
-- FastAPI: https://fastapi.tiangolo.com/
-- React: https://react.dev/
-
-## 📄 License
-
-Educational use—modify and extend freely for your project requirements.
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| `GET` | `/api/health` | Health and index readiness check |
+| `POST` | `/api/query` | Grounded search & query response |
+| `POST` | `/api/index/rebuild` | Programmatic index rebuilding |
+| `POST` | `/api/export?fmt={md\|pdf\|docx}` | Generates exportable query report |
+| `POST` | `/api/chat` | Basic chat endpoint |
+| `POST` | `/api/chat/ollama` | Local RAG chat with Ollama LLM |
+| `GET` | `/api/corpus/stats` | Dynamic corpus & category statistics |
+| `GET` | `/api/analytics/category_counts` | Summary of documents per category |
+| `GET` | `/api/analytics/time_series` | Yearly document count series |
+| `GET` | `/api/analytics/wordcloud` | Keyword frequencies for D3 cloud |
+| `GET` | `/api/analytics/wordcloud_image` | Streams a matplotlib-drawn PNG word cloud |
 
 ---
 
-**Status**: ✅ Full stack working | 96+ species | 145 documents | 6.6 MB used | 9.9 GB available
+## 🔬 Key Scripts
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/run_phase1.py` | Command-line utility to build/rebuild the FAISS index |
+| `scripts/run_api.py` | Launches the uvicorn development server for FastAPI |
+| `scripts/corpus_inventory.py` | Prints a summary of all categories, sources, and titles |
+| `scripts/corpus_management.py` | Utilities for dataset pruning, verifying metadata integrity, and cleaning |
+| `scripts/populate_corpus_extended.py` | Scraping script to fetch and build the target species/policy documents |
+
+---
+
+## 🗺️ Learning Path & Future Roadmap
+
+### In Place & Completed:
+* **Dynamic Backend Metrics:** Replaced hardcoded indicators with backend sync metrics.
+* **Zoo Policy Integration:** Embedded state-level zoo plans as first-class categories.
+* **Comprehensive Exporting:** Document downloads in PDF, Markdown, and Word formats.
+* **Local Chat Interface:** LLM retrieval-augmented grounding using a local llama instance.
+* **Analytics Board:** Dynamic time-series bar charts, category listings, and word clouds.
+
+### Next Improvements (Roadmap):
+1. **Dynamic Statistics Binding:** Hook the Team Page statistics block to dynamic API indicators.
+2. **Database Memory:** Persist multi-turn conversations using a local SQLite/PostgreSQL layer.
+3. **Agentic Router (Task Orchestrator):** Empower a planning model to orchestrate sequential search, analysis, word cloud creation, and compilation tasks.
+4. **Evaluation Loop:** Set up a local test suite to validate context relevance and hallucination indicators.
