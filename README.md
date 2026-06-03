@@ -10,14 +10,15 @@ A comprehensive full-stack wildlife information retrieval and conservation syste
 ✅ **Intelligent Chunking** using sentence-boundary-aware adaptive splitting
 ✅ **Large Embedding Model** (768-dim mpnet-base-v2) for better semantics
 ✅ **GPU Optimization** with batched encoding and aggressive memory cleanup
-✅ **140+ Curated Documents** in only 6.6 MB (9.9 GB storage available)
+✅ **145 Curated Documents** in only 6.6 MB (9.9 GB storage available)
 ✅ **Full Stack**: FastAPI backend, FAISS vector search, React animated UI
 
 ## 📊 Corpus Statistics
 
-- **Total Documents**: 140+
+- **Total Documents**: 145
 - **Species Profiles**: 96+ endangered animals (Wikipedia)
 - **Species Images**: 19+ thumbnail images
+- **Zoo Profiles**: 15 zoo/conservation center documents
 - **Policies**: National, state-level, and historical versions
 - **Legal Documents**: Treaties, acts, regulations
 - **Ecosystems**: Habitat and biodiversity reports
@@ -53,6 +54,7 @@ data/
     ├── species/             # 96+ endangered animal profiles
     │   ├── endangered/
     │   └── wiki/
+    ├── zoos/                # Zoo and conservation center profiles
     ├── ecosystems/          # Forest, coral, grassland reports
     ├── legal/               # Acts, treaties, regulations
     │   ├── india/           # 1972-2002 acts
@@ -150,6 +152,34 @@ curl -X POST http://127.0.0.1:8000/api/query \
 - Add user authentication and audit logging
 - Deploy to cloud (Azure, AWS, GCP)
 
+## 🧭 Next Feature Set
+
+The repository already contains the zoo corpus, retrieval pipeline, and a Markdown download for answers. The next useful additions are:
+
+- **Zoo policy / zoo intelligence layer**: treat `data/dataset/zoos/` as a first-class category, add zoo-specific metadata like `zoo_type`, `state`, `species_maintained`, `breeding_programs`, and expose zoo filters and zoo-focused result cards in the UI.
+- **Download as document**: extend the current Markdown export into server-side export formats such as `md`, `pdf`, and `docx`, including query, answer, citations, and metadata.
+- **Inference / chatbot**: move from retrieval-only to retrieval + generation with a `/api/chat` or `/api/answer` endpoint, conversation IDs, and an optional local model backend such as Ollama.
+- **Agentic AI**: add a small planner layer that can break a user request into search, filter, retrieve, summarize, and export steps, then log each step for traceability.
+- **Word cloud and visualizations**: add analytics endpoints for terms, categories, years, sources, and result counts; render them in the frontend with charts and a word cloud panel.
+
+## What Is Still Missing
+
+- Dynamic corpus and system stats from the backend; the current stats cards in the frontend should not stay hardcoded.
+- A backend export API; the current download only creates a local Markdown file in the browser.
+- A chat session model; there is no conversation memory or multi-turn state yet.
+- A proper analytics API for charts, trends, and word clouds.
+- A source metadata normalization pass so zoo, policy, legal, and ecosystem documents expose the same fields consistently.
+- An evaluation/monitoring loop so you can measure retrieval quality, generation quality, and failure cases after each change.
+
+## Recommended Build Order
+
+1. Make backend stats and source metadata dynamic.
+2. Add zoo-specific filtering and detail views.
+3. Add export endpoints for Markdown/PDF/DOCX.
+4. Add retrieval-augmented generation and a simple chatbot UI.
+5. Add analytics endpoints and visual dashboards.
+6. Add agentic orchestration only after the retrieval and export paths are stable.
+
 ## 🔧 Configuration
 
 Edit `src/wildai_pipeline/config.py`:
@@ -157,7 +187,7 @@ Edit `src/wildai_pipeline/config.py`:
 ```python
 @dataclass(slots=True)
 class PipelineConfig:
-    embedding_model_name: str = "sentence-transformers/all-mpnet-base-v2"  # Larger model (768-dim)
+    embedding_model_name: str = "nomic-embed-text"  # Ollama embedding model
     chunk_target_words: int = 400  # Adaptive chunking target
     use_gpu: bool = True  # GPU for embeddings
     max_batch_size: int = 32  # Batch encoding
@@ -239,4 +269,4 @@ Educational use—modify and extend freely for your project requirements.
 
 ---
 
-**Status**: ✅ Full stack working | 96+ species | 140+ documents | 6.6 MB used | 9.9 GB available
+**Status**: ✅ Full stack working | 96+ species | 145 documents | 6.6 MB used | 9.9 GB available

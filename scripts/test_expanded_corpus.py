@@ -5,7 +5,7 @@ from wildai_pipeline.rag_engine import RAGEngine
 from wildai_pipeline.config import PipelineConfig
 
 config = PipelineConfig(
-    embedding_model_name="sentence-transformers/all-mpnet-base-v2",
+    embedding_model_name="all-mpnet-base-v2",
     use_gpu=True,
     aggressive_cleanup=True,
 )
@@ -22,7 +22,7 @@ queries = [
 ]
 
 print("=" * 80)
-print("RETRIEVAL TESTS WITH EXPANDED CORPUS (all-mpnet-base-v2, 768-dim embeddings)")
+print("RETRIEVAL TESTS WITH EXPANDED CORPUS (all-mpnet-base-v2 embeddings)")
 print("=" * 80)
 
 for query in queries:

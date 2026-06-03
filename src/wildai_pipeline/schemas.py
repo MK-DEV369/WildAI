@@ -9,6 +9,7 @@ class QueryRequest(BaseModel):
     category: str | None = None
     source: str | None = None
     year: int | None = None
+    include_wordcloud: bool = False
 
 
 class BuildIndexResponse(BaseModel):

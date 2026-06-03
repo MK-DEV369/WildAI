@@ -10,12 +10,13 @@ class PipelineConfig:
     max_documents_per_category: int = 5
     request_timeout_seconds: int = 30
     user_agent: str = "WILDAI-Phase1/1.0"
-    embedding_model_name: str = "sentence-transformers/all-mpnet-base-v2"
+    embedding_model_name: str = "nomic-ai/nomic-embed-text-v1.5"
     chunk_target_words: int = 400
     use_gpu: bool = True
-    max_batch_size: int = 32
+    max_batch_size: int = 64
+    embedding_batch_size: int = 128
     model_cache_enabled: bool = True
-    aggressive_cleanup: bool = True
+    aggressive_cleanup: bool = False
 
     @property
     def data_dir(self) -> Path:

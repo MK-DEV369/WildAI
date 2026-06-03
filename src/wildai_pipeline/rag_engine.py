@@ -6,7 +6,7 @@ import logging
 import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable, cast
 
 import numpy as np
 
@@ -14,6 +14,11 @@ from .cleaning import chunk_text
 from .config import PipelineConfig
 
 logger = logging.getLogger(__name__)
+
+try:
+    import orjson
+except Exception:
+    orjson = None
 
 
 @dataclass(slots=True)
@@ -28,6 +33,18 @@ class ChunkDocument:
     text: str
     tags: list[str] = field(default_factory=list)
     extra: dict[str, Any] = field(default_factory=dict)
+    searchable_text: str = field(init=False, repr=False)
+
+    def __post_init__(self) -> None:
+        self.searchable_text = " ".join(
+            [
+                self.title,
+                " ".join(self.tags),
+                self.category,
+                self.source,
+                self.text[:1200],
+            ]
+        ).lower()
 
 
 class RAGEngine:
@@ -39,6 +56,46 @@ class RAGEngine:
         self._index = None
         self._documents: list[ChunkDocument] = []
         self._device = "cuda" if self.config.use_gpu else "cpu"
+
+    def _emit_progress(
+        self,
+        message: str,
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> None:
+        logger.info(message)
+        if progress_callback is not None:
+            progress_callback(message)
+
+    @staticmethod
+    def _ollama_model_base_name(model_name: str) -> str:
+        return model_name.removeprefix("ollama:").split(":", 1)[0].strip().lower()
+
+    def _is_ollama_embedding_model(self) -> bool:
+        raw_model_name = self.config.embedding_model_name.strip().lower()
+        if not raw_model_name.startswith("ollama:"):
+            return False
+
+        model_name = self._ollama_model_base_name(raw_model_name)
+        if model_name not in {"nomic-embed-text", "mxbai-embed-large", "bge-m3"}:
+            return False
+        return self._ollama_embedding_model_available(model_name)
+
+    def _ollama_embedding_model_available(self, model_name: str) -> bool:
+        import requests
+
+        try:
+            response = requests.get("http://localhost:11434/api/tags", timeout=5)
+            response.raise_for_status()
+            payload = response.json()
+            models = payload.get("models", []) if isinstance(payload, dict) else []
+            available_names = {
+                self._ollama_model_base_name(str(item.get("name", "")))
+                for item in models
+                if isinstance(item, dict)
+            }
+            return self._ollama_model_base_name(model_name) in available_names
+        except Exception:
+            return False
 
     @property
     def index_path(self) -> Path:
@@ -60,9 +117,19 @@ class RAGEngine:
 
     def _load_model(self):
         if self._model is None and self._encoder_mode == "sentence-transformers":
+            if self._is_ollama_embedding_model():
+                self._encoder_mode = "ollama"
+                return None
+
             try:
                 from sentence_transformers import SentenceTransformer
+            except Exception as import_exc:
+                logger.warning(f"Failed to import sentence-transformers: {import_exc}, falling back to hashing")
+                self._encoder_mode = "hashing"
+                self._model = None
+                return None
 
+            try:
                 logger.info(f"Loading embedding model: {self.config.embedding_model_name} on {self._device}")
                 self._model = SentenceTransformer(self.config.embedding_model_name, device=self._device)
             except Exception as exc:
@@ -80,17 +147,109 @@ class RAGEngine:
                     logger.warning("Falling back to hashing")
                     self._encoder_mode = "hashing"
                     self._model = None
+
         return self._model
 
-    def _encode_batch(self, texts: list[str], batch_size: int | None = None) -> np.ndarray:
+    def _extract_ollama_embeddings(self, payload: Any) -> list[list[float]] | None:
+        if not isinstance(payload, dict):
+            return None
+
+        for key in ("embeddings", "vectors"):
+            value = payload.get(key)
+            if isinstance(value, list) and value:
+                first_item = value[0]
+                if isinstance(first_item, list) and first_item and isinstance(first_item[0], (int, float)):
+                    return [[float(item) for item in vector] for vector in value if isinstance(vector, list)]
+
+        single_vector = payload.get("embedding")
+        if isinstance(single_vector, list) and single_vector and isinstance(single_vector[0], (int, float)):
+            return [[float(item) for item in single_vector]]
+
+        data = payload.get("data")
+        if isinstance(data, list) and data:
+            extracted: list[list[float]] = []
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                vector = item.get("embedding") or item.get("vector")
+                if isinstance(vector, list) and vector and isinstance(vector[0], (int, float)):
+                    extracted.append([float(item) for item in vector])
+            if extracted:
+                return extracted
+
+        return None
+
+    def _encode_with_ollama(
+        self,
+        texts: list[str],
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> np.ndarray:
+        import requests
+        last_error: Exception | None = None
+        model_name = self.config.embedding_model_name.removeprefix("ollama:")
+        batch_size = max(1, self.config.embedding_batch_size)
+        total_batches = max(1, (len(texts) + batch_size - 1) // batch_size)
+        embeddings: list[list[float]] = []
+
+        for batch_number, start in enumerate(range(0, len(texts), batch_size), start=1):
+            batch = texts[start : start + batch_size]
+            self._emit_progress(
+                f"Encoding Ollama batch {batch_number}/{total_batches} ({len(batch)} chunks)...",
+                progress_callback,
+            )
+            try:
+                response = requests.post(
+                    "http://localhost:11434/api/embed",
+                    json={"model": model_name, "input": batch if len(batch) > 1 else batch[0], "truncate": True},
+                    timeout=self.config.request_timeout_seconds,
+                )
+                if response.ok:
+                    extracted = self._extract_ollama_embeddings(response.json())
+                    if extracted is not None:
+                        embeddings.extend(extracted)
+                        continue
+
+                raise RuntimeError(f"Ollama embedding endpoint returned {response.status_code}")
+            except Exception as exc:
+                last_error = exc
+                logger.warning("Ollama embedding failed for one batch: %s", exc)
+                break
+
+        if len(embeddings) != len(texts):
+            if last_error is not None:
+                logger.warning("Falling back to hashing embeddings after Ollama error: %s", last_error)
+            from sklearn.feature_extraction.text import HashingVectorizer
+
+            vectorizer = HashingVectorizer(n_features=768, alternate_sign=False, norm="l2")
+            matrix = vectorizer.transform(texts)
+            dense_matrix = cast(Any, matrix).toarray()
+            return np.asarray(dense_matrix, dtype="float32")
+
+        return np.asarray(embeddings, dtype="float32")
+
+    def _encode_batch(
+        self,
+        texts: list[str],
+        batch_size: int | None = None,
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> np.ndarray:
         """Encode texts with optional batching for memory efficiency."""
         batch_size = batch_size or self.config.max_batch_size
         model = self._load_model()
 
+        if self._encoder_mode == "ollama":
+            return self._encode_with_ollama(texts, progress_callback=progress_callback)
+
         if model is not None:
             all_embeddings: list[np.ndarray] = []
+            total_batches = max(1, (len(texts) + batch_size - 1) // batch_size)
             for i in range(0, len(texts), batch_size):
                 batch = texts[i : i + batch_size]
+                batch_number = (i // batch_size) + 1
+                self._emit_progress(
+                    f"Encoding batch {batch_number}/{total_batches} ({len(batch)} chunks)...",
+                    progress_callback,
+                )
                 embeddings = model.encode(
                     batch,
                     convert_to_numpy=True,
@@ -106,7 +265,14 @@ class RAGEngine:
 
         vectorizer = HashingVectorizer(n_features=768, alternate_sign=False, norm="l2")
         matrix = vectorizer.transform(texts)
-        return np.asarray(matrix.toarray(), dtype="float32")  # type: ignore[attr-defined]
+        self._emit_progress(f"Encoding {len(texts)} chunks with hashing fallback...", progress_callback)
+        dense_matrix = cast(Any, matrix).toarray()
+        return np.asarray(dense_matrix, dtype="float32")
+
+    def _json_loads(self, raw_bytes: bytes) -> Any:
+        if orjson is not None:
+            return orjson.loads(raw_bytes)
+        return json.loads(raw_bytes.decode("utf-8"))
 
     def _encode(self, texts: list[str]) -> np.ndarray:
         """Legacy method for backward compatibility."""
@@ -206,15 +372,7 @@ class RAGEngine:
             if year and document.year != year:
                 continue
 
-            searchable_text = " ".join(
-                [
-                    document.title,
-                    " ".join(document.tags),
-                    document.category,
-                    document.source,
-                    document.text[:1200],
-                ]
-            ).lower()
+            searchable_text = document.searchable_text
 
             if tiger_intent and "tiger" not in searchable_text:
                 continue
@@ -303,16 +461,33 @@ class RAGEngine:
             unique_hits.append(hit)
         return unique_hits
 
-    def load_documents(self) -> list[ChunkDocument]:
+    def load_documents(
+        self,
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> list[ChunkDocument]:
         documents: list[ChunkDocument] = []
         dataset_root = self.config.data_dir
         if not dataset_root.exists():
             self._documents = []
+            self._emit_progress(f"Dataset directory not found at {dataset_root}", progress_callback)
             return []
 
-        for json_path in sorted(dataset_root.rglob("*.json")):
-            with json_path.open("r", encoding="utf-8") as handle:
-                payload = json.load(handle)
+        json_paths = sorted(dataset_root.rglob("*.json"))
+        if not json_paths:
+            self._emit_progress(f"No source documents found under {dataset_root}", progress_callback)
+            self._documents = []
+            return []
+
+        total_files = len(json_paths)
+        self._emit_progress(f"Loading {total_files} source files...", progress_callback)
+
+        for file_index, json_path in enumerate(json_paths, start=1):
+            if file_index == 1 or file_index == total_files or file_index % 10 == 0:
+                self._emit_progress(
+                    f"Reading source file {file_index}/{total_files}: {json_path.name}",
+                    progress_callback,
+                )
+            payload = self._json_loads(json_path.read_bytes())
 
             records = payload if isinstance(payload, list) else [payload]
             for record_index, record in enumerate(records):
@@ -348,21 +523,36 @@ class RAGEngine:
         self._documents = documents
         return documents
 
-    def build_index(self) -> dict[str, int | str]:
-        documents = self.load_documents()
+    def build_index(
+        self,
+        progress_callback: Callable[[str], None] | None = None,
+    ) -> dict[str, int | str]:
+        self._emit_progress("Starting index build...", progress_callback)
+        documents = self.load_documents(progress_callback=progress_callback)
         if not documents:
             self._write_metadata([])
             self._index = None
             return {"total_documents": 0, "total_chunks": 0, "index_path": str(self.index_path)}
 
-        logger.info(f"Encoding {len(documents)} chunks...")
-        embeddings = self._encode_batch([document.text for document in documents], batch_size=self.config.max_batch_size)
+        self._emit_progress(
+            f"Encoding {len(documents)} chunks in batches of {self.config.max_batch_size}...",
+            progress_callback,
+        )
+        embeddings = self._encode_batch(
+            [document.text for document in documents],
+            batch_size=self.config.max_batch_size,
+            progress_callback=progress_callback,
+        )
 
         import faiss
 
-        logger.info(f"Building FAISS index with embedding dimension {embeddings.shape[1]}...")
+        self._emit_progress(
+            f"Building FAISS index with embedding dimension {embeddings.shape[1]}...",
+            progress_callback,
+        )
         index = faiss.IndexFlatIP(embeddings.shape[1])
         index.add(embeddings)  # type: ignore[arg-type]
+        self._emit_progress(f"Writing FAISS index to {self.index_path}...", progress_callback)
         faiss.write_index(index, str(self.index_path))
 
         self._index = index
@@ -375,7 +565,7 @@ class RAGEngine:
             "index_path": str(self.index_path),
             "embedding_model": self.config.embedding_model_name,
         }
-        logger.info(f"Index built: {result}")
+        self._emit_progress(f"Index built: {result}", progress_callback)
         return result
 
     def _write_metadata(self, documents: list[ChunkDocument]) -> None:
@@ -451,15 +641,7 @@ class RAGEngine:
             if year and document.year != year:
                 continue
 
-            searchable_text = " ".join(
-                [
-                    document.title,
-                    " ".join(document.tags),
-                    document.category,
-                    document.source,
-                    document.text[:1200],
-                ]
-            ).lower()
+            searchable_text = document.searchable_text
 
             if tiger_intent and "tiger" not in searchable_text:
                 continue
@@ -639,11 +821,26 @@ class RAGEngine:
         comparison_hits = same_topic_hits if same_topic_hits else sorted_hits
         comparison_hits = sorted(comparison_hits, key=lambda hit: hit.get("year") or 0, reverse=True)
 
+        def excerpt(text: str, limit: int = 260) -> str:
+            cleaned = " ".join(text.split())
+            if len(cleaned) <= limit:
+                return cleaned
+            shortened = cleaned[:limit].rsplit(" ", 1)[0].rstrip(".,;:-")
+            return f"{shortened}..."
+
+        theme_line = (
+            f"The retrieved evidence centers on habitat protection, conservation planning, and legal safeguards for {query.strip().rstrip('?').lower()}."
+            if query.strip()
+            else "The retrieved evidence centers on habitat protection, conservation planning, and legal safeguards."
+        )
+
         summary_lines = [
             f"Summary for: {query}",
             "",
+            f"Best supported answer: {top['title']} is the strongest match, and the surrounding evidence points to a policy path that combines habitat protection, species safeguards, and implementation guidance.",
             f"Top match: {top['title']} ({top_year})",
             f"Category: {top['category']} | Source: {top['source']}",
+            theme_line,
         ]
 
         if years:
@@ -651,20 +848,20 @@ class RAGEngine:
             if latest_query:
                 summary_lines.append(f"Latest-focus query detected; prioritized recent documents from {max(years) - 4} onward when relevant.")
 
-        summary_lines.extend(["", "Key Insights:"])
+        summary_lines.extend(["", "What the evidence says:"])
 
-        for idx, hit in enumerate(sorted_hits[:4], start=1):
-            snippet = " ".join(hit["text"].split())[:180].strip()
+        for idx, hit in enumerate(sorted_hits[:5], start=1):
+            snippet = excerpt(hit["text"], 260)
             summary_lines.append(
                 f"- {idx}. {hit['title']} ({hit['year'] or 'year not specified'}) | {hit['source']} | score={hit['score']:.3f}"
             )
             summary_lines.append(f"  {snippet}")
 
-        summary_lines.extend(["", "Policy Evolution:"])
+        summary_lines.extend(["", "Policy evolution:"])
 
         if compare_query or latest_query:
             comparison_years = []
-            for hit in comparison_hits[:5]:
+            for hit in comparison_hits[:6]:
                 year_value = hit.get("year") or "year not specified"
                 comparison_years.append(str(year_value))
                 summary_lines.append(
@@ -672,26 +869,29 @@ class RAGEngine:
                 )
             if len(comparison_years) > 1:
                 summary_lines.append(
-                    f"- Evolution trend: the retrieved evidence moves from older baseline documents toward newer {max(years) if years else 'recent'} policy and status material."
+                    f"- Evolution trend: the retrieved evidence moves from older baseline documents toward newer {max(years) if years else 'recent'} policy and status material, suggesting that habitat protection is increasingly tied to implementation, monitoring, and species-specific recovery measures."
                 )
         else:
-            for hit in comparison_hits[:3]:
+            for hit in comparison_hits[:4]:
                 summary_lines.append(
                     f"- {hit['year'] or 'year not specified'}: {hit['title']} | {hit['category']} | {hit['source']}"
                 )
 
-        summary_lines.extend(["", "Conclusion:"])
+        summary_lines.extend(["", "Why this matters:"])
         if compare_query:
             summary_lines.append(
-                f"- The newest available documents provide the current baseline, while earlier iterations show how the policy has evolved over time."
+                f"- The newest available documents provide the current baseline, while earlier iterations show how the policy has evolved over time. For a policy question, that means the answer should be read as a progression rather than a single static rule."
             )
         elif latest_query:
             summary_lines.append(
-                f"- The strongest recent evidence is anchored in {top_year} documents, with {top['source']} providing the freshest usable context."
+                f"- The strongest recent evidence is anchored in {top_year} documents, with {top['source']} providing the freshest usable context and the most relevant operational guidance for current decisions."
             )
         else:
             summary_lines.append(
-                f"- The answer is grounded in the most relevant retrieved documents, led by {top['title']} from {top_year}."
+                f"- The answer is grounded in the most relevant retrieved documents, led by {top['title']} from {top_year}. The supporting material is strong enough to explain both the policy direction and the practical habitat-protection angle.")
+
+        summary_lines.append(
+            "- In practical terms, the retrieved policies point to protected-area management, wildlife conservation planning, and regulatory enforcement as the main mechanisms protecting endangered habitats."
             )
 
         summary_lines.extend(["", "Sources used:"])

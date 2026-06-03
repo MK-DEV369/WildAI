@@ -100,7 +100,7 @@ data/dataset/
 ```
 
 ### Indexing
-- **Model:** sentence-transformers/all-mpnet-base-v2
+- **Model:** nomic-embed-text
 - **Embedding Dimension:** 768-d vectors
 - **Index Type:** FAISS (GPU-optimized)
 - **Chunking:** Adaptive (sentence-boundary aware)
