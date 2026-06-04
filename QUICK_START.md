@@ -170,7 +170,7 @@ Expected:
 **FAISS Index:**
 - Size: 605.1 MB
 - Chunks: 206,529
-- Embedding Model: sentence-transformers/all-mpnet-base-v2
+- Embedding Model: nomic-embed-text
 - Dimensions: 768-d vectors
 - Backend: FAISS with AVX2 support
 

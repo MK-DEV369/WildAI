@@ -18,6 +18,10 @@ type SearchHit = {
   url: string
   text: string
   tags: string[]
+  extra?: {
+    source_path?: string
+    record_index?: number
+  }
 }
 
 type QueryResponse = {
@@ -771,16 +775,16 @@ function ResearchConsole({
                 <h2>Answer synthesis</h2>
                 <p>Concise explanation generated from the highest-scoring retrieved chunks.</p>
               </div>
-              <button
-                className="secondary-button answer-download"
-                type="button"
-                onClick={downloadSummary}
-                disabled={!result?.answer}
-              >
-                Download Summary
-                <Download size={16} />
-              </button>
-              <div style={{ display: 'inline-block', marginLeft: 8 }}>
+              <div className="answer-actions">
+                <button
+                  className="secondary-button answer-download"
+                  type="button"
+                  onClick={downloadSummary}
+                  disabled={!result?.answer}
+                >
+                  Download Summary
+                  <Download size={14} />
+                </button>
                 <button className="ghost-button" onClick={() => exportServer('md')} disabled={!result?.answer || exporting}>
                   Export MD
                 </button>
@@ -852,14 +856,18 @@ function ResearchConsole({
               )}
             </div>
 
-            <div className="wordcloud-panel">
-              <h4>Word cloud</h4>
-              {wordcloudWords && wordcloudWords.length ? (
-                <WordCloud words={wordcloudWords} />
-              ) : (
-                <div>No wordcloud available</div>
-              )}
-            </div>
+            {result ? (
+              <div className="wordcloud-panel">
+                <h4>Word cloud</h4>
+                <div className="wordcloud-shell">
+                  <img
+                    src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
+                    className="wordcloud-image"
+                    alt="Word Cloud"
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div className="panel source-panel">
@@ -1038,7 +1046,7 @@ function WordCloud({ words }: { words: Array<{ text: string; value: number }> })
   )
 }
 
-function AnalyticsPage() {
+function AnalyticsPage({ result }: { result: QueryResponse | null }) {
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number> | null>(null)
   const [timeSeries, setTimeSeries] = useState<Array<[number, number]>>([])
   const [wordcloudWords, setWordcloudWords] = useState<Array<{ text: string; value: number }>>([])
@@ -1141,50 +1149,172 @@ function AnalyticsPage() {
             )}
           </div>
 
-          <div className="analytics-card panel-inset analytics-chart-card">
-            <div className="section-heading compact-heading">
-              <h3>Yearly documents</h3>
-              <p>Counts plotted as a compact bar chart.</p>
-            </div>
-            {timeSeries.length ? (
-              <div className="bar-chart" aria-label="Yearly document counts">
-                {timeSeries.map(([year, count]) => {
-                  const maxCount = Math.max(...timeSeries.map((s) => s[1])) || 1
-                  const height = Math.max(8, (count / maxCount) * 100)
-                  return (
-                    <div key={year} className="bar-chart-item">
-                      <div className="bar-chart-column">
-                        <span className="bar-chart-value">{count}</span>
-                        <div className="bar-chart-bar-wrap">
-                          <div className="bar-chart-bar" style={{ height: `${height}%` }} />
+          <div className="analytics-right-col">
+            <div className="analytics-card panel-inset analytics-chart-card">
+              <div className="section-heading compact-heading">
+                <h3>Yearly documents</h3>
+                <p>Counts plotted as a compact bar chart.</p>
+              </div>
+              {timeSeries.length ? (
+                <div className="bar-chart" aria-label="Yearly document counts">
+                  {timeSeries.map(([year, count]) => {
+                    const maxCount = Math.max(...timeSeries.map((s) => s[1])) || 1
+                    const height = Math.max(8, (count / maxCount) * 100)
+                    return (
+                      <div key={year} className="bar-chart-item">
+                        <div className="bar-chart-column">
+                          <span className="bar-chart-value">{count}</span>
+                          <div className="bar-chart-bar-wrap">
+                            <div className="bar-chart-bar" style={{ height: `${height}%` }} />
+                          </div>
                         </div>
+                        <span className="bar-chart-year">{year}</span>
                       </div>
-                      <span className="bar-chart-year">{year}</span>
-                    </div>
-                  )
-                })}
-              </div>
-            ) : (
-              <div className="empty-state">{loading ? 'Loading time series...' : 'No yearly data available.'}</div>
-            )}
-          </div>
-
-          <div className="analytics-card panel-inset analytics-wordcloud-card">
-            <div className="section-heading compact-heading">
-              <h3>Word cloud</h3>
-              <p>Top terms from the current corpus snapshot.</p>
+                    )
+                  })}
+                </div>
+              ) : (
+                <div className="empty-state">{loading ? 'Loading time series...' : 'No yearly data available.'}</div>
+              )}
             </div>
-            {wordcloudWords.length ? (
-              <div className="analytics-wordcloud-shell">
-                <WordCloud words={wordcloudWords} />
+
+            <div className="analytics-card panel-inset analytics-wordcloud-card">
+              <div className="section-heading compact-heading">
+                <h3>Word cloud</h3>
+                <p>Top terms from the active search query.</p>
               </div>
-            ) : (
-              <div className="empty-state">{loading ? 'Loading word cloud...' : 'No word cloud available.'}</div>
-            )}
+              {result ? (
+                <div className="analytics-wordcloud-shell">
+                  <img
+                    src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
+                    className="wordcloud-image"
+                    alt="Word Cloud"
+                  />
+                </div>
+              ) : (
+                <div className="empty-state">No search results yet. Run a query in the Research tab to view the word cloud.</div>
+              )}
+            </div>
           </div>
         </div>
       </section>
     </motion.div>
+  )
+}
+
+function DocumentModalViewer({
+  doc,
+  onClose,
+}: {
+  doc: DocumentPreview
+  onClose: () => void
+}) {
+  const [fullText, setFullText] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!doc.extra?.source_path) {
+      setFullText(doc.text) // Fallback to chunk text
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    const sourcePath = doc.extra.source_path
+    const recordIndex = doc.extra.record_index ?? 0
+
+    fetch(`/api/document/full_text?source_path=${encodeURIComponent(sourcePath)}&record_index=${recordIndex}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to retrieve original document content')
+        }
+        return res.json()
+      })
+      .then((data) => {
+        setFullText(data.full_text || doc.text)
+      })
+      .catch((err) => {
+        console.error(err)
+        setError(err.message)
+        setFullText(doc.text) // Fallback to RAG chunk
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [doc])
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="document-viewer-loading">
+          <span>Loading original document...</span>
+          <div className="dots-container">
+            <span className="dot"></span>
+            <span className="dot"></span>
+            <span className="dot"></span>
+          </div>
+        </div>
+      )
+    }
+
+    if (!fullText) return null
+
+    // Let's highlight the snippet
+    const chunkText = doc.text
+    const index = fullText.indexOf(chunkText)
+    if (index === -1) {
+      return <span>{fullText}</span>
+    }
+
+    const before = fullText.slice(0, index)
+    const match = fullText.slice(index, index + chunkText.length)
+    const after = fullText.slice(index + chunkText.length)
+
+    return (
+      <>
+        {before}
+        <mark className="search-highlight">{match}</mark>
+        {after}
+      </>
+    )
+  }
+
+  return (
+    <div className="document-modal-overlay" onClick={onClose}>
+      <div className="document-modal panel" onClick={(e) => e.stopPropagation()}>
+        <div className="document-viewer-header">
+          <div>
+            <div className="eyebrow">
+              <Search size={16} />
+              Document viewer
+            </div>
+            <h3>{doc.title}</h3>
+            <p>
+              {doc.rank ? `Rank ${doc.rank} · ` : ''} {doc.source} · {doc.category}
+              {doc.year ? ` · ${doc.year}` : ''}
+            </p>
+          </div>
+          <button className="secondary-button" type="button" onClick={onClose}>
+            Close
+          </button>
+        </div>
+
+        <div className="document-viewer-meta">
+          <span>
+            <strong>Type:</strong> {doc.document_type}
+          </span>
+          {doc.url ? (
+            <a href={doc.url} target="_blank" rel="noreferrer">
+              Open original
+            </a>
+          ) : null}
+          {error && <span className="error-badge">⚠️ Using RAG snippet fallback</span>}
+        </div>
+
+        <div className="document-viewer-body">{renderContent()}</div>
+      </div>
+    </div>
   )
 }
 
@@ -1288,6 +1418,46 @@ function ChatPage() {
                 )) : (
                   <div className="empty-state">Ask a question to start a local RAG conversation.</div>
                 )}
+                {loading && (
+                  <div className="chat-bubble assistant thinking-bubble">
+                    <div className="bubble-label">Assistant</div>
+                    <div className="bubble-text thinking-dots">
+                      <span>Loading the answer</span>
+                      <div className="dots-container">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="expected-questions-ticker">
+                <div className="ticker-wrapper">
+                  <div className="ticker-content">
+                    {suggestedPrompts.map((q, idx) => (
+                      <span key={idx} className="ticker-item" onClick={() => setMessage(q)}>
+                        {q}
+                      </span>
+                    ))}
+                    {suggestedPrompts.map((q, idx) => (
+                      <span key={`dup-${idx}`} className="ticker-item" onClick={() => setMessage(q)}>
+                        {q}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="chat-input-row">
+                <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a question..." onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault()
+                    void send()
+                  }
+                }} />
+                <button onClick={send} disabled={loading || !message}>Send</button>
               </div>
             </div>
 
@@ -1324,47 +1494,11 @@ function ChatPage() {
             </div>
           </div>
 
-          {selectedDocument ? (
-            <section className="panel-inset document-viewer">
-              <div className="document-viewer-header">
-                <div>
-                  <div className="eyebrow">
-                    <Search size={16} />
-                    Document viewer
-                  </div>
-                  <h3>{selectedDocument.title}</h3>
-                  <p>
-                    Rank {selectedDocument.rank ?? '—'} · {selectedDocument.source} · {selectedDocument.category}
-                    {selectedDocument.year ? ` · ${selectedDocument.year}` : ''}
-                  </p>
-                </div>
-                <button className="secondary-button" type="button" onClick={() => setSelectedDocument(null)}>
-                  Close
-                </button>
-              </div>
+          {selectedDocument && (
+            <DocumentModalViewer doc={selectedDocument} onClose={() => setSelectedDocument(null)} />
+          )}
 
-              <div className="document-viewer-meta">
-                <span><strong>Type:</strong> {selectedDocument.document_type}</span>
-                {selectedDocument.url ? (
-                  <a href={selectedDocument.url} target="_blank" rel="noreferrer">Open original</a>
-                ) : null}
-              </div>
 
-              <div className="document-viewer-body">
-                {selectedDocument.text}
-              </div>
-            </section>
-          ) : null}
-
-          <div className="chat-input-row">
-            <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type a question..." onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                void send()
-              }
-            }} />
-            <button onClick={send} disabled={loading || !message}>Send</button>
-          </div>
         </div>
       </section>
     </motion.div>
@@ -1489,7 +1623,7 @@ function App() {
           </div>
         </div>
 
-        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+        <div />
 
         <div className="navbar-status" data-ready={Boolean(health?.index_ready)}>
           <span className="status-dot" />
@@ -1499,6 +1633,10 @@ function App() {
           </div>
         </div>
       </header>
+
+      <div className="dock-sticky-container">
+        <Dock items={dockItems} panelHeight={68} baseItemSize={50} magnification={70} />
+      </div>
 
       <main className="layout-wrapper">
         <AnimatePresence mode="wait">
@@ -1527,7 +1665,7 @@ function App() {
           ) : currentPage === 'team' ? (
             <TeamPage key="team" />
           ) : currentPage === 'analytics' ? (
-            <AnalyticsPage key="analytics" />
+            <AnalyticsPage key="analytics" result={result} />
           ) : currentPage === 'chat' ? (
             <ChatPage key="chat" />
           ) : (
@@ -1535,37 +1673,9 @@ function App() {
           )}
         </AnimatePresence>
 
-        {selectedDocument ? (
-          <section className="panel document-overlay">
-            <div className="document-viewer-header">
-              <div>
-                <div className="eyebrow">
-                  <Search size={16} />
-                  Document viewer
-                </div>
-                <h3>{selectedDocument.title}</h3>
-                <p>
-                  {selectedDocument.source} · {selectedDocument.category}
-                  {selectedDocument.year ? ` · ${selectedDocument.year}` : ''}
-                </p>
-              </div>
-              <button className="secondary-button" type="button" onClick={() => setSelectedDocument(null)}>
-                Close
-              </button>
-            </div>
-
-            <div className="document-viewer-meta">
-              <span><strong>Type:</strong> {selectedDocument.document_type}</span>
-              {selectedDocument.url ? (
-                <a href={selectedDocument.url} target="_blank" rel="noreferrer">Open original</a>
-              ) : null}
-            </div>
-
-            <div className="document-viewer-body">
-              {selectedDocument.text}
-            </div>
-          </section>
-        ) : null}
+        {selectedDocument && (
+          <DocumentModalViewer doc={selectedDocument} onClose={() => setSelectedDocument(null)} />
+        )}
       </main>
     </div>
   )

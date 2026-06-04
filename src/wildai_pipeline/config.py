@@ -16,7 +16,7 @@ class PipelineConfig:
     max_batch_size: int = 64
     embedding_batch_size: int = 128
     model_cache_enabled: bool = True
-    aggressive_cleanup: bool = False
+    aggressive_cleanup: bool = True
 
     @property
     def data_dir(self) -> Path:

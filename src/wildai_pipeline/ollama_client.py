@@ -24,16 +24,16 @@ def _call_http_api(prompt: str, model: str = "ollama", timeout: int = 30) -> Opt
     if requests is None:
         return None
     url = f"http://localhost:11434/api/generate"
-    payload = {"model": model, "prompt": prompt, "max_tokens": 1024}
+    payload = {"model": model, "prompt": prompt, "max_tokens": 1024, "stream": False}
     try:
         r = requests.post(url, json=payload, timeout=timeout)
         r.raise_for_status()
         # Ollama may return JSON or plain text depending on server; attempt JSON
         try:
             data = r.json()
-            # common fields: 'text' or 'completion' or 'result'
+            # common fields: 'response', 'text', 'completion' or 'result'
             if isinstance(data, dict):
-                for key in ("text", "completion", "result", "output"):
+                for key in ("response", "text", "completion", "result", "output"):
                     if key in data and isinstance(data[key], str):
                         return data[key]
                 # sometimes the API returns {'choices':[{'text':..}]}
@@ -62,7 +62,7 @@ def _call_cli(prompt: str, model: str = "ollama", timeout: int = 30) -> Optional
         try:
             data = json.loads(out)
             if isinstance(data, dict):
-                for key in ("text", "completion", "result", "output"):
+                for key in ("response", "text", "completion", "result", "output"):
                     if key in data and isinstance(data[key], str):
                         return data[key]
                 if "choices" in data and isinstance(data["choices"], list) and data["choices"]:
