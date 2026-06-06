@@ -6,8 +6,8 @@ import logging
 import re
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Callable, cast
-
+from typing import Any, Callable, cast, Generator
+import os
 import numpy as np
 
 from .cleaning import chunk_text
@@ -241,25 +241,35 @@ class RAGEngine:
             return self._encode_with_ollama(texts, progress_callback=progress_callback)
 
         if model is not None:
-            all_embeddings: list[np.ndarray] = []
-            total_batches = max(1, (len(texts) + batch_size - 1) // batch_size)
-            for i in range(0, len(texts), batch_size):
+            import torch
+            import contextlib
+            
+            # Use fp16 mixed-precision autocast for CUDA encoding
+            ctx = torch.amp.autocast("cuda") if self._device == "cuda" else contextlib.nullcontext()
+            
+            num_texts = len(texts)
+            # Pre-allocate array to avoid intermediate memory copies (np.vstack)
+            embeddings_array = np.zeros((num_texts, 768), dtype=np.float32)
+            total_batches = max(1, (num_texts + batch_size - 1) // batch_size)
+            
+            for i in range(0, num_texts, batch_size):
                 batch = texts[i : i + batch_size]
                 batch_number = (i // batch_size) + 1
                 self._emit_progress(
                     f"Encoding batch {batch_number}/{total_batches} ({len(batch)} chunks)...",
                     progress_callback,
                 )
-                embeddings = model.encode(
-                    batch,
-                    convert_to_numpy=True,
-                    normalize_embeddings=True,
-                    show_progress_bar=False,
-                )
-                all_embeddings.append(embeddings.astype("float32"))
+                with ctx:
+                    batch_emb = model.encode(
+                        batch,
+                        convert_to_numpy=True,
+                        normalize_embeddings=True,
+                        show_progress_bar=False,
+                    )
+                embeddings_array[i : i + len(batch)] = batch_emb.astype("float32")
                 self._cleanup_gpu_memory()
 
-            return np.vstack(all_embeddings)
+            return embeddings_array
 
         from sklearn.feature_extraction.text import HashingVectorizer
 
@@ -523,50 +533,174 @@ class RAGEngine:
         self._documents = documents
         return documents
 
+    def _yield_document_chunks(self) -> Generator[ChunkDocument, None, None]:
+        dataset_root = self.config.data_dir
+        if not dataset_root.exists():
+            return
+
+        json_paths = sorted(dataset_root.rglob("*.json"))
+        for json_path in json_paths:
+            if "failed" in json_path.name or ".model_cache" in str(json_path):
+                continue
+            try:
+                payload = self._json_loads(json_path.read_bytes())
+                records = payload if isinstance(payload, list) else [payload]
+                for record_index, record in enumerate(records):
+                    if not isinstance(record, dict):
+                        continue
+                    content = record.get("cleaned_content") or record.get("content") or ""
+                    chunks = record.get("chunks") or chunk_text(content, self.config.chunk_target_words)
+                    if not chunks and content:
+                        chunks = [content]
+                    for chunk_index, chunk in enumerate(chunks):
+                        yield ChunkDocument(
+                            chunk_id=f"{json_path.stem}-{record_index}-{chunk_index}",
+                            title=record.get("title", json_path.stem),
+                            year=record.get("year"),
+                            category=record.get("category", "unknown"),
+                            source=record.get("source", "unknown"),
+                            document_type=record.get("type", "text"),
+                            url=record.get("url", ""),
+                            text=chunk,
+                            tags=list(record.get("tags", [])),
+                            extra={
+                                "source_path": str(json_path),
+                                "record_index": record_index,
+                                "chunks_in_source": len(chunks),
+                                "raw_title": record.get("title"),
+                            },
+                        )
+            except Exception:
+                continue
+
     def build_index(
         self,
         progress_callback: Callable[[str], None] | None = None,
+        chunk_batch_size: int = 1000,
     ) -> dict[str, int | str]:
-        self._emit_progress("Starting index build...", progress_callback)
-        documents = self.load_documents(progress_callback=progress_callback)
-        if not documents:
-            self._write_metadata([])
-            self._index = None
-            return {"total_documents": 0, "total_chunks": 0, "index_path": str(self.index_path)}
-
-        self._emit_progress(
-            f"Encoding {len(documents)} chunks in batches of {self.config.max_batch_size}...",
-            progress_callback,
-        )
-        embeddings = self._encode_batch(
-            [document.text for document in documents],
-            batch_size=self.config.max_batch_size,
-            progress_callback=progress_callback,
-        )
-
-        import faiss
-
-        self._emit_progress(
-            f"Building FAISS index with embedding dimension {embeddings.shape[1]}...",
-            progress_callback,
-        )
-        index = faiss.IndexFlatIP(embeddings.shape[1])
-        index.add(embeddings)  # type: ignore[arg-type]
-        self._emit_progress(f"Writing FAISS index to {self.index_path}...", progress_callback)
-        faiss.write_index(index, str(self.index_path))
-
-        self._index = index
-        self._write_metadata(documents)
-        self._cleanup_gpu_memory()
-
-        result = {
-            "total_documents": len({document.extra["source_path"] for document in documents}),
-            "total_chunks": len(documents),
-            "index_path": str(self.index_path),
-            "embedding_model": self.config.embedding_model_name,
-        }
-        self._emit_progress(f"Index built: {result}", progress_callback)
-        return result
+        from .energy_tracker import EnergyTracker
+        import gc
+        
+        with EnergyTracker("FAISS Index Building & Encoding"):
+            self._emit_progress("Starting index build...", progress_callback)
+            
+            import faiss
+            
+            index = None
+            total_chunks = 0
+            unique_sources = set()
+            
+            # Temporary metadata stream file
+            temp_metadata_path = self.metadata_path.with_suffix(".tmp")
+            
+            with open(temp_metadata_path, "w", encoding="utf-8") as handle:
+                handle.write("[\n")
+                
+                block_documents = []
+                first_item = True
+                
+                for document in self._yield_document_chunks():
+                    block_documents.append(document)
+                    
+                    if len(block_documents) >= chunk_batch_size:
+                        self._emit_progress(
+                            f"Processing chunk block {(total_chunks // chunk_batch_size) + 1} (chunks {total_chunks} to {total_chunks + len(block_documents)})...",
+                            progress_callback,
+                        )
+                        
+                        block_texts = [doc.text for doc in block_documents]
+                        block_embeddings = self._encode_batch(
+                            block_texts,
+                            batch_size=self.config.max_batch_size,
+                            progress_callback=progress_callback,
+                        )
+                        
+                        if index is None:
+                            self._emit_progress(
+                                f"Building FAISS index with embedding dimension {block_embeddings.shape[1]}...",
+                                progress_callback,
+                            )
+                            index = faiss.IndexFlatIP(block_embeddings.shape[1])
+                            
+                        index.add(block_embeddings)  # type: ignore
+                        
+                        # Write metadata block to temp file
+                        for doc in block_documents:
+                            unique_sources.add(doc.extra["source_path"])
+                            doc_dict = asdict(doc)
+                            json_str = json.dumps(doc_dict, ensure_ascii=True)
+                            if not first_item:
+                                handle.write(",\n")
+                            else:
+                                first_item = False
+                            handle.write(json_str)
+                            
+                        total_chunks += len(block_documents)
+                        block_documents.clear()
+                        self._cleanup_gpu_memory()
+                        gc.collect()
+                
+                # Process remaining documents in final block
+                if block_documents:
+                    self._emit_progress(
+                        f"Processing final chunk block {(total_chunks // chunk_batch_size) + 1} (chunks {total_chunks} to {total_chunks + len(block_documents)})...",
+                        progress_callback,
+                    )
+                    block_texts = [doc.text for doc in block_documents]
+                    block_embeddings = self._encode_batch(
+                        block_texts,
+                        batch_size=self.config.max_batch_size,
+                        progress_callback=progress_callback,
+                    )
+                    
+                    if index is None:
+                        index = faiss.IndexFlatIP(block_embeddings.shape[1])
+                    index.add(block_embeddings)  # type: ignore
+                    
+                    for doc in block_documents:
+                        unique_sources.add(doc.extra["source_path"])
+                        doc_dict = asdict(doc)
+                        json_str = json.dumps(doc_dict, ensure_ascii=True)
+                        if not first_item:
+                            handle.write(",\n")
+                        else:
+                            first_item = False
+                        handle.write(json_str)
+                        
+                    total_chunks += len(block_documents)
+                    block_documents.clear()
+                    self._cleanup_gpu_memory()
+                    gc.collect()
+                
+                handle.write("\n]")
+            
+            # If we indexed successfully, save the index and finalize metadata
+            if index is not None:
+                self._emit_progress(f"Writing FAISS index to {self.index_path}...", progress_callback)
+                faiss.write_index(index, str(self.index_path))
+                self._index = index
+                
+                # Overwrite metadata file with the temp file
+                if self.metadata_path.exists():
+                    self.metadata_path.unlink()
+                temp_metadata_path.rename(self.metadata_path)
+            else:
+                self._index = None
+                if temp_metadata_path.exists():
+                    temp_metadata_path.unlink()
+                    
+            self._cleanup_gpu_memory()
+            
+            result = {
+                "total_documents": len(unique_sources),
+                "total_chunks": total_chunks,
+                "index_path": str(self.index_path),
+                "embedding_model": self.config.embedding_model_name,
+            }
+            self._emit_progress(f"Index built: {result}", progress_callback)
+            
+            self._documents = []
+            return result
 
     def _write_metadata(self, documents: list[ChunkDocument]) -> None:
         payload = [asdict(document) for document in documents]
@@ -581,7 +715,9 @@ class RAGEngine:
             self._load_faiss()
             with self.metadata_path.open("r", encoding="utf-8") as handle:
                 raw_documents = json.load(handle)
-            self._documents = [ChunkDocument(**document) for document in raw_documents]
+            for doc in raw_documents:
+                doc.pop("searchable_text", None)
+            self._documents = [ChunkDocument(**doc) for doc in raw_documents]
             return
 
         self.build_index()

@@ -1,6 +1,13 @@
 from __future__ import annotations
 
 import re
+import sys
+from pathlib import Path
+
+_ROOT = Path(__file__).resolve().parents[2]
+_VENV_SITES = _ROOT / "venv" / "Lib" / "site-packages"
+if _VENV_SITES.exists() and str(_VENV_SITES) not in sys.path:
+    sys.path.insert(0, str(_VENV_SITES))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

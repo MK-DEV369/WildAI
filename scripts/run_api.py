@@ -5,8 +5,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
+VENV_SITES = ROOT / "venv" / "Lib" / "site-packages"
+
+if VENV_SITES.exists() and str(VENV_SITES) not in sys.path:
+    sys.path.insert(0, str(VENV_SITES))
+
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
+
 
 import uvicorn
 
