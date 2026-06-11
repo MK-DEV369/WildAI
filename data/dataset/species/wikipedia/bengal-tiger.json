@@ -1,5 +1,5 @@
 {
-  "title": "Bengal tiger",
+  "title": "Bengal Tiger",
   "year": 2024,
   "category": "species",
   "source": "Wikipedia",
@@ -9,7 +9,7 @@
     "endangered",
     "habitat",
     "species",
-    "wildlife"
+    "tiger"
   ],
   "url": "https://en.wikipedia.org/wiki/Bengal_tiger",
   "cleaned_content": "The Bengal tiger is a population of the Panthera tigris tigris subspecies. It ranks among the largest of wild cats. It is distributed from India, southern Nepal, Bangladesh, Bhutan to Southwestern China. Its historical range extended to the Indus Basin until the early 19th century, and it is thought to have been present in the Indian subcontinent since the Late Pleistocene about 12,000 to 16,500 years ago. It is threatened by poaching, habitat loss and habitat fragmentation.",
@@ -18,7 +18,7 @@
   ],
   "extra": {
     "page_title": "Bengal_tiger",
-    "canonical_name": "Bengal tiger",
+    "canonical_name": "Bengal Tiger",
     "description": "Tiger population on the Indian subcontinent",
     "content_urls": {
       "desktop": {

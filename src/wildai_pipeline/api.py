@@ -516,6 +516,50 @@ def create_app() -> FastAPI:
         buf.seek(0)
         return StreamingResponse(buf, media_type='image/png')
 
+    @app.get('/api/analytics/energy')
+    def get_energy_analytics() -> dict:
+        import re
+        from pathlib import Path
+        from .energy_tracker import get_system_specs, LOG_FILE
+        log_path = LOG_FILE
+        try:
+            specs = get_system_specs()
+        except Exception:
+            specs = {
+                "os": "Windows",
+                "cpu": "Intel(R) Core(TM) i7-11800H CPU @ 2.30GHz",
+                "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU",
+                "ram": "16 GB"
+            }
+            
+        logs = []
+        if log_path.exists():
+            pattern = re.compile(
+                r"\[(?P<timestamp>.*?)\] Task: (?P<task>.*?) \| "
+                r"Duration: (?P<duration>[\d.]+)s \| CPU Mean Util: (?P<cpu_util>[\d.]+)% \| "
+                r"CPU Power: (?P<cpu_w>[\d.]+)W \| GPU Power: (?P<gpu_w>[\d.]+)W \| "
+                r"Energy: (?P<energy>[\d.]+) Wh"
+            )
+            try:
+                with log_path.open("r", encoding="utf-8") as f:
+                    for line in f:
+                        match = pattern.search(line)
+                        if match:
+                            d = match.groupdict()
+                            logs.append({
+                                "timestamp": d["timestamp"],
+                                "task": d["task"],
+                                "duration": float(d["duration"]),
+                                "cpu_util": float(d["cpu_util"]),
+                                "cpu_w": float(d["cpu_w"]),
+                                "gpu_w": float(d["gpu_w"]),
+                                "energy": float(d["energy"]),
+                            })
+            except Exception as e:
+                return {"error": str(e), "logs": [], "system_specs": specs}
+                
+        return {"logs": logs, "system_specs": specs}
+
     @app.post("/api/query", response_model=QueryResponse)
     def query(request: QueryRequest) -> QueryResponse:
         from .energy_tracker import EnergyTracker

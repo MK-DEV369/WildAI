@@ -1,14 +1,14 @@
 {
-  "title": "Ganges river dolphin",
+  "title": "Ganges River Dolphin",
   "year": 2024,
   "category": "species",
   "source": "Wikipedia",
   "type": "html",
   "content": "The Ganges river dolphin is a species of freshwater dolphin classified in the family Platanistidae. It lives in the Ganges and related rivers of South Asia, namely in the countries of India, Nepal, and Bangladesh. It is related to the much smaller Indus river dolphin which lives in the rivers of the Indus Basin in Pakistan and northwestern India.",
   "tags": [
-    "endangered",
-    "species",
-    "wildlife"
+    "dolphin",
+    "river",
+    "species"
   ],
   "url": "https://en.wikipedia.org/wiki/Ganges_river_dolphin",
   "cleaned_content": "The Ganges river dolphin is a species of freshwater dolphin classified in the family Platanistidae. It lives in the Ganges and related rivers of South Asia, namely in the countries of India, Nepal, and Bangladesh. It is related to the much smaller Indus river dolphin which lives in the rivers of the Indus Basin in Pakistan and northwestern India.",
@@ -17,7 +17,7 @@
   ],
   "extra": {
     "page_title": "Ganges_river_dolphin",
-    "canonical_name": "Ganges river dolphin",
+    "canonical_name": "Ganges River Dolphin",
     "description": "Species of toothed whale",
     "content_urls": {
       "desktop": {
