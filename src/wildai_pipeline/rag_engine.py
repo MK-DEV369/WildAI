@@ -580,26 +580,87 @@ class RAGEngine:
     ) -> dict[str, int | str]:
         from .energy_tracker import EnergyTracker
         import gc
+        import faiss
         
         with EnergyTracker("FAISS Index Building & Encoding"):
             self._emit_progress("Starting index build...", progress_callback)
             
-            import faiss
+            # Temporary metadata and index paths
+            temp_metadata_path = self.metadata_path.with_suffix(".tmp")
+            temp_index_path = self.index_path.with_suffix(".faiss.tmp")
             
-            index = None
+            resuming = False
             total_chunks = 0
             unique_sources = set()
+            index = None
+            first_item = True
             
-            # Temporary metadata stream file
-            temp_metadata_path = self.metadata_path.with_suffix(".tmp")
+            if temp_index_path.exists() and temp_metadata_path.exists():
+                try:
+                    # Read and parse metadata lines
+                    parsed_lines = []
+                    with open(temp_metadata_path, "r", encoding="utf-8") as rf:
+                        lines = rf.readlines()
+                    
+                    for line in lines[1:]:  # skip first line "[\n"
+                        line_str = line.strip()
+                        if not line_str or line_str == "]":
+                            continue
+                        if line_str.endswith(","):
+                            line_str = line_str[:-1].strip()
+                        try:
+                            doc_dict = json.loads(line_str)
+                            parsed_lines.append(line_str)
+                            unique_sources.add(doc_dict["extra"]["source_path"])
+                        except Exception:
+                            # Break on the first invalid JSON line (e.g. truncated line)
+                            break
+                    
+                    if parsed_lines:
+                        # Try to read the FAISS index
+                        loaded_index = faiss.read_index(str(temp_index_path))
+                        if loaded_index.ntotal == len(parsed_lines):
+                            index = loaded_index
+                            total_chunks = len(parsed_lines)
+                            resuming = True
+                            first_item = False
+                            
+                            # Rewrite the temp metadata file to remove any partial/corrupted trailing lines
+                            with open(temp_metadata_path, "w", encoding="utf-8") as wf:
+                                wf.write("[\n")
+                                wf.write(",\n".join(parsed_lines))
+                            
+                            self._emit_progress(
+                                f"Resuming index build from checkpoint: {total_chunks} chunks already processed.",
+                                progress_callback,
+                            )
+                except Exception as resume_err:
+                    self._emit_progress(
+                        f"Failed to resume from checkpoint, starting from scratch. Error: {resume_err}",
+                        progress_callback,
+                    )
+                    index = None
+                    total_chunks = 0
+                    unique_sources = set()
+                    first_item = True
+
+            # If not resuming or resuming failed, initialize/truncate the metadata file
+            if not resuming:
+                with open(temp_metadata_path, "w", encoding="utf-8") as handle:
+                    handle.write("[\n")
+                if temp_index_path.exists():
+                    temp_index_path.unlink()
+
+            block_documents = []
+            skipped = 0
             
-            with open(temp_metadata_path, "w", encoding="utf-8") as handle:
-                handle.write("[\n")
-                
-                block_documents = []
-                first_item = True
-                
+            # Open metadata file in append mode
+            with open(temp_metadata_path, "a", encoding="utf-8") as handle:
                 for document in self._yield_document_chunks():
+                    if resuming and skipped < total_chunks:
+                        skipped += 1
+                        continue
+                        
                     block_documents.append(document)
                     
                     if len(block_documents) >= chunk_batch_size:
@@ -637,6 +698,11 @@ class RAGEngine:
                             
                         total_chunks += len(block_documents)
                         block_documents.clear()
+                        
+                        # Save checkpoint
+                        faiss.write_index(index, str(temp_index_path))
+                        handle.flush()
+                        
                         self._cleanup_gpu_memory()
                         gc.collect()
                 
@@ -669,6 +735,11 @@ class RAGEngine:
                         
                     total_chunks += len(block_documents)
                     block_documents.clear()
+                    
+                    # Save final checkpoint before closing array
+                    faiss.write_index(index, str(temp_index_path))
+                    handle.flush()
+                    
                     self._cleanup_gpu_memory()
                     gc.collect()
                 
@@ -684,10 +755,16 @@ class RAGEngine:
                 if self.metadata_path.exists():
                     self.metadata_path.unlink()
                 temp_metadata_path.rename(self.metadata_path)
+                
+                # Clean up temporary index checkpoint
+                if temp_index_path.exists():
+                    temp_index_path.unlink()
             else:
                 self._index = None
                 if temp_metadata_path.exists():
                     temp_metadata_path.unlink()
+                if temp_index_path.exists():
+                    temp_index_path.unlink()
                     
             self._cleanup_gpu_memory()
             
