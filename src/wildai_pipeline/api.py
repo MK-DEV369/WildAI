@@ -362,6 +362,7 @@ def create_app() -> FastAPI:
                 "Use clear bullet points or numbered lists to break down different aspects of the information.",
                 "Cite the source titles in square brackets after assertions (e.g., [Himachal Pradesh Forest Rules (2023)]).",
                 "Do not hallucinate facts that are not present in the evidence.",
+                "Analyze the years and time periods of each retrieved document. You must reference these years/periods in your analysis to outline the timeframe of active policies (e.g. covering the period from 2011 to 2026), even if the text itself doesn't explicitly label them as 'latest'. If a query asks for 'latest' or 'recent' information, treat the most recently dated documents in the evidence as the latest policies and summarize their contents accordingly.",
                 "",
                 "Evidence:",
             ]
@@ -560,7 +561,18 @@ def create_app() -> FastAPI:
                 
         return {"logs": logs, "system_specs": specs}
 
+    @app.get('/api/analytics/year_category')
+    def year_category_breakdown() -> dict:
+        from collections import defaultdict
+        engine.ensure_index()
+        result_dict = defaultdict(lambda: defaultdict(int))
+        for doc in engine._documents:
+            if doc.year is not None:
+                result_dict[int(doc.year)][doc.category] += 1
+        return {"year_category": {yr: dict(cats) for yr, cats in result_dict.items()}}
+
     @app.post("/api/query", response_model=QueryResponse)
+
     def query(request: QueryRequest) -> QueryResponse:
         from .energy_tracker import EnergyTracker
         with EnergyTracker("RAG Search & Synthesis Query"):

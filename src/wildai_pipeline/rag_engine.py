@@ -751,6 +751,61 @@ class RAGEngine:
             "indian",
             "wildlife",
             "management",
+            "how",
+            "make",
+            "better",
+            "best",
+            "good",
+            "should",
+            "would",
+            "could",
+            "does",
+            "do",
+            "did",
+            "done",
+            "has",
+            "have",
+            "had",
+            "is",
+            "are",
+            "were",
+            "was",
+            "be",
+            "been",
+            "being",
+            "document",
+            "documents",
+            "report",
+            "reports",
+            "page",
+            "pages",
+            "about",
+            "some",
+            "any",
+            "detail",
+            "details",
+            "info",
+            "information",
+            "guideline",
+            "guidelines",
+            "rule",
+            "rules",
+            "act",
+            "acts",
+            "law",
+            "laws",
+            "regulation",
+            "regulations",
+            "plan",
+            "plans",
+            "program",
+            "programs",
+            "project",
+            "projects",
+            "national",
+            "state",
+            "local",
+            "global",
         }
         anchor_terms = {term for term in query_terms if term not in generic_terms}
         min_year, max_year = self._year_bounds()
@@ -761,7 +816,7 @@ class RAGEngine:
         elif compare_query and year is None:
             search_top_k = min(max(top_k * 200, 2000), len(self._documents))
         else:
-            search_top_k = min(max(top_k * 4, top_k), len(self._documents))
+            search_top_k = min(max(top_k * 100, 500), len(self._documents))
         distances, indices = self._index.search(query_embedding, search_top_k)  # type: ignore[call-arg]
 
         ranked_results: list[dict[str, Any]] = []
@@ -787,7 +842,10 @@ class RAGEngine:
                 or document.document_type == "profile"
                 or document.source == "India Zoo Network"
             ):
-                continue
+                if anchor_terms and any(term in searchable_text for term in anchor_terms):
+                    pass
+                else:
+                    continue
 
             semantic_score = float(score)
             adjusted_score = semantic_score
@@ -804,12 +862,12 @@ class RAGEngine:
                     if lexical_overlap == 0:
                         adjusted_score -= 0.35
 
-                if latest_query and anchor_terms:
+                if anchor_terms:
                     anchor_matches = sum(1 for term in anchor_terms if term in searchable_text)
                     if anchor_matches == 0:
-                        adjusted_score -= 0.30
+                        adjusted_score -= 1.50
                     else:
-                        adjusted_score += 0.12 * (anchor_matches / len(anchor_terms))
+                        adjusted_score += 0.40 * (anchor_matches / len(anchor_terms))
 
                 if tiger_intent:
                     if "tiger" in searchable_text:
@@ -855,7 +913,10 @@ class RAGEngine:
                     adjusted_score += 0.18
 
                 if document.category == "zoos" or document.document_type == "profile" or document.source == "India Zoo Network":
-                    adjusted_score -= 1.20
+                    if anchor_terms and any(term in searchable_text for term in anchor_terms):
+                        adjusted_score -= 0.10
+                    else:
+                        adjusted_score -= 1.20
 
             ranked_results.append(
                 {

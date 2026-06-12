@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Bot, Database, Download, Search, ShieldCheck, Sparkles, TreePine, Users, Home, MessageSquare } from 'lucide-react'
+import { ArrowRight, Bot, Database, Download, Search, ShieldCheck, Sparkles, TreePine, Users, Home, MessageSquare, Mic, MicOff } from 'lucide-react'
 import cloud from 'd3-cloud'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/scale.css'
 import Dock from '@/components/ui/dock'
@@ -269,37 +269,41 @@ function highlightText(text: string, query: string): JSX.Element | string {
     .toLowerCase()
     .match(/[a-z0-9]+/g) || []
 
-  const filteredWords = words.filter(w => w.length >= 2 && !stopwords.has(w))
-  if (filteredWords.length === 0) return text
+  if (words.length === 0) return text
 
   const patterns: string[] = []
-  
-  // 3-grams
-  for (let i = 0; i < filteredWords.length - 2; i++) {
-    patterns.push(`${filteredWords[i]}\\s+${filteredWords[i+1]}\\s+${filteredWords[i+2]}`)
-  }
-  // 2-grams
-  for (let i = 0; i < filteredWords.length - 1; i++) {
-    patterns.push(`${filteredWords[i]}\\s+${filteredWords[i+1]}`)
-  }
-  // 1-grams
-  for (const w of filteredWords) {
-    patterns.push(w)
+
+  const isValuable = (phraseWords: string[]) => {
+    return phraseWords.some(w => !stopwords.has(w) && w.length >= 2)
   }
 
+  // Generate N-grams from N down to 1
+  for (let n = Math.min(8, words.length); n >= 1; n--) {
+    for (let i = 0; i <= words.length - n; i++) {
+      const subWords = words.slice(i, i + n)
+      if (isValuable(subWords)) {
+        const pattern = subWords.map(escapeRegex).join('\\s+')
+        patterns.push(pattern)
+      }
+    }
+  }
+
+  if (patterns.length === 0) return text
+
+  // Sort unique patterns by length descending so that longer phrase matches take precedence
   const uniquePatterns = Array.from(new Set(patterns)).sort((a, b) => b.length - a.length)
 
   try {
-    const regex = new RegExp(`\\b(${uniquePatterns.map(escapeRegex).join('|')})\\b`, 'gi')
+    const regex = new RegExp(`\\b(${uniquePatterns.join('|')})\\b`, 'gi')
     const parts = text.split(regex)
-    const testRegex = new RegExp(`^(${uniquePatterns.map(escapeRegex).join('|')})$`, 'i')
+    const testRegex = new RegExp(`^(${uniquePatterns.join('|')})$`, 'i')
 
     return (
       <>
         {parts.map((part, idx) => {
           const isMatch = testRegex.test(part.trim())
           return isMatch ? (
-            <mark key={`${part}-${idx}`} style={{ backgroundColor: '#fbbf24', color: '#000', padding: '0 2px', borderRadius: '2px' }}>
+            <mark key={`${part}-${idx}`} className="search-highlight">
               {part}
             </mark>
           ) : (
@@ -362,6 +366,126 @@ function ResearchConsole({
   const [exporting, setExporting] = useState(false)
   const [rightTab, setRightTab] = useState<'sources' | 'synthesis' | 'wordcloud'>('sources')
   const [chatInput, setChatInput] = useState('')
+  const [showMdPreview, setShowMdPreview] = useState(false)
+  const [mdPreviewContent, setMdPreviewContent] = useState('')
+  const [previewLoading, setPreviewLoading] = useState(false)
+
+  // Speech to Text State
+  const [isListening, setIsListening] = useState(false)
+  const [recognition, setRecognition] = useState<any>(null)
+
+  // Text to Speech State
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([])
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string>('')
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [autoRead, setAutoRead] = useState(true)
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (SpeechRecognition) {
+      const rec = new SpeechRecognition()
+      rec.continuous = false
+      rec.interimResults = false
+      rec.lang = 'en-US'
+
+      rec.onstart = () => {
+        setIsListening(true)
+      }
+
+      rec.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript
+        setChatInput((prev) => (prev ? prev + ' ' + transcript : transcript))
+      }
+
+      rec.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error)
+        setIsListening(false)
+      }
+
+      rec.onend = () => {
+        setIsListening(false)
+      }
+
+      setRecognition(rec)
+    }
+  }, [])
+
+  const toggleListening = () => {
+    if (!recognition) {
+      alert('Speech recognition is not supported in this browser. Please try Chrome or Edge.')
+      return
+    }
+
+    if (isListening) {
+      recognition.stop()
+    } else {
+      recognition.start()
+    }
+  }
+
+  // Load and monitor speech synthesis voices
+  useEffect(() => {
+    const loadVoices = () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        const list = window.speechSynthesis.getVoices()
+        setVoices(list)
+        if (list.length > 0 && !selectedVoiceName) {
+          const englishVoice = list.find((v) => v.lang.startsWith('en'))
+          setSelectedVoiceName(englishVoice ? englishVoice.name : list[0].name)
+        }
+      }
+    }
+
+    loadVoices()
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices
+    }
+
+    const interval = setInterval(() => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        setIsSpeaking(window.speechSynthesis.speaking)
+      }
+    }, 250)
+
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = null
+      }
+      clearInterval(interval)
+    }
+  }, [selectedVoiceName])
+
+  // Trigger speak when new assistant message arrives
+  useEffect(() => {
+    if (messages.length > 0) {
+      const lastMessage = messages[messages.length - 1]
+      if (lastMessage.who === 'assistant' && autoRead) {
+        // Strip markdown and citations for a cleaner read-aloud voice
+        const textToSpeak = lastMessage.text
+          .replace(/[*#`_\-]/g, '')
+          .replace(/\[\d+\]/g, '')
+          .trim()
+        
+        if (textToSpeak && !textToSpeak.startsWith('Error:')) {
+          window.speechSynthesis.cancel()
+          const utterance = new SpeechSynthesisUtterance(textToSpeak)
+          if (selectedVoiceName) {
+            const voice = voices.find((v) => v.name === selectedVoiceName)
+            if (voice) utterance.voice = voice
+          }
+          window.speechSynthesis.speak(utterance)
+        }
+      }
+    }
+  }, [messages, autoRead, selectedVoiceName, voices])
+
+  const stopSpeaking = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel()
+      setIsSpeaking(false)
+    }
+  }
 
   const metrics = [
     { label: 'Status', value: health?.status ?? 'offline' },
@@ -381,48 +505,9 @@ function ResearchConsole({
     return b.score - a.score
   })
 
-  async function downloadSummary() {
-    if (!result?.answer) return
-    setExporting(true)
-
+  function generateReportMarkdown(detailedReportText: string): string {
     const top3 = sortedHits.slice(0, 3)
-    let detailedReport = ''
-
-    try {
-      const systemPrompt = `
-  You are a wildlife-policy research analyst writing a formal report section.
-  Write a detailed, well-structured answer to the user's query.
-  Rules:
-  - Cite sources inline as [1], [2], [3] whenever you draw on them.
-  - Every factual claim must be traceable to at least one source.
-  - Structure with ### headings: Overview, Key Findings, Policy Implications, Conclusion.
-  - Use clear, formal prose — no bullet spam.
-  - Length: 350-500 words.
-  - End with a one-sentence "Confidence note" describing retrieval quality.`.trim()
-
-      const sourcesBlock = top3
-        .map((h, i) => `SOURCE [${i + 1}]\nTitle: ${h.title}\nYear: ${h.year ?? 'N/A'}\nCategory: ${h.category}\nSource: ${h.source}\nType: ${h.document_type}\nTags: ${h.tags.slice(0, 6).join(', ')}\nText:\n${h.text.slice(0, 1200)}`)
-        .join('\n\n---\n\n')
-
-      const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: `Query: ${result.query}\n\nRetrieved sources:\n${sourcesBlock}\n\nWrite the detailed cited report now.` }],
-        }),
-      })
-      if (apiRes.ok) {
-        const data = await apiRes.json()
-        detailedReport = (data.content as Array<{ type: string; text?: string }>)
-          .filter((b) => b.type === 'text').map((b) => b.text ?? '').join('\n')
-      }
-    } catch {
-      detailedReport = '_Detailed synthesis unavailable._\n\n' + result.answer
-    }
-
+    
     function hitToMd(hit: SearchHit, idx: number): string {
       return [
         `### [${idx}] ${hit.title}`,
@@ -454,10 +539,9 @@ function ResearchConsole({
       ).join('\n')
 
     const stamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    const isoStamp = new Date().toISOString().replace(/[:.]/g, '-')
     const remainingCount = sortedHits.length - 3
 
-    const fileBody = [
+    return [
       '# WILDAI Research Report',
       '',
       `> Generated by WILDAI Research Console · ${stamp}`,
@@ -466,13 +550,13 @@ function ResearchConsole({
       '',
       '## Query',
       '',
-      `> ${result.query}`,
+      `> ${result?.query ?? ''}`,
       '',
       '---',
       '',
       '## Detailed Analysis',
       '',
-      detailedReport,
+      detailedReportText,
       '',
       '---',
       '',
@@ -493,25 +577,121 @@ function ResearchConsole({
       '',
       '| Metric | Value |',
       '|--------|-------|',
-      `| Total hits | ${result.total_hits} |`,
+      `| Total hits | ${result?.total_hits ?? 0} |`,
       `| Returned | ${sortedHits.length} |`,
-      `| Highlight terms | ${result.highlight_terms.join(', ') || 'N/A'} |`,
+      `| Highlight terms | ${result?.highlight_terms.join(', ') || 'N/A'} |`,
       '',
       '---',
       '',
       '*Report produced by WILDAI · Wildlife Intelligence RAG System*',
     ].join('\n')
+  }
 
+  async function downloadSummary() {
+    if (!result?.answer) return
+    setExporting(true)
+
+    const top3 = sortedHits.slice(0, 3)
+    let detailedReport = ''
+
+    try {
+      const systemPrompt = `
+  You are a wildlife-policy research analyst writing a formal report section.
+  Write a detailed, well-structured answer to the user's query.
+  Rules:
+  - Cite sources inline as [1], [2], [3] whenever you draw on them.
+  - Every factual claim must be traceable to at least one source.
+  - Structure with ### headings: Overview, Key Findings, Policy Implications, Conclusion.
+  - Use clear, formal prose — no bullet spam.
+  - Length: 350-500 words.
+  - Analyze the years/time periods of the retrieved documents (e.g. from 2011 to 2026). Use this chronological timeframe in your summary, even if the text itself doesn't explicitly label them as 'latest'.
+  - End with a one-sentence "Confidence note" describing retrieval quality.`.trim()
+
+      const sourcesBlock = top3
+        .map((h, i) => `SOURCE [${i + 1}]\nTitle: ${h.title}\nYear: ${h.year ?? 'N/A'}\nCategory: ${h.category}\nSource: ${h.source}\nType: ${h.document_type}\nTags: ${h.tags.slice(0, 6).join(', ')}\nText:\n${h.text.slice(0, 1200)}`)
+        .join('\n\n---\n\n')
+
+      const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: `Query: ${result.query}\n\nRetrieved sources:\n${sourcesBlock}\n\nWrite the detailed cited report now.` }],
+        }),
+      })
+      if (apiRes.ok) {
+        const data = await apiRes.json()
+        detailedReport = (data.content as Array<{ type: string; text?: string }>)
+          .filter((b) => b.type === 'text').map((b) => b.text ?? '').join('\n')
+      }
+    } catch {
+      detailedReport = '_Detailed synthesis unavailable._\n\n' + result.answer
+    }
+
+    const fileBody = generateReportMarkdown(detailedReport || result.answer)
     const blob = new Blob([fileBody], { type: 'text/markdown;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
+    const isoStamp = new Date().toISOString().replace(/[:.]/g, '-')
     link.download = `wildai-report-${isoStamp}.md`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
     setExporting(false)
+  }
+
+  async function handleOpenMdPreview() {
+    if (!result?.answer) return
+    setPreviewLoading(true)
+    setShowMdPreview(true)
+    
+    let detailedReport = ''
+    try {
+      const top3 = sortedHits.slice(0, 3)
+      const systemPrompt = `
+  You are a wildlife-policy research analyst writing a formal report section.
+  Write a detailed, well-structured answer to the user's query.
+  Rules:
+  - Cite sources inline as [1], [2], [3] whenever you draw on them.
+  - Every factual claim must be traceable to at least one source.
+  - Structure with ### headings: Overview, Key Findings, Policy Implications, Conclusion.
+  - Use clear, formal prose — no bullet spam.
+  - Length: 350-500 words.
+  - Analyze the years/time periods of the retrieved documents (e.g. from 2011 to 2026). Use this chronological timeframe in your summary, even if the text itself doesn't explicitly label them as 'latest'.
+  - End with a one-sentence "Confidence note" describing retrieval quality.`.trim()
+
+      const sourcesBlock = top3
+        .map((h, i) => `SOURCE [${i + 1}]\nTitle: ${h.title}\nYear: ${h.year ?? 'N/A'}\nCategory: ${h.category}\nSource: ${h.source}\nType: ${h.document_type}\nTags: ${h.tags.slice(0, 6).join(', ')}\nText:\n${h.text.slice(0, 1200)}`)
+        .join('\n\n---\n\n')
+
+      const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: `Query: ${result.query}\n\nRetrieved sources:\n${sourcesBlock}\n\nWrite the detailed cited report now.` }],
+        }),
+      })
+      if (apiRes.ok) {
+        const data = await apiRes.json()
+        detailedReport = (data.content as Array<{ type: string; text?: string }>)
+          .filter((b) => b.type === 'text').map((b) => b.text ?? '').join('\n')
+      } else {
+        detailedReport = result.answer
+      }
+    } catch {
+      detailedReport = result.answer
+    }
+    
+    const markdown = generateReportMarkdown(detailedReport)
+    setMdPreviewContent(markdown)
+    setPreviewLoading(false)
   }
 
   const [wordcloudWords, setWordcloudWords] = useState<Array<{ text: string; value: number }>>([])
@@ -540,7 +720,7 @@ function ResearchConsole({
     let detailedReport = result.answer
     try {
       const top3 = sortedHits.slice(0, 3)
-      const systemPrompt = `You are a wildlife-policy analyst. Write a 350-500 word formal report with ### headings (Overview, Key Findings, Policy Implications, Conclusion). Cite sources inline as [1] [2] [3]. End with a one-line Confidence note.`
+      const systemPrompt = `You are a wildlife-policy analyst. Write a 350-500 word formal report with ### headings (Overview, Key Findings, Policy Implications, Conclusion). Cite sources inline as [1] [2] [3]. Analyze the document years/time periods to outline the active policy timeframe (e.g. 2011 to 2026), even if the text doesn't label them as 'latest'. End with a one-line Confidence note.`
       const sourcesBlock = top3
         .map((h, i) => `SOURCE [${i + 1}]\nTitle: ${h.title}\nYear: ${h.year ?? 'N/A'}\nText:\n${h.text.slice(0, 1000)}`)
         .join('\n\n---\n\n')
@@ -756,7 +936,122 @@ function ResearchConsole({
               </div>
             </div>
 
+            {/* Voice Control Bar */}
+            <div className="voice-control-panel" style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem',
+              padding: '0.55rem 0.85rem',
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              borderRadius: '12px',
+              marginBottom: '0.75rem',
+              fontSize: '0.82rem',
+              color: 'var(--muted)'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', userSelect: 'none' }}>
+                  <input
+                    type="checkbox"
+                    checked={autoRead}
+                    onChange={(e) => setAutoRead(e.target.checked)}
+                    style={{ cursor: 'pointer', accentColor: 'var(--accent)' }}
+                  />
+                  <span>Auto-read replies</span>
+                </label>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {isSpeaking && (
+                  <button
+                    onClick={stopSpeaking}
+                    style={{
+                      background: 'rgba(255, 100, 100, 0.15)',
+                      border: '1px solid rgba(255, 100, 100, 0.3)',
+                      color: '#ff8888',
+                      padding: '0.25rem 0.6rem',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      fontSize: '0.78rem',
+                      fontWeight: 600,
+                      transition: 'all 0.2s'
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 100, 100, 0.25)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 100, 100, 0.15)';
+                    }}
+                  >
+                    Stop Reading
+                  </button>
+                )}
+
+                {voices.length > 0 && (
+                  <div className="voice-selector" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <span>Voice:</span>
+                    <select
+                      value={selectedVoiceName}
+                      onChange={(e) => setSelectedVoiceName(e.target.value)}
+                      style={{
+                        background: 'rgba(4, 10, 9, 0.8)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        borderRadius: '8px',
+                        padding: '0.2rem 0.5rem',
+                        color: 'var(--text)',
+                        fontSize: '0.78rem',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        maxWidth: '180px'
+                      }}
+                    >
+                      {voices.map((v) => (
+                        <option key={v.name} value={v.name} style={{ background: '#0c1b17', color: '#e9fff4' }}>
+                          {v.name.slice(0, 20)} ({v.lang})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="chat-input-row" style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
+              <button
+                type="button"
+                onClick={toggleListening}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '52px',
+                  height: '52px',
+                  borderRadius: '16px',
+                  border: isListening ? '1px solid rgba(255, 100, 100, 0.4)' : '1px solid rgba(255,255,255,0.08)',
+                  background: isListening ? 'rgba(255, 100, 100, 0.15)' : 'rgba(4,10,9,0.6)',
+                  color: isListening ? '#ff8888' : 'var(--accent)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  position: 'relative'
+                }}
+                title={isListening ? 'Listening... Click to stop.' : 'Voice input (Speech-to-Text)'}
+              >
+                {isListening ? (
+                  <>
+                    <MicOff size={20} />
+                    <span className="ping" style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '16px',
+                      border: '2px solid rgba(255, 100, 100, 0.5)',
+                      animation: 'pulse-mic 1.5s infinite ease-in-out'
+                    }}></span>
+                  </>
+                ) : (
+                  <Mic size={20} />
+                )}
+              </button>
               <input 
                 value={chatInput} 
                 onChange={(e) => setChatInput(e.target.value)} 
@@ -984,9 +1279,18 @@ function ResearchConsole({
                         </section>
                       ))}
                       
-                      <div style={{ display: 'flex', gap: '0.4rem', marginTop: '1rem' }}>
-                        <button className="secondary-button" onClick={downloadSummary} style={{ flex: 1, padding: '0.5rem', fontSize: '0.78rem', borderRadius: '12px' }}>
-                          Export Report (MD)
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.4rem', marginTop: '1.25rem' }}>
+                        <button className="secondary-button" onClick={() => exportServer('pdf')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                          Export PDF
+                        </button>
+                        <button className="secondary-button" onClick={() => exportServer('docx')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                          Export Word
+                        </button>
+                        <button className="secondary-button" onClick={downloadSummary} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                          Export MD
+                        </button>
+                        <button className="secondary-button" onClick={handleOpenMdPreview} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                          Preview MD
                         </button>
                       </div>
                     </div>
@@ -1019,6 +1323,72 @@ function ResearchConsole({
         </div>
       </div>
       {error && <div className="alert">{error}</div>}
+
+      {showMdPreview && (
+        <div className="document-modal-overlay" onClick={() => setShowMdPreview(false)}>
+          <div className="document-modal panel" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '800px', width: '90%', height: '80vh', display: 'flex', flexDirection: 'column' }}>
+            <div className="document-viewer-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem' }}>
+              <div>
+                <div className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Search size={16} />
+                  Report Markdown Preview
+                </div>
+                <h3>{result?.query}</h3>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button 
+                  className="ghost-button" 
+                  onClick={() => {
+                    navigator.clipboard.writeText(mdPreviewContent);
+                    alert("Markdown report copied to clipboard!");
+                  }}
+                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.76rem', borderRadius: '8px' }}
+                  disabled={previewLoading}
+                >
+                  Copy Markdown
+                </button>
+                <button 
+                  className="ghost-button" 
+                  onClick={() => setShowMdPreview(false)}
+                  style={{ padding: '0.4rem 0.8rem', fontSize: '0.76rem', borderRadius: '8px' }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+            <div className="document-viewer-body" style={{ flex: 1, overflowY: 'auto', padding: '1rem 0', display: 'flex', flexDirection: 'column' }}>
+              {previewLoading ? (
+                <div className="document-viewer-loading" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                    <div className="thinking-dots" style={{ marginBottom: '0.5rem' }}>
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                      <span className="dot"></span>
+                    </div>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--muted)' }}>Synthesizing detailed Markdown report...</span>
+                  </div>
+                </div>
+              ) : (
+                <pre style={{ 
+                  margin: 0, 
+                  padding: '1rem', 
+                  background: '#06100d', 
+                  border: '1px solid rgba(126, 240, 168, 0.15)', 
+                  borderRadius: '10px', 
+                  color: 'rgba(233, 255, 244, 0.92)', 
+                  fontFamily: 'Consolas, Courier New, monospace', 
+                  fontSize: '0.82rem', 
+                  lineHeight: '1.6', 
+                  whiteSpace: 'pre-wrap', 
+                  overflowX: 'auto' 
+                }}>
+                  {mdPreviewContent}
+                </pre>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -1154,6 +1524,8 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
   const [wordcloudWords, setWordcloudWords] = useState<Array<{ text: string; value: number }>>([])
   const [energyData, setEnergyData] = useState<{ logs: any[]; system_specs: any } | null>(null)
   const [loading, setLoading] = useState(true)
+  // New: per-year category breakdown
+  const [yearCategoryData, setYearCategoryData] = useState<Record<number, Record<string, number>>>({})
 
   useEffect(() => {
     async function load() {
@@ -1166,6 +1538,16 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
         const res2 = await fetch('/api/analytics/time_series')
         const p2 = await res2.json()
         setTimeSeries(p2.time_series || [])
+
+        // New endpoint: per-year category breakdown
+        // Expected shape: { year_category: { "2020": { "policy": 12, "species": 8, ... }, ... } }
+        try {
+          const res2b = await fetch('/api/analytics/year_category')
+          if (res2b.ok) {
+            const p2b = await res2b.json()
+            setYearCategoryData(p2b.year_category || {})
+          }
+        } catch { /* graceful degradation */ }
 
         const res3 = await fetch('/api/analytics/wordcloud?top_n=90')
         const p3 = await res3.json()
@@ -1183,48 +1565,149 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
     void load()
   }, [])
 
+  // Cluster duplicate tasks in energyData.logs
+  const clusteredLogs = useMemo(() => {
+    if (!energyData?.logs) return []
+    const groups: Record<string, {
+      task: string
+      energy: number
+      duration: number
+      cpu_util_sum: number
+      cpu_w_sum: number
+      gpu_w_sum: number
+      count: number
+    }> = {}
+
+    for (const log of energyData.logs) {
+      const name = log.task || "Unknown Task"
+      if (!groups[name]) {
+        groups[name] = {
+          task: name,
+          energy: 0,
+          duration: 0,
+          cpu_util_sum: 0,
+          cpu_w_sum: 0,
+          gpu_w_sum: 0,
+          count: 0,
+        }
+      }
+      const g = groups[name]
+      g.energy += log.energy ?? 0
+      g.duration += log.duration ?? 0
+      g.cpu_util_sum += log.cpu_util ?? 0
+      g.cpu_w_sum += log.cpu_w ?? 0
+      g.gpu_w_sum += log.gpu_w ?? 0
+      g.count += 1
+    }
+
+    return Object.values(groups).map((g) => ({
+      task: g.task,
+      energy: g.energy,
+      duration: g.duration,
+      cpu_util: g.cpu_util_sum / g.count,
+      cpu_w: g.cpu_w_sum / g.count,
+      gpu_w: g.gpu_w_sum / g.count,
+      count: g.count,
+    }))
+  }, [energyData?.logs])
+
+  // ─── Derived data for stacked bar chart ───────────────────────────────────
+  // Palette per domain category (expand as needed)
+  const DOMAIN_PALETTE: Record<string, string> = {
+    policy:      '#7ef0a8',
+    species:     '#ffc857',
+    ecosystems:  '#5ec8ff',
+    legal:       '#ff8b7b',
+    habitat:     '#91a7ff',
+    trade:       '#f48fb1',
+    community:   '#80cbc4',
+    climate:     '#ce93d8',
+    research:    '#ffcc80',
+    management:  '#a5d6a7',
+  }
+  const FALLBACK_COLORS = ['#7ef0a8','#ffc857','#5ec8ff','#ff8b7b','#91a7ff','#f48fb1','#80cbc4','#ce93d8']
+
+  // Build a unified set of all domain keys seen across all years
+  const allDomains = Array.from(
+    new Set(Object.values(yearCategoryData).flatMap((obj) => Object.keys(obj)))
+  ).sort()
+
+  // Years sorted ascending, last 12 for readability
+  const chartYears = Object.keys(yearCategoryData)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .slice(-12)
+
+  // Per-year totals for normalization
+  const yearTotals: Record<number, number> = {}
+  for (const yr of chartYears) {
+    const row = yearCategoryData[yr] ?? {}
+    yearTotals[yr] = Object.values(row).reduce((s, v) => s + v, 0) || 1
+  }
+
+  function domainColor(domain: string, idx: number): string {
+    return DOMAIN_PALETTE[domain.toLowerCase()] ?? FALLBACK_COLORS[idx % FALLBACK_COLORS.length]
+  }
+
+  // ─── Donut chart for category counts ──────────────────────────────────────
+  function buildDonut(counts: Record<string, number>) {
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10)
+    const total = entries.reduce((s, [, v]) => s + v, 0) || 1
+    const cx = 110, cy = 110, r = 80, innerR = 48
+    let angle = -Math.PI / 2
+    const slices = entries.map(([label, value], i) => {
+      const frac = value / total
+      const startAngle = angle
+      angle += frac * 2 * Math.PI
+      const endAngle = angle
+      const x1 = cx + r * Math.cos(startAngle), y1 = cy + r * Math.sin(startAngle)
+      const x2 = cx + r * Math.cos(endAngle),   y2 = cy + r * Math.sin(endAngle)
+      const ix1 = cx + innerR * Math.cos(startAngle), iy1 = cy + innerR * Math.sin(startAngle)
+      const ix2 = cx + innerR * Math.cos(endAngle),   iy2 = cy + innerR * Math.sin(endAngle)
+      const large = frac > 0.5 ? 1 : 0
+      const path = `M ${ix1} ${iy1} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} L ${ix2} ${iy2} A ${innerR} ${innerR} 0 ${large} 0 ${ix1} ${iy1} Z`
+      const midAngle = startAngle + (frac * Math.PI)
+      return { label, value, frac, path, color: domainColor(label, i), midAngle }
+    })
+    return { slices, total }
+  }
+
+  // ─── Energy telemetry bar chart ───────────────────────────────────────────
+  const maxEnergy = clusteredLogs.length
+    ? Math.max(...clusteredLogs.map((l: any) => l.energy)) || 1
+    : 1
+  const maxDuration = clusteredLogs.length
+    ? Math.max(...clusteredLogs.map((l: any) => l.duration)) || 1
+    : 1
+
   return (
     <motion.div className="layout analytics-layout" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-      <motion.section 
+
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <motion.section
         className="hero panel analytics-hero"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <div className="hero-copy">
-          <div className="eyebrow">
-            <Database size={16} />
-            Corpus analytics
-          </div>
-          <h1>Corpus signals, styled like the rest of the console.</h1>
-          <p>Category mix, year coverage, and tech stack telemetry in one coherent analytics surface.</p>
-
+          <div className="eyebrow"><Database size={16} />Corpus analytics</div>
+          <h1>Corpus Signals & System Telemetry</h1>
+          <p>Category distribution, yearly domain breakdown, and energy profiling — all in one surface.</p>
           <div className="metric-row">
-            <div className="metric-card">
-              <span>Categories</span>
-              <strong>{categoryCounts ? Object.keys(categoryCounts).length : '—'}</strong>
-            </div>
-            <div className="metric-card">
-              <span>Years</span>
-              <strong>{timeSeries.length || '—'}</strong>
-            </div>
-            <div className="metric-card">
-              <span>Word cloud</span>
-              <strong>{wordcloudWords.length || '—'}</strong>
-            </div>
+            <div className="metric-card"><span>Categories</span><strong>{categoryCounts ? Object.keys(categoryCounts).length : '—'}</strong></div>
+            <div className="metric-card"><span>Years tracked</span><strong>{timeSeries.length || '—'}</strong></div>
+            <div className="metric-card"><span>Energy logs</span><strong>{energyData?.logs?.length ?? '—'}</strong></div>
           </div>
         </div>
-
         <div className="hero-side panel-inset">
           <div className="console-card">
-            <div className="console-header">
-              <ShieldCheck size={18} />
-              Analytics snapshot
-            </div>
+            <div className="console-header"><ShieldCheck size={18} />What's in this tab</div>
             <ul>
-              <li>Category counts grouped from indexed chunks</li>
-              <li>Time series from the search corpus</li>
-              <li>Interactive word cloud using the same palette as Research</li>
+              <li><strong>Section A</strong> — Category donut + ranked list</li>
+              <li><strong>Section B</strong> — Yearly domain stacked bars (normalized %)</li>
+              <li><strong>Section C</strong> — Word cloud for active query</li>
+              <li><strong>Section D</strong> — Energy & latency telemetry charts</li>
             </ul>
           </div>
           <div className="badge-row">
@@ -1235,140 +1718,329 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
         </div>
       </motion.section>
 
-      <section className="panel analytics-grid-panel">
-        <div className="section-heading">
-          <h2>Analytics panels</h2>
-          <p>Matching visual treatment for charts, term clouds, and counts.</p>
+      {/* ── Section A: Category distribution ────────────────────────────── */}
+      <section className="panel" style={{ padding: '1.5rem' }}>
+        <div className="section-heading" style={{ marginBottom: '1.25rem' }}>
+          <div className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent)', marginBottom: '0.4rem' }}>
+            <span>A</span> — Category Distribution
+          </div>
+          <h2 style={{ marginBottom: '0.25rem' }}>What types of documents are in the corpus?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>Top 10 categories by indexed chunk count. Hover slices for exact values.</p>
         </div>
 
-        <div className="analytics-grid">
-          <div className="analytics-card panel-inset">
-            <div className="section-heading compact-heading">
-              <h3>Category counts</h3>
-              <p>Document chunks per major corpus category.</p>
-            </div>
-            {categoryCounts ? (
-              <div className="analytics-list">
-                {Object.entries(categoryCounts).map(([k, v]) => (
-                  <div key={k} className="analytics-list-row">
-                    <span>{k}</span>
-                    <strong>{v}</strong>
+        {categoryCounts ? (() => {
+          const { slices, total } = buildDonut(categoryCounts)
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '3rem', alignItems: 'center' }}>
+              {/* Donut */}
+              <div style={{ position: 'relative', width: '320px', height: '320px' }}>
+                <svg viewBox="0 0 220 220" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+                  <title>Category distribution donut chart</title>
+                  {slices.map((s) => (
+                    <path
+                      key={s.label}
+                      d={s.path}
+                      fill={s.color}
+                      opacity={0.88}
+                      style={{ transition: 'opacity 0.15s' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+                      onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.88')}
+                    >
+                      <title>{s.label}: {s.value.toLocaleString()} chunks ({(s.frac * 100).toFixed(1)}%)</title>
+                    </path>
+                  ))}
+                  {/* Center label */}
+                  <text x="110" y="105" textAnchor="middle" style={{ fill: 'var(--text)', fontSize: '22px', fontWeight: 700 }}>{total.toLocaleString()}</text>
+                  <text x="110" y="122" textAnchor="middle" style={{ fill: 'var(--muted)', fontSize: '10px' }}>total chunks</text>
+                </svg>
+              </div>
+
+              {/* Legend + ranked list */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxWidth: '480px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '200px 100px 80px', gap: '0.35rem 1rem', fontSize: '0.82rem', color: 'var(--muted)', padding: '0 0.5rem 0.35rem', borderBottom: '1px solid rgba(255,255,255,0.06)', marginBottom: '0.25rem' }}>
+                  <span>Category</span><span style={{ textAlign: 'right' }}>Chunks</span><span style={{ textAlign: 'right' }}>Share</span>
+                </div>
+                {slices.map((s, i) => (
+                  <div key={s.label} style={{ display: 'grid', gridTemplateColumns: '200px 100px 80px', gap: '0.35rem 1rem', alignItems: 'center', padding: '0.3rem 0.5rem', borderRadius: '8px', background: 'rgba(255,255,255,0.02)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: s.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.84rem', color: 'var(--text)', textTransform: 'capitalize', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
+                    </div>
+                    <span style={{ fontSize: '0.84rem', color: 'var(--text)', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{s.value.toLocaleString()}</span>
+                    <span style={{ fontSize: '0.78rem', color: s.color, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{(s.frac * 100).toFixed(1)}%</span>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="empty-state">{loading ? 'Loading category counts...' : 'No category counts available.'}</div>
+            </div>
+          )
+        })() : (
+          <div className="empty-state">{loading ? 'Loading category data…' : 'No category data available.'}</div>
+        )}
+      </section>
+
+      {/* ── Section B: Yearly domain breakdown (normalized stacked bars) ── */}
+      <section className="panel" style={{ padding: '1.5rem' }}>
+        <div className="section-heading" style={{ marginBottom: '1.25rem' }}>
+          <div className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent)', marginBottom: '0.4rem' }}>
+            <span>B</span> — Yearly Domain Breakdown
+          </div>
+          <h2 style={{ marginBottom: '0.25rem' }}>How does domain composition shift across years?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Each bar is normalized to 100%. Stacked segments show the share of each domain category per year (last 12 years shown).
+          </p>
+        </div>
+
+        {chartYears.length > 0 ? (
+          <div>
+            {/* Chart */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '180px', padding: '0 0 0.25rem' }} role="img" aria-label="Stacked bar chart of domain distribution by year">
+              {chartYears.map((yr) => {
+                const row = yearCategoryData[yr] ?? {}
+                const total = yearTotals[yr]
+                let cumulative = 0
+                return (
+                  <div key={yr} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', height: '100%' }}>
+                    {/* Label above bar */}
+                    <span style={{ fontSize: '0.6rem', color: 'var(--muted)', marginBottom: 'auto' }}>{total}</span>
+                    {/* Stacked bar */}
+                    <div style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column-reverse', borderRadius: '4px', overflow: 'hidden', cursor: 'default' }}>
+                      {allDomains.map((domain, di) => {
+                        const count = row[domain] ?? 0
+                        if (!count) return null
+                        const pct = (count / total) * 100
+                        return (
+                          <div
+                            key={domain}
+                            style={{ width: '100%', height: `${pct}%`, background: domainColor(domain, di), minHeight: count > 0 ? '2px' : '0', transition: 'height 0.4s ease' }}
+                            title={`${domain}: ${count} docs (${pct.toFixed(1)}%)`}
+                          />
+                        )
+                      })}
+                    </div>
+                    {/* Year label below */}
+                    <span style={{ fontSize: '0.65rem', color: 'var(--muted)', marginTop: '4px', writingMode: 'vertical-rl', transform: 'rotate(180deg)', lineHeight: 1 }}>{yr}</span>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Y-axis guide labels */}
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '0.75rem', marginTop: '0.25rem', paddingLeft: '0', fontSize: '0.7rem', color: 'var(--muted)' }}>
+              <span>0%</span><span style={{ marginLeft: 'auto' }}>← normalized share per year →</span><span>100%</span>
+            </div>
+
+            {/* Legend */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem 1rem', marginTop: '1rem', padding: '0.75rem 1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.05)' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--muted)', width: '100%', marginBottom: '0.25rem' }}>Legend — domain categories</span>
+              {allDomains.map((domain, di) => (
+                <div key={domain} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.78rem', color: 'var(--text)' }}>
+                  <span style={{ width: '10px', height: '10px', borderRadius: '2px', background: domainColor(domain, di), flexShrink: 0 }} />
+                  <span style={{ textTransform: 'capitalize' }}>{domain}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Fallback: if yearCategoryData is empty, show plain time series */}
+            {chartYears.length === 0 && timeSeries.length > 0 && (
+              <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: '1rem' }}>
+                ℹ️ Per-year category breakdown not yet available from the API (<code>/api/analytics/year_category</code>). Showing total document counts only.
+              </p>
             )}
           </div>
-
-          <div className="analytics-right-col">
-            <div className="analytics-card panel-inset analytics-chart-card">
-              <div className="section-heading compact-heading">
-                <h3>Yearly documents</h3>
-                <p>Counts plotted as a compact bar chart.</p>
-              </div>
-              {timeSeries.length ? (
-                <div className="bar-chart" aria-label="Yearly document counts">
-                  {timeSeries.map(([year, count]) => {
-                    const maxCount = Math.max(...timeSeries.map((s) => s[1])) || 1
-                    const height = Math.max(8, (count / maxCount) * 100)
-                    return (
-                      <div key={year} className="bar-chart-item">
-                        <div className="bar-chart-column">
-                          <span className="bar-chart-value">{count}</span>
-                          <div className="bar-chart-bar-wrap">
-                            <div className="bar-chart-bar" style={{ height: `${height}%` }} />
-                          </div>
-                        </div>
-                        <span className="bar-chart-year">{year}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : (
-                <div className="empty-state">{loading ? 'Loading time series...' : 'No yearly data available.'}</div>
-              )}
-            </div>
-
-            <div className="analytics-card panel-inset analytics-wordcloud-card">
-              <div className="section-heading compact-heading">
-                <h3>Word cloud</h3>
-                <p>Top terms from the active search query.</p>
-              </div>
-              {result ? (
-                <div className="analytics-wordcloud-shell">
-                  <img
-                    src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
-                    className="wordcloud-image"
-                    alt="Word Cloud"
-                  />
-                </div>
-              ) : (
-                <div className="empty-state">No search results yet. Run a query in the Research tab to view the word cloud.</div>
-              )}
+        ) : timeSeries.length > 0 ? (
+          /* Fallback plain bar chart if year_category endpoint missing */
+          <div>
+            <p style={{ color: 'var(--accent-warm)', fontSize: '0.82rem', marginBottom: '1rem', padding: '0.6rem 0.9rem', background: 'rgba(255,200,87,0.06)', borderRadius: '8px', border: '1px solid rgba(255,200,87,0.15)' }}>
+              ⚠️ The <code>/api/analytics/year_category</code> endpoint isn't available yet — showing total document counts per year. Add the endpoint to enable per-domain stacking.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '160px' }} role="img" aria-label="Bar chart of documents per year">
+              {timeSeries.map(([year, count]) => {
+                const maxCount = Math.max(...timeSeries.map((s) => s[1])) || 1
+                const heightPct = Math.max(6, (count / maxCount) * 100)
+                return (
+                  <div key={year} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', gap: '4px' }}>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--muted)', marginBottom: 'auto' }}>{count}</span>
+                    <div style={{ width: '100%', height: `${heightPct}%`, background: '#7ef0a8', borderRadius: '4px 4px 0 0', minHeight: '4px' }} title={`${year}: ${count}`} />
+                    <span style={{ fontSize: '0.65rem', color: 'var(--muted)', writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>{year}</span>
+                  </div>
+                )
+              })}
             </div>
           </div>
-        </div>
-
-        {/* Energy Telemetry Dashboard */}
-        <div className="analytics-card panel-inset energy-telemetry-card" style={{ marginTop: '1.5rem' }}>
-          <div className="section-heading compact-heading">
-            <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-strong)' }}>
-              ⚡ Tech Stack Energy Telemetry
-            </h3>
-            <p>Real-time execution telemetry, hardware profiling, and energy consumption logs.</p>
-          </div>
-          
-          {energyData?.system_specs ? (
-            <div className="specs-grid" style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', 
-              gap: '1rem', 
-              margin: '1rem 0 1.5rem', 
-              background: 'rgba(255, 255, 255, 0.02)', 
-              padding: '1rem', 
-              borderRadius: '12px', 
-              border: '1px solid rgba(255, 255, 255, 0.05)' 
-            }}>
-              <div><strong>OS:</strong> <span style={{ color: 'var(--accent)', marginLeft: '0.5rem' }}>{energyData.system_specs.os}</span></div>
-              <div><strong>CPU:</strong> <span style={{ color: 'var(--accent)', marginLeft: '0.5rem' }}>{energyData.system_specs.cpu}</span></div>
-              <div><strong>GPU:</strong> <span style={{ color: 'var(--accent)', marginLeft: '0.5rem' }}>{energyData.system_specs.gpu}</span></div>
-              <div><strong>RAM:</strong> <span style={{ color: 'var(--accent)', marginLeft: '0.5rem' }}>{energyData.system_specs.ram}</span></div>
-            </div>
-          ) : null}
-
-          {energyData?.logs && energyData.logs.length > 0 ? (
-            <div className="telemetry-table-wrapper" style={{ overflowX: 'auto', marginTop: '1rem' }}>
-              <table className="telemetry-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.15)', color: 'var(--accent-strong)' }}>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>Task Name</th>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>Duration</th>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>CPU Util</th>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>CPU Power</th>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>GPU Power</th>
-                    <th style={{ padding: '0.75rem 0.5rem' }}>Energy Consumed</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {energyData.logs.map((log: any, idx: number) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.06)' }}>
-                      <td style={{ padding: '0.75rem 0.5rem', fontWeight: 600 }}>{log.task}</td>
-                      <td style={{ padding: '0.75rem 0.5rem', color: 'var(--accent-warm)' }}>{log.duration.toFixed(2)}s</td>
-                      <td style={{ padding: '0.75rem 0.5rem' }}>{log.cpu_util.toFixed(1)}%</td>
-                      <td style={{ padding: '0.75rem 0.5rem' }}>{log.cpu_w.toFixed(1)}W</td>
-                      <td style={{ padding: '0.75rem 0.5rem' }}>{log.gpu_w.toFixed(1)}W</td>
-                      <td style={{ padding: '0.75rem 0.5rem', color: 'var(--accent)', fontWeight: 600 }}>{log.energy.toFixed(5)} Wh</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div className="empty-state">No telemetry logged yet. Telemetry will accumulate as you run indexing, queries, or chat.</div>
-          )}
-        </div>
+        ) : (
+          <div className="empty-state">{loading ? 'Loading yearly data…' : 'No yearly data available.'}</div>
+        )}
       </section>
+
+      {/* ── Section C: Word Cloud ─────────────────────────────────────────── */}
+      <section className="panel" style={{ padding: '1.5rem' }}>
+        <div className="section-heading" style={{ marginBottom: '1.25rem' }}>
+          <div className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent)', marginBottom: '0.4rem' }}>
+            <span>C</span> — Term Frequency Cloud
+          </div>
+          <h2 style={{ marginBottom: '0.25rem' }}>What terms dominate the retrieved passages?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Top 120 terms from the corpus, sized by frequency. Run a query in the Research tab to filter by your active search.
+          </p>
+        </div>
+        {result ? (
+          <img
+            src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
+            alt={`Word cloud for query: ${result.query}`}
+            style={{ width: '100%', borderRadius: '12px', maxHeight: '280px', objectFit: 'contain' }}
+          />
+        ) : (
+          <div className="empty-state">No active query — word cloud will appear after you run a search in the Research tab.</div>
+        )}
+      </section>
+
+      {/* ── Section D: Energy & Latency Telemetry ────────────────────────── */}
+      <section className="panel" style={{ padding: '1.5rem' }}>
+        <div className="section-heading" style={{ marginBottom: '1.25rem' }}>
+          <div className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent)', marginBottom: '0.4rem' }}>
+            <span>D</span> — Tech Stack Energy & Latency Telemetry
+          </div>
+          <h2 style={{ marginBottom: '0.25rem' }}>How much energy does each pipeline stage consume?</h2>
+          <p style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>
+            Wh consumed and wall-clock duration per task. Logged as you run indexing, queries, or chat sessions.
+          </p>
+        </div>
+
+        {/* System specs */}
+        {energyData?.system_specs && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', marginBottom: '1.5rem' }}>
+            {[
+              { label: 'OS', value: energyData.system_specs.os },
+              { label: 'CPU', value: energyData.system_specs.cpu },
+              { label: 'GPU', value: energyData.system_specs.gpu },
+              { label: 'RAM', value: energyData.system_specs.ram },
+            ].map(({ label, value }) => (
+              <div key={label} style={{ padding: '0.7rem 1rem', background: 'rgba(255,255,255,0.025)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.25rem' }}>{label}</div>
+                <div style={{ fontSize: '0.88rem', color: 'var(--accent)', fontWeight: 600 }}>{value ?? '—'}</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {energyData?.logs?.length ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+            {/* D1: Energy consumed per task */}
+            <div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#7ef0a8', display: 'inline-block' }} />
+                Energy consumed (Wh) per task — lower is better
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                {clusteredLogs.map((log: any, idx: number) => {
+                  const barPct = Math.max(2, (log.energy / maxEnergy) * 100)
+                  const labelText = log.count > 1 ? `${log.task} (${log.count} runs)` : log.task
+                  return (
+                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '240px 1fr 80px', gap: '0.75rem', alignItems: 'center', fontSize: '0.82rem' }}>
+                      <span style={{ color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={labelText}>{labelText}</span>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '4px', height: '18px', overflow: 'hidden', position: 'relative' }}>
+                        <div style={{ width: `${barPct}%`, height: '100%', background: 'linear-gradient(90deg, #7ef0a8, #5ec8ff)', borderRadius: '4px', transition: 'width 0.5s ease' }} />
+                      </div>
+                      <span style={{ color: '#7ef0a8', fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>{log.energy.toFixed(5)} Wh</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* D2: Duration per task */}
+            <div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffc857', display: 'inline-block' }} />
+                Wall-clock duration (s) per task
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                {clusteredLogs.map((log: any, idx: number) => {
+                  const barPct = Math.max(2, (log.duration / maxDuration) * 100)
+                  const labelText = log.count > 1 ? `${log.task} (${log.count} runs)` : log.task
+                  return (
+                    <div key={idx} style={{ display: 'grid', gridTemplateColumns: '240px 1fr 80px', gap: '0.75rem', alignItems: 'center', fontSize: '0.82rem' }}>
+                      <span style={{ color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={labelText}>{labelText}</span>
+                      <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '4px', height: '18px', overflow: 'hidden' }}>
+                        <div style={{ width: `${barPct}%`, height: '100%', background: 'linear-gradient(90deg, #ffc857, #ff8b7b)', borderRadius: '4px', transition: 'width 0.5s ease' }} />
+                      </div>
+                      <span style={{ color: '#ffc857', fontVariantNumeric: 'tabular-nums', textAlign: 'right' }}>{log.duration.toFixed(2)}s</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* D3: CPU vs GPU power scatter / comparison */}
+            <div>
+              <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginBottom: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#91a7ff', display: 'inline-block' }} />
+                CPU util & power draw per task
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.65rem' }}>
+                {clusteredLogs.map((log: any, idx: number) => {
+                  const cpuFrac = Math.min(100, log.cpu_util ?? 0)
+                  const cpuW    = log.cpu_w ?? 0
+                  const gpuW    = log.gpu_w ?? 0
+                  const labelText = log.count > 1 ? `${log.task} (${log.count} runs)` : log.task
+                  return (
+                    <div key={idx} style={{ padding: '0.75rem', background: 'rgba(255,255,255,0.025)', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.06)', fontSize: '0.78rem' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: '0.5rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={labelText}>{labelText}</div>
+                      {/* CPU util gauge */}
+                      <div style={{ marginBottom: '0.35rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--muted)', marginBottom: '2px' }}>
+                          <span>CPU util</span><span style={{ color: '#91a7ff' }}>{cpuFrac.toFixed(1)}%</span>
+                        </div>
+                        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '3px', height: '6px' }}>
+                          <div style={{ width: `${cpuFrac}%`, height: '100%', background: '#91a7ff', borderRadius: '3px' }} />
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'space-between', color: 'var(--muted)' }}>
+                        <span>CPU <strong style={{ color: '#91a7ff' }}>{cpuW.toFixed(1)}W</strong></span>
+                        <span>GPU <strong style={{ color: '#f48fb1' }}>{gpuW.toFixed(1)}W</strong></span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* D4: Raw log table (collapsed detail) */}
+            <details style={{ marginTop: '0.5rem' }}>
+              <summary style={{ cursor: 'pointer', fontSize: '0.82rem', color: 'var(--muted)', padding: '0.5rem 0', userSelect: 'none' }}>
+                ▸ Show full telemetry table ({energyData.logs.length} entries)
+              </summary>
+              <div style={{ overflowX: 'auto', marginTop: '0.75rem' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'var(--accent)' }}>
+                      {['Task','Duration','CPU Util','CPU W','GPU W','Energy (Wh)'].map((h) => (
+                        <th key={h} style={{ padding: '0.5rem 0.75rem', textAlign: 'left', fontWeight: 600 }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {energyData.logs.map((log: any, idx: number) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                        <td style={{ padding: '0.5rem 0.75rem', fontWeight: 500 }}>{log.task}</td>
+                        <td style={{ padding: '0.5rem 0.75rem', color: '#ffc857' }}>{log.duration.toFixed(2)}s</td>
+                        <td style={{ padding: '0.5rem 0.75rem' }}>{log.cpu_util.toFixed(1)}%</td>
+                        <td style={{ padding: '0.5rem 0.75rem' }}>{log.cpu_w.toFixed(1)}W</td>
+                        <td style={{ padding: '0.5rem 0.75rem' }}>{log.gpu_w.toFixed(1)}W</td>
+                        <td style={{ padding: '0.5rem 0.75rem', color: '#7ef0a8', fontWeight: 600 }}>{log.energy.toFixed(5)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+          </div>
+        ) : (
+          <div className="empty-state">{loading ? 'Loading telemetry…' : 'No telemetry logged yet — run indexing or a query to populate this section.'}</div>
+        )}
+      </section>
+
     </motion.div>
   )
 }

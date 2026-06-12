@@ -4,18 +4,19 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 
 ## 💻 System Specifications
 
-- **Operating System:** Windows 11 (v10.0.26200)
-- **CPU Model:** AMD Ryzen 7 5800H with Radeon Graphics (TDP Config: 45W)
-- **GPU Model:** NVIDIA GeForce RTX 3050 Laptop GPU
-- **Physical Memory (RAM):** 15 GB
+- **Operating System:** Windows 10 (v10.0.26200)
+- **CPU Model:** 11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz (TDP Config: 45W)
+- **GPU Model:** NVIDIA GeForce RTX 3070 Laptop GPU
+- **Physical Memory (RAM):** 32 GB
 
 ## ⚡ Telemetry Summary Table
 
 | Task Name | Duration | Avg CPU Util | CPU Power (Est) | GPU Power (Meas) | Energy Consumed |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | FAISS Index Building & Encoding | 454.77s | 22.0% | 13.8W | 62.8W | 9.67292 Wh |
-| Local LLM Chat (Ollama - llama3.2:3b) | 64.40s | 18.3% | 12.3W | 39.4W | 0.92524 Wh |
+| Local LLM Chat (Ollama - llama3.2:3b) | 65.53s | 20.4% | 13.1W | 38.8W | 0.94637 Wh |
 | Query Result Exporting (MD) | 274.69s | 10.8% | 9.3W | 25.0W | 2.62072 Wh |
+| Query Result Exporting (PDF) | 52.81s | 20.3% | 13.1W | 39.9W | 0.77869 Wh |
 | RAG Search & Synthesis Query | 0.59s | 5.8% | 7.3W | 20.4W | 0.00455 Wh |
 | Web Scraping & Ingestion (Simulated) | 291.20s | 14.5% | 10.8W | 0.0W | 0.87360 Wh |
 
@@ -26,4 +27,4 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 - **GPU power calculation:** Real-time polling via NVML / `nvidia-smi` sensors.
 - **Energy calculation:** $\text{Energy (Wh)} = (\text{Avg Watts} \times \text{Duration in seconds}) / 3600$.
 
-*Last updated: 2026-06-12 00:59:44 (IST)*
+*Last updated: 2026-06-12 16:38:33 (IST)*
