@@ -370,6 +370,15 @@ function ResearchConsole({
   const [mdPreviewContent, setMdPreviewContent] = useState('')
   const [previewLoading, setPreviewLoading] = useState(false)
 
+  // Custom Report Export Settings States
+  const [summaryLength, setSummaryLength] = useState('2') // '1', '2', '3+'
+  const [summaryType, setSummaryType] = useState('abstractive') // 'abstractive', 'comprehensive', 'evolution', 'executive'
+  const [includeAnimal, setIncludeAnimal] = useState(true)
+  const [includeTelemetry, setIncludeTelemetry] = useState(true)
+  const [attachSnippets, setAttachSnippets] = useState(true)
+  const [synthesisReport, setSynthesisReport] = useState('')
+  const [synthesisLoading, setSynthesisLoading] = useState(false)
+
   // Speech to Text State
   const [isListening, setIsListening] = useState(false)
   const [recognition, setRecognition] = useState<any>(null)
@@ -479,6 +488,77 @@ function ResearchConsole({
       }
     }
   }, [messages, autoRead, selectedVoiceName, voices])
+
+  async function generateCustomSummary() {
+    if (!result) return
+    setSynthesisLoading(true)
+    try {
+      const payload = {
+        query: result.query,
+        summary_length: summaryLength,
+        summary_type: summaryType,
+        include_animal_photo: includeAnimal,
+        include_telemetry_charts: includeTelemetry,
+        attach_snippets: attachSnippets,
+        category: category || null,
+        source: source || null,
+        year: year ? Number(year) : null,
+        top_k: topK
+      }
+      const res = await fetch('/api/generate_summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      if (!res.ok) throw new Error('Generation failed')
+      const data = await res.json()
+      setSynthesisReport(data.summary)
+    } catch (err) {
+      console.error(err)
+      alert('Failed to generate custom summary. Make sure the backend API is running.')
+    } finally {
+      setSynthesisLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (result) {
+      setSynthesisReport(result.answer)
+      const loadDefaultSummary = async () => {
+        setSynthesisLoading(true)
+        try {
+          const payload = {
+            query: result.query,
+            summary_length: '2', // default 2 pages
+            summary_type: 'abstractive', // default abstractive
+            include_animal_photo: true,
+            include_telemetry_charts: true,
+            attach_snippets: true,
+            category: category || null,
+            source: source || null,
+            year: year ? Number(year) : null,
+            top_k: topK
+          }
+          const res = await fetch('/api/generate_summary', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          })
+          if (res.ok) {
+            const data = await res.json()
+            setSynthesisReport(data.summary)
+          }
+        } catch (err) {
+          console.error('Failed to pre-load custom summary:', err)
+        } finally {
+          setSynthesisLoading(false)
+        }
+      }
+      void loadDefaultSummary()
+    } else {
+      setSynthesisReport('')
+    }
+  }, [result])
 
   const stopSpeaking = () => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -717,57 +797,19 @@ function ResearchConsole({
     if (!result) return
     setExporting(true)
 
-    let detailedReport = result.answer
-    try {
-      const top3 = sortedHits.slice(0, 3)
-      const systemPrompt = `You are a wildlife-policy analyst. Write a 350-500 word formal report with ### headings (Overview, Key Findings, Policy Implications, Conclusion). Cite sources inline as [1] [2] [3]. Analyze the document years/time periods to outline the active policy timeframe (e.g. 2011 to 2026), even if the text doesn't label them as 'latest'. End with a one-line Confidence note.`
-      const sourcesBlock = top3
-        .map((h, i) => `SOURCE [${i + 1}]\nTitle: ${h.title}\nYear: ${h.year ?? 'N/A'}\nText:\n${h.text.slice(0, 1000)}`)
-        .join('\n\n---\n\n')
-      const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: [{ role: 'user', content: `Query: ${result.query}\n\n${sourcesBlock}\n\nWrite the report now.` }],
-        }),
-      })
-      if (apiRes.ok) {
-        const data = await apiRes.json()
-        detailedReport = (data.content as Array<{ type: string; text?: string }>)
-          .filter((b) => b.type === 'text').map((b) => b.text ?? '').join('\n')
-      }
-    } catch { }
-
     try {
       const payload = {
         query: result.query,
-        top_k: topK,
+        summary_length: summaryLength,
+        summary_type: summaryType,
+        include_animal_photo: includeAnimal,
+        include_telemetry_charts: includeTelemetry,
+        attach_snippets: attachSnippets,
         category: category || null,
         source: source || null,
         year: year ? Number(year) : null,
-        include_wordcloud: includeWordcloud,
-        detailed_report: detailedReport,
-        top3_sources: sortedHits.slice(0, 3).map((h) => ({
-          title: h.title,
-          year: h.year,
-          category: h.category,
-          source: h.source,
-          document_type: h.document_type,
-          url: h.url,
-          score: h.score,
-          tags: h.tags.slice(0, 6),
-          excerpt: h.text.slice(0, 800),
-        })),
-        total_hits: result.total_hits,
-        highlight_terms: result.highlight_terms,
-        all_hits: sortedHits.map((h) => ({
-          title: h.title, year: h.year, category: h.category,
-          source: h.source, document_type: h.document_type,
-          url: h.url, score: h.score, tags: h.tags,
-        })),
+        top_k: topK,
+        detailed_report: synthesisReport || result.answer,
       }
 
       const res = await fetch(`/api/export?fmt=${fmt}`, {
@@ -780,7 +822,8 @@ function ResearchConsole({
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `wildai-report.${fmt}`
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+      a.download = `wildai-report-${timestamp}.${fmt}`
       document.body.appendChild(a)
       a.click()
       a.remove()
@@ -1252,45 +1295,137 @@ function ResearchConsole({
               {rightTab === 'synthesis' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '420px', overflowY: 'auto' }}>
                   {result?.answer ? (
-                    <div className="answer-sections" style={{ fontSize: '0.88rem' }}>
-                      <div className="answer-summary-box" style={{ padding: '0.75rem 1rem', borderRadius: '12px' }}>
-                        <span className="answer-summary-label" style={{ fontSize: '0.68rem', marginBottom: '0.25rem' }}>Key Takeaway</span>
-                        <p style={{ fontSize: '0.85rem' }}>{renderInlineMarkdown(answerSummary)}</p>
-                      </div>
-                      
-                      {answerSections.map((section) => (
-                        <section key={section.title} className="answer-section-block" style={{ padding: '0.75rem 1rem', borderRadius: '12px' }}>
-                          <h3 style={{ fontSize: '0.92rem', marginBottom: '0.5rem' }}>{section.title}</h3>
-                          <div className="answer-section-body" style={{ color: 'var(--muted)', fontSize: '0.84rem' }}>
-                            {section.body.map((line, idx) => {
-                              const trimmed = line.trim()
-                              if (!trimmed) return <div key={idx} className="answer-spacer" style={{ height: '0.2rem' }} />
-                              if (/^[*-]\s+/.test(trimmed)) {
-                                return (
-                                  <div key={idx} className="answer-bullet">
-                                    <span className="answer-bullet-mark">•</span>
-                                    <span>{renderInlineMarkdown(trimmed.replace(/^[*-]\s+/, ''))}</span>
-                                  </div>
-                                )
-                              }
-                              return <p key={idx}>{renderInlineMarkdown(trimmed)}</p>
-                            })}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                      {/* Export Settings Panel */}
+                      <div className="export-settings-panel" style={{ padding: '0.8rem 1rem', borderRadius: '12px', border: '1px solid rgba(126, 240, 168, 0.15)', background: 'rgba(12, 27, 23, 0.6)', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '0.5rem' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.05em' }}>REPORT EXPORT SETTINGS</span>
+                          <button 
+                            className="secondary-button" 
+                            onClick={generateCustomSummary} 
+                            disabled={synthesisLoading}
+                            style={{ padding: '0.25rem 0.6rem', fontSize: '0.74rem', minHeight: 'auto', borderRadius: '8px' }}
+                          >
+                            {synthesisLoading ? 'Generating...' : 'Update Summary'}
+                          </button>
+                        </div>
+                        
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                            <label style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>Summary Type</label>
+                            <select 
+                              value={summaryType} 
+                              onChange={(e) => setSummaryType(e.target.value)}
+                              className="console-select"
+                              style={{ width: '100%', padding: '0.35rem 0.5rem', fontSize: '0.78rem', background: '#07120e', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '6px', color: '#e9fff4' }}
+                            >
+                              <option value="abstractive">Abstractive Summary</option>
+                              <option value="comprehensive">Comprehensive Report</option>
+                              <option value="evolution">Policy Evolution Analyst</option>
+                              <option value="executive">Executive Briefing</option>
+                            </select>
                           </div>
-                        </section>
-                      ))}
-                      
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.4rem', marginTop: '1.25rem' }}>
-                        <button className="secondary-button" onClick={() => exportServer('pdf')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                          
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                            <label style={{ fontSize: '0.68rem', color: 'var(--muted)' }}>Target Length</label>
+                            <select 
+                              value={summaryLength} 
+                              onChange={(e) => setSummaryLength(e.target.value)}
+                              className="console-select"
+                              style={{ width: '100%', padding: '0.35rem 0.5rem', fontSize: '0.78rem', background: '#07120e', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '6px', color: '#e9fff4' }}
+                            >
+                              <option value="1">1 Page (Compact)</option>
+                              <option value="2">2 Pages (Standard)</option>
+                              <option value="3+">3+ Pages (Exhaustive)</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', marginTop: '0.2rem', fontSize: '0.74rem' }}>
+                          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={includeAnimal} 
+                              onChange={(e) => setIncludeAnimal(e.target.checked)}
+                              style={{ accentColor: 'var(--accent)' }}
+                            />
+                            Species Photo
+                          </label>
+                          
+                          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={includeTelemetry} 
+                              onChange={(e) => setIncludeTelemetry(e.target.checked)}
+                              style={{ accentColor: 'var(--accent)' }}
+                            />
+                            Telemetry Charts
+                          </label>
+                          
+                          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
+                            <input 
+                              type="checkbox" 
+                              checked={attachSnippets} 
+                              onChange={(e) => setAttachSnippets(e.target.checked)}
+                              style={{ accentColor: 'var(--accent)' }}
+                            />
+                            Attach Passage Snippets
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Summary Report Body */}
+                      {synthesisLoading ? (
+                        <div className="synthesis-loading-box" style={{ padding: '3rem 1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8rem', background: 'rgba(0,0,0,0.1)', borderRadius: '12px', border: '1px dashed rgba(126,240,168,0.1)' }}>
+                          <div style={{ display: 'flex', gap: '0.4rem' }}>
+                            <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)' }} />
+                            <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)', animationDelay: '0.2s' }} />
+                            <span className="dot-pulse" style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent)', animationDelay: '0.4s' }} />
+                          </div>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--accent)', fontFamily: 'monospace' }}>COMPILING REPORT SYNTHESIS FROM PASSAGES...</span>
+                        </div>
+                      ) : (
+                        <div className="answer-sections" style={{ fontSize: '0.88rem' }}>
+                          <div className="answer-summary-box" style={{ padding: '0.75rem 1rem', borderRadius: '12px' }}>
+                            <span className="answer-summary-label" style={{ fontSize: '0.68rem', marginBottom: '0.25rem' }}>Active Document Timeframe</span>
+                            <p style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>
+                              Report configuration: {summaryLength} Page(s) · {summaryType.toUpperCase()} summary
+                            </p>
+                          </div>
+                          
+                          {getAnswerSections(synthesisReport || result.answer).map((section) => (
+                            <section key={section.title} className="answer-section-block" style={{ padding: '0.75rem 1rem', borderRadius: '12px', marginTop: '0.5rem' }}>
+                              <h3 style={{ fontSize: '0.92rem', marginBottom: '0.5rem', color: 'var(--accent)' }}>{section.title}</h3>
+                              <div className="answer-section-body" style={{ color: 'var(--muted)', fontSize: '0.84rem' }}>
+                                {section.body.map((line, idx) => {
+                                  const trimmed = line.trim()
+                                  if (!trimmed) return <div key={idx} className="answer-spacer" style={{ height: '0.2rem' }} />
+                                  if (/^[*-]\s+/.test(trimmed)) {
+                                    return (
+                                      <div key={idx} className="answer-bullet" style={{ display: 'flex', gap: '0.4rem', margin: '0.2rem 0' }}>
+                                        <span className="answer-bullet-mark" style={{ color: 'var(--accent)' }}>•</span>
+                                        <span>{renderInlineMarkdown(trimmed.replace(/^[*-]\s+/, ''))}</span>
+                                      </div>
+                                    )
+                                  }
+                                  return <p key={idx} style={{ margin: '0.4rem 0', lineHeight: '1.5' }}>{renderInlineMarkdown(trimmed)}</p>
+                                })}
+                              </div>
+                            </section>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Export Action Buttons */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.4rem', marginTop: '0.5rem' }}>
+                        <button className="secondary-button" onClick={() => exportServer('pdf')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting || synthesisLoading}>
                           Export PDF
                         </button>
-                        <button className="secondary-button" onClick={() => exportServer('docx')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                        <button className="secondary-button" onClick={() => exportServer('docx')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting || synthesisLoading}>
                           Export Word
                         </button>
-                        <button className="secondary-button" onClick={downloadSummary} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
+                        <button className="secondary-button" onClick={() => exportServer('md')} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting || synthesisLoading}>
                           Export MD
-                        </button>
-                        <button className="secondary-button" onClick={handleOpenMdPreview} style={{ padding: '0.5rem 0.25rem', fontSize: '0.74rem', borderRadius: '12px' }} disabled={exporting}>
-                          Preview MD
                         </button>
                       </div>
                     </div>

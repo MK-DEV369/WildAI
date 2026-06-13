@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import PipelineConfig
 from .rag_engine import RAGEngine
-from .schemas import BuildIndexResponse, QueryRequest, QueryResponse, SearchHit
+from .schemas import BuildIndexResponse, QueryRequest, QueryResponse, SearchHit, SummaryRequest, ExportRequest
 from .ollama_client import generate as ollama_generate
 from fastapi.responses import FileResponse, JSONResponse
 from tempfile import NamedTemporaryFile
@@ -223,110 +223,521 @@ def create_app() -> FastAPI:
         buf.seek(0)
         return buf
 
+    @app.post("/api/generate_summary")
+    def generate_summary(request: SummaryRequest) -> dict:
+        from .energy_tracker import EnergyTracker
+        with EnergyTracker("RAG Custom Summary Synthesis"):
+            hits = engine.search(
+                request.query,
+                top_k=max(8, request.top_k),
+                category=request.category,
+                source=request.source,
+                year=request.year,
+            )
+            if not hits:
+                return {
+                    "summary": "No relevant documents were found to synthesize a summary from.",
+                    "hits": []
+                }
+            
+            # Determine summary length guidelines
+            if request.summary_length == "1":
+                len_instruction = "Write a concise summary of approximately 300 words that fits on a single page."
+            elif request.summary_length == "2":
+                len_instruction = "Write a comprehensive and detailed report of approximately 750 words. To ensure the report is thorough enough to cover a minimum of 2 pages of a formal document, analyze the evidence deeply, detail specific operational rules, and expand on all key areas."
+            else: # "3+"
+                len_instruction = "Write an exhaustive, highly detailed policy briefing paper of approximately 1100 words. To ensure the report covers 3+ pages, provide a deep policy analysis, detail specific legal/regulatory implications, state-by-state variations, and implementation challenges."
+
+            # Determine summary type guidelines
+            if request.summary_type == "abstractive":
+                type_instruction = (
+                    "Type: Abstractive Summary.\n"
+                    "Focus on synthesizing the retrieved evidence into a cohesive narrative. "
+                    "Integrate all facts and findings smoothly. Focus on the core meaning and big picture."
+                )
+            elif request.summary_type == "comprehensive":
+                type_instruction = (
+                    "Type: Comprehensive Technical Report.\n"
+                    "Focus on strict technical details, structures, and systems. "
+                    "Use formal markdown headings: Overview, Detailed Regulatory Assessment, Conservation Impacts, and Implementation Framework. "
+                    "Incorporate technical data, specific clauses, and numbers from the evidence."
+                )
+            elif request.summary_type == "evolution":
+                type_instruction = (
+                    "Type: Policy Evolution Analyst.\n"
+                    "Focus on chronological development and baseline shifts over time. "
+                    "Examine the document years/time periods of the evidence (e.g. from 2011 to 2026). "
+                    "Highlight how earlier rules set the stage, what changes occurred in intermediate years, and what the latest documents show as the current operational baseline."
+                )
+            else: # "executive"
+                type_instruction = (
+                    "Type: Executive Briefing.\n"
+                    "Focus on high-level strategic takeaways, action items, and confidence ratings. "
+                    "Use a professional briefing tone, providing a concise summary first, followed by clear bulleted findings, critical challenges, and strategic recommendations."
+                )
+
+            # Build prompt
+            prompt_lines = [
+                "You are an expert wildlife policy analyst and legal researcher.",
+                "Your goal is to answer the user query based ONLY on the provided retrieved evidence snippets.",
+                "Do not invent facts, and do not make assertions that cannot be traced to the evidence.",
+                "Structure your output cleanly with markdown headings matching the selected style.",
+                "Always cite sources inline using square brackets with the document titles (e.g., [National Wildlife Action Plan 2017-2031]).",
+                "",
+                f"LENGTH INSTRUCTION: {len_instruction}",
+                f"STYLE INSTRUCTION:\n{type_instruction}",
+                "",
+                "Retrieved Evidence Snippets:",
+            ]
+            for idx, hit in enumerate(hits[:8], start=1):
+                snippet = " ".join(hit.get('text', '').split())
+                title = hit.get('title') or f"doc{idx}"
+                year = hit.get('year') or 'N/A'
+                src = hit.get('source') or ''
+                prompt_lines.append(f"Snippet [{idx}] (Title: {title} ({year}) | Source: {src}):\n{snippet}\n")
+            
+            prompt_lines.extend([
+                "",
+                "User query:",
+                request.query,
+                "",
+                "Write the detailed report now:"
+            ])
+            prompt = "\n".join(prompt_lines)
+
+            try:
+                summary_text = ollama_generate(prompt, model="llama3.2:3b", timeout=90)
+            except Exception as exc:
+                summary_text = engine.answer(request.query, hits)
+
+            return {
+                "summary": summary_text,
+                "hits": hits
+            }
+
+    def find_matched_animal_image(query: str) -> str | None:
+        q = query.lower()
+        species_dir = Path("data/dataset/images/species")
+        if not species_dir.exists():
+            return None
+        
+        files = list(species_dir.glob("*.jpg"))
+        for f in files:
+            name_clean = f.stem.replace("-", " ")
+            if name_clean in q:
+                return str(f)
+        
+        if "tiger" in q:
+            return str(species_dir / "bengal-tiger.jpg")
+        if "elephant" in q:
+            return str(species_dir / "indian-elephant.jpg")
+        if "leopard" in q:
+            if "snow" in q:
+                return str(species_dir / "snow-leopard.jpg")
+            return str(species_dir / "clouded-leopard.jpg")
+        if "cheetah" in q:
+            return str(species_dir / "asiatic-cheetah.jpg")
+        if "dolphin" in q:
+            return str(species_dir / "ganges-river-dolphin.jpg")
+        if "rhino" in q or "rhinoceros" in q:
+            return str(species_dir / "greater-one-horned-rhinoceros.jpg")
+        if "bear" in q:
+            return str(species_dir / "sloth-bear.jpg")
+        if "eagle" in q:
+            return str(species_dir / "grey-headed-fish-eagle.jpg")
+        if "monkey" in q or "macaque" in q:
+            return str(species_dir / "rhesus-macaque.jpg")
+            
+        animal_terms = {"animal", "animals", "species", "wildlife", "fauna", "biodiversity", "zoo", "zoos"}
+        if any(t in q for t in animal_terms):
+            return str(species_dir / "bengal-tiger.jpg")
+            
+        return None
+
+    def generate_visualization_chart(hits) -> str | None:
+        try:
+            import matplotlib
+            matplotlib.use('Agg')
+            import matplotlib.pyplot as plt
+            import tempfile
+            
+            if not hits:
+                return None
+                
+            titles = [h.get('title', '')[:30] + "..." if len(h.get('title', '')) > 30 else h.get('title', '') for h in hits[:5]]
+            raw_scores = [float(h.get('score', 0)) for h in hits[:5]]
+            
+            scores = []
+            for s in raw_scores:
+                if s < 0:
+                    scores.append(abs(s))
+                else:
+                    scores.append(s)
+            
+            fig, ax = plt.subplots(figsize=(6, 2.8))
+            colors = ['#132a24', '#1f4e43', '#2a7262', '#369781', '#41bc9f']
+            bars = ax.barh(titles[::-1], scores[::-1], color=colors[:len(hits)][::-1], edgecolor='#132a24', height=0.55)
+            
+            ax.set_title("Document Retrieval Relevance Details", fontsize=10, fontweight='bold', color='#132a24', pad=10)
+            ax.set_xlabel("Relevance Score (higher is more relevant)", fontsize=8, color='#132a24')
+            ax.tick_params(axis='both', which='major', labelsize=8)
+            
+            for spine in ('top', 'right'):
+                ax.spines[spine].set_visible(False)
+            ax.spines['left'].set_color('#132a24')
+            ax.spines['bottom'].set_color('#132a24')
+            
+            plt.tight_layout()
+            tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+            plt.savefig(tmp.name, dpi=150, bbox_inches='tight')
+            plt.close()
+            return tmp.name
+        except Exception as e:
+            logger.error(f"Error generating matplotlib chart: {e}")
+            return None
+
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.colors import HexColor
+
+    class WildaiCanvas(canvas.Canvas):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self._saved_page_states = []
+
+        def showPage(self):
+            self._saved_page_states.append(dict(self.__dict__))
+            self._startPage()
+
+        def save(self):
+            num_pages = len(self._saved_page_states)
+            for state in self._saved_page_states:
+                self.__dict__.update(state)
+                self.draw_page_decorations(num_pages)
+                super().showPage()
+            super().save()
+
+        def draw_page_decorations(self, total_pages):
+            self.saveState()
+            width, height = self._pagesize
+            
+            # 1. Double Line Border
+            self.setStrokeColor(HexColor("#132a24"))
+            self.setLineWidth(1)
+            self.rect(36, 36, width - 72, height - 72)
+            self.rect(39, 39, width - 78, height - 78)
+            
+            # 2. Diagonal Watermark "WILDAI"
+            self.setFont("Helvetica-Bold", 70)
+            self.setFillColor(HexColor("#132a24"), alpha=0.035)
+            self.saveState()
+            self.translate(width / 2, height / 2)
+            self.rotate(45)
+            self.drawCentredString(0, 0, "WILDAI")
+            self.restoreState()
+            
+            # 3. Header
+            self.setFont("Helvetica-Bold", 8)
+            self.setFillColor(HexColor("#132a24"))
+            self.drawString(50, height - 28, "WILDAI RESEARCH & PLANNING CONSOLE")
+            self.setFont("Helvetica", 8)
+            self.setFillColor(HexColor("#64748b"))
+            self.drawRightString(width - 50, height - 28, "Wildlife Intelligence RAG System")
+            
+            self.setStrokeColor(HexColor("#cbd5e1"))
+            self.setLineWidth(0.5)
+            self.line(40, height - 32, width - 40, height - 32)
+            
+            # 4. Footer
+            page_num = self._pageNumber
+            self.drawRightString(width - 50, 24, f"Page {page_num} of {total_pages}")
+            self.drawString(50, 24, "Confidential · Document Citations & Passage Reference Logs")
+            self.line(40, 30, width - 40, 30)
+            
+            self.restoreState()
+
     @app.post("/api/export")
-    def export_result(request: QueryRequest, fmt: str = "md") -> Any:
+    def export_result(request: ExportRequest, fmt: str = "md") -> Any:
         from .energy_tracker import EnergyTracker
         with EnergyTracker(f"Query Result Exporting ({fmt.upper()})"):
-            # Reuse existing query functionality
             hits = engine.search(request.query, top_k=request.top_k, category=request.category, source=request.source, year=request.year)
             answer = engine.answer(request.query, hits)
-            # Always include the wordcloud in exported documents per user requirement
-            include_wc = True
 
             timestamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
             filename = f"wildai_report_{timestamp}.{fmt}"
 
             if fmt == "md":
-                body_lines = ["# WILDAI Query Report", "", f"Query: {request.query}", "", "## Answer", answer, "", "## References", ""]
-                for idx, hit in enumerate(hits, start=1):
-                    body_lines.append(f"{idx}. {hit['title']} ({hit.get('year')}) — {hit.get('source')}")
+                body_lines = [
+                    "# WILDAI Query Report", 
+                    "", 
+                    f"**Query:** {request.query}", 
+                    "", 
+                    "## I. Executive & Analytical Summary",
+                    "",
+                    request.detailed_report or answer,
+                    "",
+                    "## II. Grounded Reference Passages & Sources",
+                    ""
+                ]
+                
+                if request.attach_snippets:
+                    for idx, hit in enumerate(hits[:5], start=1):
+                        url_part = f"([link]({hit['url']}))" if hit.get('url') else ""
+                        body_lines.append(f"### [{idx}] {hit['title']} ({hit.get('year')}) — {hit.get('source')} {url_part}")
+                        body_lines.append(f"> {hit['text'][:800]}")
+                        body_lines.append("")
+                        
                 content = "\n".join(body_lines)
-                # If including wordcloud, embed as base64 data URI
-                if include_wc:
-                    wc_buf = generate_wordcloud_bytes(120)
-                    if wc_buf:
+                
+                if request.include_animal_photo:
+                    img_path = find_matched_animal_image(request.query)
+                    if img_path:
                         try:
-                            img_bytes = wc_buf.getvalue()
                             import base64
-                            b64 = base64.b64encode(img_bytes).decode('ascii')
-                            content = content + "\n\n![wordcloud](data:image/png;base64," + b64 + ")"
+                            with open(img_path, "rb") as image_file:
+                                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+                            content = f"![species](data:image/jpeg;base64,{encoded_string})\n\n" + content
                         except Exception:
                             pass
-
+                
                 tmp = NamedTemporaryFile(delete=False, suffix=".md")
                 tmp.write(content.encode("utf-8"))
                 tmp.flush()
                 return FileResponse(tmp.name, filename=filename, media_type="text/markdown")
 
             if fmt in {"pdf", "docx"}:
-                # Generate a simple PDF or DOCX using reportlab / python-docx
                 if fmt == "pdf":
                     from reportlab.lib.pagesizes import letter
-                    from reportlab.pdfgen import canvas
+                    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+                    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+                    from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT
 
                     tmp = NamedTemporaryFile(delete=False, suffix=".pdf")
-                    c = canvas.Canvas(tmp.name, pagesize=letter)
-                    width, height = letter
-                    y = height - 50
-                    c.setFont("Helvetica-Bold", 14)
-                    c.drawString(50, y, "WILDAI Query Report")
-                    y -= 30
-                    c.setFont("Helvetica", 10)
-                    c.drawString(50, y, f"Query: {request.query}")
-                    y -= 20
-                    # If requested, include the wordcloud image at the top of the PDF
-                    if include_wc:
-                        wc_buf = generate_wordcloud_bytes(120)
-                        if wc_buf:
-                            try:
-                                # draw image centered at top
-                                from reportlab.lib.utils import ImageReader
-                                img = ImageReader(wc_buf)
-                                iw, ih = img.getSize()
-                                target_w = width - 100
-                                target_h = (ih / iw) * target_w
-                                c.drawImage(img, 50, height - 60 - target_h, width=target_w, height=target_h)
-                                y = height - 60 - target_h - 20
-                            except Exception:
-                                y = height - 50
-                        else:
-                            y = height - 50
-                    else:
-                        y = height - 50
+                    doc = SimpleDocTemplate(
+                        tmp.name,
+                        pagesize=letter,
+                        leftMargin=54,
+                        rightMargin=54,
+                        topMargin=54,
+                        bottomMargin=54
+                    )
+                    
+                    styles = getSampleStyleSheet()
+                    title_style = ParagraphStyle(
+                        'ReportTitle',
+                        parent=styles['Title'],
+                        fontName='Helvetica-Bold',
+                        fontSize=22,
+                        leading=26,
+                        textColor=HexColor('#132a24'),
+                        alignment=TA_CENTER,
+                        spaceAfter=15
+                    )
+                    
+                    meta_style = ParagraphStyle(
+                        'ReportMeta',
+                        fontName='Helvetica-Oblique',
+                        fontSize=9,
+                        leading=12,
+                        textColor=HexColor('#64748b'),
+                        alignment=TA_CENTER,
+                        spaceAfter=20
+                    )
+                    
+                    h1_style = ParagraphStyle(
+                        'Heading1Custom',
+                        fontName='Helvetica-Bold',
+                        fontSize=14,
+                        leading=18,
+                        textColor=HexColor('#132a24'),
+                        spaceBefore=14,
+                        spaceAfter=8,
+                        keepWithNext=True
+                    )
 
-                    for line in answer.split('\n'):
-                        if y < 80:
-                            c.showPage()
-                            y = height - 50
-                        c.drawString(50, y, line)
-                        y -= 14
-                    c.save()
+                    h2_style = ParagraphStyle(
+                        'Heading2Custom',
+                        fontName='Helvetica-Bold',
+                        fontSize=12,
+                        leading=16,
+                        textColor=HexColor('#1f4e43'),
+                        spaceBefore=10,
+                        spaceAfter=6,
+                        keepWithNext=True
+                    )
+
+                    body_style = ParagraphStyle(
+                        'BodyTextCustom',
+                        fontName='Helvetica',
+                        fontSize=10,
+                        leading=14.5,
+                        textColor=HexColor('#1e293b'),
+                        spaceAfter=10
+                    )
+                    
+                    snippet_body_style = ParagraphStyle(
+                        'SnippetBody',
+                        fontName='Helvetica-Oblique',
+                        fontSize=8.5,
+                        leading=12,
+                        textColor=HexColor('#334155'),
+                    )
+
+                    story = []
+                    story.append(Paragraph("WILDAI Query Synthesis & Policy Report", title_style))
+                    
+                    timestamp_str = datetime.datetime.now().strftime("%d %B %Y, %I:%M %p")
+                    story.append(Paragraph(f"Query: \"{request.query}\"<br/>Generated on {timestamp_str} · Verified Environment", meta_style))
+                    story.append(Spacer(1, 10))
+                    
+                    img_path = None
+                    if request.include_animal_photo:
+                        img_path = find_matched_animal_image(request.query)
+                    
+                    if img_path:
+                        try:
+                            img_flowable = Image(img_path, width=350, height=200)
+                            story.append(img_flowable)
+                            caption_text = f"Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace('.jpg','').replace('-',' ').title()})"
+                            story.append(Paragraph(caption_text, ParagraphStyle('Caption', fontName='Helvetica-Oblique', fontSize=8, leading=10, textColor=HexColor('#64748b'), alignment=TA_CENTER, spaceBefore=4, spaceAfter=15)))
+                        except Exception as e:
+                            logger.error(f"Failed to embed animal photo: {e}")
+                    elif request.include_telemetry_charts:
+                        chart_path = generate_visualization_chart(hits)
+                        if chart_path:
+                            try:
+                                img_flowable = Image(chart_path, width=400, height=186)
+                                story.append(img_flowable)
+                                caption_text = "Figure 1: RAG Retrieval Relevance and Similarity Distribution"
+                                story.append(Paragraph(caption_text, ParagraphStyle('Caption', fontName='Helvetica-Oblique', fontSize=8, leading=10, textColor=HexColor('#64748b'), alignment=TA_CENTER, spaceBefore=4, spaceAfter=15)))
+                            except Exception as e:
+                                logger.error(f"Failed to embed matplotlib chart: {e}")
+                    
+                    story.append(Spacer(1, 10))
+                    story.append(Paragraph("I. Executive & Analytical Summary", h1_style))
+                    
+                    report_text = request.detailed_report or answer
+                    for section in report_text.split('\n'):
+                        section = section.strip()
+                        if not section:
+                            continue
+                        if section.startswith("### "):
+                            story.append(Paragraph(section.replace("### ", ""), h2_style))
+                        elif section.startswith("## "):
+                            story.append(Paragraph(section.replace("## ", ""), h1_style))
+                        elif section.startswith("# "):
+                            story.append(Paragraph(section.replace("# ", ""), title_style))
+                        else:
+                            clean_section = section
+                            clean_section = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", clean_section)
+                            story.append(Paragraph(clean_section, body_style))
+                            
+                    story.append(Spacer(1, 15))
+                    
+                    if request.attach_snippets and hits:
+                        story.append(Paragraph("II. Grounded Reference Passages & Sources", h1_style))
+                        for idx, hit in enumerate(hits[:5], start=1):
+                            title_url = f"<a href='{hit['url']}' color='#1f4e43'><u>{hit['title']}</u></a>" if hit.get('url') else hit['title']
+                            year_str = f" ({hit['year']})" if hit.get('year') else ""
+                            relevance_pct = int(hit.get('semantic_score', hit['score']) * 100)
+                            if relevance_pct < 0:
+                                relevance_pct = int(hit.get('semantic_score', 0.75) * 100)
+                            ref_header = f"[{idx}] {title_url}{year_str} — {hit.get('source', 'Unknown Source')} [Relevance: {relevance_pct}%]"
+                            
+                            cell_text = f"<b>{ref_header}</b><br/><br/><i>Excerpt:</i> \"{hit['text'][:800]}\""
+                            cell_p = Paragraph(cell_text, snippet_body_style)
+                            
+                            snippet_table = Table([[cell_p]], colWidths=[480])
+                            snippet_table.setStyle(TableStyle([
+                                ('BACKGROUND', (0,0), (-1,-1), HexColor('#f8fafc')),
+                                ('BOX', (0,0), (-1,-1), 0.5, HexColor('#e2e8f0')),
+                                ('VALIGN', (0,0), (-1,-1), 'TOP'),
+                                ('TOPPADDING', (0,0), (-1,-1), 8),
+                                ('BOTTOMPADDING', (0,0), (-1,-1), 8),
+                                ('LEFTPADDING', (0,0), (-1,-1), 10),
+                                ('RIGHTPADDING', (0,0), (-1,-1), 10),
+                            ]))
+                            
+                            story.append(snippet_table)
+                            story.append(Spacer(1, 10))
+                    
+                    doc.build(story, canvasmaker=WildaiCanvas)
                     return FileResponse(tmp.name, filename=filename, media_type="application/pdf")
 
                 if fmt == "docx":
                     from docx import Document
+                    from docx.shared import Inches, Pt, RGBColor
+                    from docx.enum.text import WD_ALIGN_PARAGRAPH
 
                     doc = Document()
-                    doc.add_heading('WILDAI Query Report', level=1)
-                    doc.add_paragraph(f'Query: {request.query}')
-                    doc.add_heading('Answer', level=2)
-                    doc.add_paragraph(answer)
-                    # include wordcloud image in docx if requested
-                    if include_wc:
-                        wc_buf = generate_wordcloud_bytes(120)
-                        if wc_buf:
-                            try:
-                                from docx.shared import Inches
-                                # python-docx add_picture accepts file-like objects
-                                doc.add_page_break()
-                                p = doc.add_paragraph()
-                                run = p.add_run()
-                                run.add_picture(wc_buf, width=Inches(6))
-                            except Exception:
-                                pass
-                    doc.add_heading('References', level=2)
-                    for hit in hits:
-                        doc.add_paragraph(f"{hit['title']} ({hit.get('year')}) — {hit.get('source')}")
+                    sections = doc.sections
+                    for sec in sections:
+                        sec.top_margin = Inches(1)
+                        sec.bottom_margin = Inches(1)
+                        sec.left_margin = Inches(1)
+                        sec.right_margin = Inches(1)
+                    
+                    title = doc.add_paragraph()
+                    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    run = title.add_run('WILDAI Query Synthesis & Policy Report')
+                    run.font.name = 'Arial'
+                    run.font.size = Pt(22)
+                    run.font.bold = True
+                    run.font.color.rgb = RGBColor(19, 42, 36)
+                    
+                    meta = doc.add_paragraph()
+                    meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                    run_meta = meta.add_run(f'Query: "{request.query}"\nGenerated via WILDAI Research Console')
+                    run_meta.font.name = 'Arial'
+                    run_meta.font.size = Pt(9)
+                    run_meta.font.italic = True
+                    run_meta.font.color.rgb = RGBColor(100, 116, 139)
+                    
+                    img_path = None
+                    if request.include_animal_photo:
+                        img_path = find_matched_animal_image(request.query)
+                    
+                    if img_path:
+                        try:
+                            doc.add_paragraph().add_run().add_picture(img_path, width=Inches(4.5))
+                            caption = doc.add_paragraph()
+                            caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                            cap_run = caption.add_run(f'Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace(".jpg","").replace("-"," ").title()})')
+                            cap_run.font.name = 'Arial'
+                            cap_run.font.size = Pt(8)
+                            cap_run.font.italic = True
+                        except Exception:
+                            pass
+                    
+                    doc.add_heading('I. Executive & Analytical Summary', level=1)
+                    report_text = request.detailed_report or answer
+                    for line in report_text.split('\n'):
+                        line = line.strip()
+                        if not line:
+                            continue
+                        if line.startswith("### "):
+                            p = doc.add_paragraph()
+                            run = p.add_run(line.replace("### ", ""))
+                            run.font.bold = True
+                            run.font.size = Pt(12)
+                            run.font.color.rgb = RGBColor(31, 78, 67)
+                        elif line.startswith("## ") or line.startswith("# "):
+                            doc.add_heading(line.replace("## ", "").replace("# ", ""), level=2)
+                        else:
+                            p = doc.add_paragraph(line)
+                            p.paragraph_format.line_spacing = 1.15
+                    
+                    if request.attach_snippets and hits:
+                        doc.add_heading('II. Grounded Reference Passages & Sources', level=1)
+                        for idx, hit in enumerate(hits[:5], start=1):
+                            relevance_pct = int(hit.get('semantic_score', hit['score']) * 100)
+                            if relevance_pct < 0:
+                                relevance_pct = int(hit.get('semantic_score', 0.75) * 100)
+                            doc.add_paragraph(f"[{idx}] {hit['title']} ({hit.get('year')}) — {hit.get('source')} (Relevance: {relevance_pct}%)")
+                            p_excerpt = doc.add_paragraph()
+                            run_ex = p_excerpt.add_run(f'Excerpt: "{hit["text"][:800]}"')
+                            run_ex.font.italic = True
+                            p_excerpt.paragraph_format.left_indent = Inches(0.25)
+                            
                     tmp = NamedTemporaryFile(delete=False, suffix=".docx")
                     doc.save(tmp.name)
                     return FileResponse(tmp.name, filename=filename, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")

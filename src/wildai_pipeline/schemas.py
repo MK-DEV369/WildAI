@@ -37,3 +37,30 @@ class QueryResponse(BaseModel):
     total_hits: int
     highlight_terms: list[str] = Field(default_factory=list)
     hits: list[SearchHit]
+
+
+class SummaryRequest(BaseModel):
+    query: str = Field(min_length=1, max_length=500)
+    summary_length: str = "2"  # "1" = 1 page, "2" = 2 pages, "3+" = 3+ pages
+    summary_type: str = "abstractive"  # "abstractive", "comprehensive", "evolution", "executive"
+    include_animal_photo: bool = True
+    include_telemetry_charts: bool = True
+    attach_snippets: bool = True
+    category: str | None = None
+    source: str | None = None
+    year: int | None = None
+    top_k: int = 5
+
+
+class ExportRequest(BaseModel):
+    query: str = Field(min_length=1, max_length=500)
+    summary_length: str = "2"
+    summary_type: str = "abstractive"
+    include_animal_photo: bool = True
+    include_telemetry_charts: bool = True
+    attach_snippets: bool = True
+    category: str | None = None
+    source: str | None = None
+    year: int | None = None
+    top_k: int = 5
+    detailed_report: str | None = None

@@ -16,7 +16,8 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 | FAISS Index Building & Encoding | 454.77s | 22.0% | 13.8W | 62.8W | 9.67292 Wh |
 | Local LLM Chat (Ollama - llama3.2:3b) | 65.53s | 20.4% | 13.1W | 38.8W | 0.94637 Wh |
 | Query Result Exporting (MD) | 274.69s | 10.8% | 9.3W | 25.0W | 2.62072 Wh |
-| Query Result Exporting (PDF) | 52.81s | 20.3% | 13.1W | 39.9W | 0.77869 Wh |
+| Query Result Exporting (PDF) | 1.28s | 8.1% | 8.2W | 21.7W | 0.01070 Wh |
+| RAG Custom Summary Synthesis | 58.04s | 12.5% | 10.0W | 39.0W | 0.79100 Wh |
 | RAG Search & Synthesis Query | 0.59s | 5.8% | 7.3W | 20.4W | 0.00455 Wh |
 | Web Scraping & Ingestion (Simulated) | 291.20s | 14.5% | 10.8W | 0.0W | 0.87360 Wh |
 
@@ -27,4 +28,4 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 - **GPU power calculation:** Real-time polling via NVML / `nvidia-smi` sensors.
 - **Energy calculation:** $\text{Energy (Wh)} = (\text{Avg Watts} \times \text{Duration in seconds}) / 3600$.
 
-*Last updated: 2026-06-12 16:38:33 (IST)*
+*Last updated: 2026-06-13 07:13:08 (IST)*
