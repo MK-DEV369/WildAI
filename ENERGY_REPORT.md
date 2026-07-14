@@ -13,12 +13,13 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 
 | Task Name | Duration | Avg CPU Util | CPU Power (Est) | GPU Power (Meas) | Energy Consumed |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| FAISS Index Building & Encoding | 454.77s | 22.0% | 13.8W | 62.8W | 9.67292 Wh |
-| Local LLM Chat (Ollama - llama3.2:3b) | 65.53s | 20.4% | 13.1W | 38.8W | 0.94637 Wh |
+| FAISS Index Building & Encoding | 3113.46s | 7.3% | 7.9W | 80.2W | 76.23102 Wh |
+| Local LLM Chat (Ollama - llama3.2:3b) | 6.25s | 13.2% | 10.3W | 63.5W | 0.12795 Wh |
+| Query Result Exporting (DOCX) | 0.36s | 0.0% | 5.0W | 54.7W | 0.00601 Wh |
 | Query Result Exporting (MD) | 274.69s | 10.8% | 9.3W | 25.0W | 2.62072 Wh |
-| Query Result Exporting (PDF) | 1.28s | 8.1% | 8.2W | 21.7W | 0.01070 Wh |
-| RAG Custom Summary Synthesis | 58.04s | 12.5% | 10.0W | 39.0W | 0.79100 Wh |
-| RAG Search & Synthesis Query | 0.59s | 5.8% | 7.3W | 20.4W | 0.00455 Wh |
+| Query Result Exporting (PDF) | 0.46s | 0.0% | 5.0W | 30.3W | 0.00449 Wh |
+| RAG Custom Summary Synthesis | 19.86s | 15.6% | 11.2W | 96.3W | 0.59320 Wh |
+| RAG Search & Synthesis Query | 0.35s | 0.0% | 5.0W | 26.0W | 0.00298 Wh |
 | Web Scraping & Ingestion (Simulated) | 291.20s | 14.5% | 10.8W | 0.0W | 0.87360 Wh |
 
 ---
@@ -28,4 +29,4 @@ Grounded telemetry of execution times, hardware profiles, and energy consumption
 - **GPU power calculation:** Real-time polling via NVML / `nvidia-smi` sensors.
 - **Energy calculation:** $\text{Energy (Wh)} = (\text{Avg Watts} \times \text{Duration in seconds}) / 3600$.
 
-*Last updated: 2026-06-13 07:13:08 (IST)*
+*Last updated: 2026-07-14 15:09:16 (IST)*

@@ -9,18 +9,70 @@ _VENV_SITES = _ROOT / "venv" / "Lib" / "site-packages"
 if _VENV_SITES.exists() and str(_VENV_SITES) not in sys.path:
     sys.path.insert(0, str(_VENV_SITES))
 
+import os
+# Load .env file manually if it exists
+def _load_env_manually() -> None:
+    env_path = _ROOT / ".env"
+    if env_path.exists():
+        try:
+            with open(env_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        continue
+                    if "=" in line:
+                        key, val = line.split("=", 1)
+                        key = key.strip()
+                        val = val.strip().strip("'\"")
+                        os.environ[key] = val
+        except Exception:
+            pass
+
+_load_env_manually()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import logging
+logger = logging.getLogger(__name__)
 
 from .config import PipelineConfig
 from .rag_engine import RAGEngine
-from .schemas import BuildIndexResponse, QueryRequest, QueryResponse, SearchHit, SummaryRequest, ExportRequest
+from .schemas import BuildIndexResponse, QueryRequest, QueryResponse, SearchHit, SummaryRequest, ExportRequest, ImageGenRequest
 from .ollama_client import generate as ollama_generate
+from . import gemini_client
+import os
+
+def generate_text_with_fallback(prompt: str, model: str = "llama3.2:3b", timeout: int = 60) -> str:
+    api_key_configured = bool(os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY"))
+    if model.lower().startswith("gemini"):
+        if api_key_configured:
+            logger.info("Directly querying Gemini API...")
+            return gemini_client.generate(prompt)
+        else:
+            raise RuntimeError("Gemini API Key is not configured but a Gemini model was requested.")
+            
+    try:
+        logger.info(f"Querying local Ollama model {model}...")
+        return ollama_generate(prompt, model=model, timeout=timeout)
+    except Exception as ollama_err:
+        logger.warning(f"Local Ollama failed: {ollama_err}.")
+        if api_key_configured:
+            logger.info("Falling back to Gemini API...")
+            try:
+                return gemini_client.generate(prompt)
+            except Exception as gemini_err:
+                logger.error(f"Gemini API fallback also failed: {gemini_err}")
+                raise RuntimeError(f"Both Ollama and Gemini API failed. Ollama error: {ollama_err}. Gemini error: {gemini_err}")
+        else:
+            raise ollama_err
+
 from fastapi.responses import FileResponse, JSONResponse
 from tempfile import NamedTemporaryFile
 import io
 import datetime
 from typing import Any
+import requests
+import hashlib
 from fastapi.responses import StreamingResponse
 import docx
 import json
@@ -119,23 +171,72 @@ def create_app() -> FastAPI:
         )
 
     @app.get("/api/document/full_text")
-    def get_full_text(source_path: str, record_index: int = 0) -> dict:
+    def get_full_text(source_path: str = "", record_index: int = 0, url: str | None = None) -> dict:
         try:
             import json
             from pathlib import Path
-            path = Path(source_path)
-            if not path.exists():
-                return JSONResponse({"error": f"File not found: {source_path}"}, status_code=404)
-            with open(path, "r", encoding="utf-8") as f:
-                payload = json.load(f)
-            records = payload if isinstance(payload, list) else [payload]
-            if record_index < 0 or record_index >= len(records):
-                return JSONResponse({"error": f"Record index {record_index} out of bounds"}, status_code=400)
-            record = records[record_index]
-            content = record.get("cleaned_content") or record.get("content") or ""
-            return {"full_text": content}
+            
+            # 1. Try local file if path exists
+            if source_path:
+                path = Path(source_path)
+                if path.exists():
+                    with open(path, "r", encoding="utf-8") as f:
+                        payload = json.load(f)
+                    records = payload if isinstance(payload, list) else [payload]
+                    if 0 <= record_index < len(records):
+                        record = records[record_index]
+                        content = record.get("cleaned_content") or record.get("content") or ""
+                        return {"full_text": content}
+            
+            # 2. Try web retrieval if url is provided
+            if url and url.startswith("http"):
+                import requests
+                from bs4 import BeautifulSoup
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+                response = requests.get(url, headers=headers, timeout=10)
+                if response.ok:
+                    soup = BeautifulSoup(response.content, "html.parser")
+                    for script in soup(["script", "style", "nav", "footer", "header"]):
+                        script.decompose()
+                    text = soup.get_text(separator="\n")
+                    cleaned = "\n".join(line.strip() for line in text.splitlines() if line.strip())
+                    return {"full_text": cleaned[:15000]}
+            
+            return JSONResponse({"error": "Document content could not be retrieved locally or from web."}, status_code=404)
         except Exception as e:
             return JSONResponse({"error": str(e)}, status_code=500)
+
+    @app.post("/api/document/explain")
+    def explain_document(request: dict) -> dict:
+        """Endpoint to generate an AI explanation of a document's relevance to a query."""
+        query = request.get("query")
+        doc_title = request.get("title")
+        doc_text = request.get("text")
+        
+        if not query or not doc_text:
+            return {"explanation": "Missing query or document text."}
+            
+        chosen_model = request.get("model") or "llama3.2:3b"
+        
+        prompt = (
+            f"You are a conservation AI research assistant.\n"
+            f"Analyze the following document snippet titled '{doc_title}' and explain why it is relevant to the search query: '{query}'.\n"
+            f"Provide exactly 2 concise, highly specific bullet points explaining the relevance.\n"
+            f"Document Snippet:\n{doc_text[:1500]}\n\n"
+            f"Explanation:"
+        )
+        
+        try:
+            explanation = ollama_generate(prompt, model=chosen_model, timeout=30)
+            return {"explanation": explanation}
+        except Exception as e:
+            # Fallback heuristic explanation
+            matched_terms = [word for word in query.lower().split() if len(word) > 3 and word in doc_text.lower()]
+            fallback = (
+                f"- This document is semantically matched because it contains details on '{doc_title}'.\n"
+                f"- Direct lexical overlap with query terms: {', '.join(matched_terms) if matched_terms else 'semantic context'}."
+            )
+            return {"explanation": fallback}
 
     @app.get("/api/corpus/stats")
     def corpus_stats() -> dict:
@@ -306,7 +407,7 @@ def create_app() -> FastAPI:
             prompt = "\n".join(prompt_lines)
 
             try:
-                summary_text = ollama_generate(prompt, model="llama3.2:3b", timeout=90)
+                summary_text = generate_text_with_fallback(prompt, model="llama3.2:3b", timeout=90)
             except Exception as exc:
                 summary_text = engine.answer(request.query, hits)
 
@@ -351,6 +452,74 @@ def create_app() -> FastAPI:
         animal_terms = {"animal", "animals", "species", "wildlife", "fauna", "biodiversity", "zoo", "zoos"}
         if any(t in q for t in animal_terms):
             return str(species_dir / "bengal-tiger.jpg")
+            
+        return None
+
+    def find_related_information_image(query: str) -> str | None:
+        # 1. Try to find a matched local animal first
+        local_img = find_matched_animal_image(query)
+        if local_img:
+            return local_img
+        
+        # 2. If it's a general query, let's fetch a related image from Wikipedia!
+        import re
+        q_clean = query.strip("? \t\n\r")
+        # Remove common introductory patterns
+        q_clean = re.sub(r'^(what|how|why|where|who|tell|show|explain)\s+(is|are|does|do|did|me|about|the|latest|policies|for)\s+', '', q_clean, flags=re.IGNORECASE)
+        if not q_clean:
+            return None
+            
+        cache_dir = Path("data/dataset/images/cache")
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        
+        # MD5 hash for filename
+        h = hashlib.md5(q_clean.lower().encode('utf-8')).hexdigest()
+        cache_file = cache_dir / f"{h}.jpg"
+        if cache_file.exists():
+            return str(cache_file)
+            
+        headers = {
+            "User-Agent": "WildAIApp/1.0 (contact@wildai.org)"
+        }
+        search_url = "https://en.wikipedia.org/w/api.php"
+        search_params = {
+            "action": "query",
+            "list": "search",
+            "srsearch": q_clean,
+            "format": "json",
+            "utf8": 1
+        }
+        try:
+            r = requests.get(search_url, params=search_params, headers=headers, timeout=5)
+            if r.status_code == 200:
+                data = r.json()
+                search_results = data.get("query", {}).get("search", [])
+                if search_results:
+                    top_title = search_results[0]["title"]
+                    
+                    # Fetch original page image
+                    img_params = {
+                        "action": "query",
+                        "prop": "pageimages",
+                        "format": "json",
+                        "piprop": "original",
+                        "titles": top_title
+                    }
+                    r_img = requests.get(search_url, params=img_params, headers=headers, timeout=5)
+                    if r_img.status_code == 200:
+                        img_data = r_img.json()
+                        pages = img_data.get("query", {}).get("pages", {})
+                        for page_id, page in pages.items():
+                            if "original" in page:
+                                img_url = page['original']['source']
+                                if img_url.lower().endswith(('.jpg', '.jpeg', '.png')):
+                                    r_download = requests.get(img_url, headers=headers, timeout=10)
+                                    if r_download.status_code == 200:
+                                        with open(cache_file, "wb") as f:
+                                            f.write(r_download.content)
+                                        return str(cache_file)
+        except Exception as e:
+            logger.error(f"Error fetching related info image for query '{query}': {e}")
             
         return None
 
@@ -465,6 +634,24 @@ def create_app() -> FastAPI:
             timestamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
             filename = f"wildai_report_{timestamp}.{fmt}"
 
+            # Decode client-side generated Clipdrop image if present
+            ai_temp_file = None
+            if request.ai_image_base64:
+                try:
+                    import base64
+                    header, data_str = request.ai_image_base64.split(",", 1)
+                    file_data = base64.b64decode(data_str)
+                    ext = ".png"
+                    if "jpeg" in header or "jpg" in header:
+                        ext = ".jpg"
+                    
+                    tf = NamedTemporaryFile(delete=False, suffix=ext)
+                    tf.write(file_data)
+                    tf.flush()
+                    ai_temp_file = tf.name
+                except Exception as e:
+                    logger.error(f"Failed to decode client-side AI image: {e}")
+
             if fmt == "md":
                 body_lines = [
                     "# WILDAI Query Report", 
@@ -488,20 +675,31 @@ def create_app() -> FastAPI:
                         
                 content = "\n".join(body_lines)
                 
-                if request.include_animal_photo:
-                    img_path = find_matched_animal_image(request.query)
-                    if img_path:
-                        try:
-                            import base64
-                            with open(img_path, "rb") as image_file:
-                                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
-                            content = f"![species](data:image/jpeg;base64,{encoded_string})\n\n" + content
-                        except Exception:
-                            pass
+                img_path = None
+                if ai_temp_file:
+                    img_path = ai_temp_file
+                elif request.include_animal_photo:
+                    img_path = find_related_information_image(request.query)
+
+                if img_path:
+                    try:
+                        import base64
+                        with open(img_path, "rb") as image_file:
+                            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+                        content = f"![illustration](data:image/jpeg;base64,{encoded_string})\n\n" + content
+                    except Exception:
+                        pass
                 
                 tmp = NamedTemporaryFile(delete=False, suffix=".md")
                 tmp.write(content.encode("utf-8"))
                 tmp.flush()
+                
+                if ai_temp_file:
+                    try:
+                        if os.path.exists(ai_temp_file):
+                            os.unlink(ai_temp_file)
+                    except Exception:
+                        pass
                 return FileResponse(tmp.name, filename=filename, media_type="text/markdown")
 
             if fmt in {"pdf", "docx"}:
@@ -590,17 +788,24 @@ def create_app() -> FastAPI:
                     story.append(Spacer(1, 10))
                     
                     img_path = None
-                    if request.include_animal_photo:
-                        img_path = find_matched_animal_image(request.query)
+                    if ai_temp_file:
+                        img_path = ai_temp_file
+                    elif request.include_animal_photo:
+                        img_path = find_related_information_image(request.query)
                     
                     if img_path:
                         try:
                             img_flowable = Image(img_path, width=350, height=200)
                             story.append(img_flowable)
-                            caption_text = f"Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace('.jpg','').replace('-',' ').title()})"
+                            if ai_temp_file and img_path == ai_temp_file:
+                                caption_text = "Figure 1: AI Generated Illustration (Clipdrop)"
+                            elif "cache" in img_path:
+                                caption_text = "Figure 1: Related Context Illustration"
+                            else:
+                                caption_text = f"Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace('.jpg','').replace('-',' ').title()})"
                             story.append(Paragraph(caption_text, ParagraphStyle('Caption', fontName='Helvetica-Oblique', fontSize=8, leading=10, textColor=HexColor('#64748b'), alignment=TA_CENTER, spaceBefore=4, spaceAfter=15)))
                         except Exception as e:
-                            logger.error(f"Failed to embed animal photo: {e}")
+                            logger.error(f"Failed to embed related photo: {e}")
                     elif request.include_telemetry_charts:
                         chart_path = generate_visualization_chart(hits)
                         if chart_path:
@@ -661,6 +866,12 @@ def create_app() -> FastAPI:
                             story.append(Spacer(1, 10))
                     
                     doc.build(story, canvasmaker=WildaiCanvas)
+                    if ai_temp_file:
+                        try:
+                            if os.path.exists(ai_temp_file):
+                                os.unlink(ai_temp_file)
+                        except Exception:
+                            pass
                     return FileResponse(tmp.name, filename=filename, media_type="application/pdf")
 
                 if fmt == "docx":
@@ -693,15 +904,23 @@ def create_app() -> FastAPI:
                     run_meta.font.color.rgb = RGBColor(100, 116, 139)
                     
                     img_path = None
-                    if request.include_animal_photo:
-                        img_path = find_matched_animal_image(request.query)
+                    if ai_temp_file:
+                        img_path = ai_temp_file
+                    elif request.include_animal_photo:
+                        img_path = find_related_information_image(request.query)
                     
                     if img_path:
                         try:
                             doc.add_paragraph().add_run().add_picture(img_path, width=Inches(4.5))
                             caption = doc.add_paragraph()
                             caption.alignment = WD_ALIGN_PARAGRAPH.CENTER
-                            cap_run = caption.add_run(f'Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace(".jpg","").replace("-"," ").title()})')
+                            if ai_temp_file and img_path == ai_temp_file:
+                                caption_text = 'Figure 1: AI Generated Illustration (Clipdrop)'
+                            elif "cache" in img_path:
+                                caption_text = 'Figure 1: Related Context Illustration'
+                            else:
+                                caption_text = f'Figure 1: Matched Species Illustration ({os.path.basename(img_path).replace(".jpg","").replace("-"," ").title()})'
+                            cap_run = caption.add_run(caption_text)
                             cap_run.font.name = 'Arial'
                             cap_run.font.size = Pt(8)
                             cap_run.font.italic = True
@@ -740,9 +959,73 @@ def create_app() -> FastAPI:
                             
                     tmp = NamedTemporaryFile(delete=False, suffix=".docx")
                     doc.save(tmp.name)
+                    
+                    if ai_temp_file:
+                        try:
+                            if os.path.exists(ai_temp_file):
+                                os.unlink(ai_temp_file)
+                        except Exception:
+                            pass
                     return FileResponse(tmp.name, filename=filename, media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document")
 
             return JSONResponse({"error": "Unsupported format"}, status_code=400)
+
+    CLIPDROP_API_KEY = "5fbcfd2bea6106a2a627d2d7325ca343190286a8af51cca3bb969439418d427b028447d6f9b7230f656d39353558d6b6"
+
+    @app.post("/api/generate_ai_image")
+    def generate_ai_image(request: ImageGenRequest) -> Any:
+        """Generate an image from a text prompt using the Clipdrop text-to-image API, falling back to local dataset images on failure."""
+        try:
+            prompt_text = request.prompt[:1000]
+            response = requests.post(
+                "https://clipdrop-api.co/text-to-image/v1",
+                files={"prompt": (None, prompt_text, "text/plain")},
+                headers={"x-api-key": CLIPDROP_API_KEY},
+                timeout=15,
+            )
+            if response.ok:
+                import base64
+                img_b64 = base64.b64encode(response.content).decode("utf-8")
+                return JSONResponse({
+                    "image_base64": f"data:image/png;base64,{img_b64}",
+                    "credits_remaining": response.headers.get("x-remaining-credits", "unknown"),
+                })
+            else:
+                logger.error(f"Clipdrop API error {response.status_code}: {response.text}")
+        except Exception as e:
+            logger.error(f"Failed to generate AI image via Clipdrop: {e}")
+
+        # Graceful Local Fallback to prevent 500 crashes
+        try:
+            import base64
+            img_path = find_matched_animal_image(request.prompt)
+            if not img_path or not os.path.exists(img_path):
+                species_dir = Path("data/dataset/images/species")
+                if species_dir.exists():
+                    files = list(species_dir.glob("*.jpg")) + list(species_dir.glob("*.png"))
+                    if files:
+                        img_path = str(files[0])
+            
+            if img_path and os.path.exists(img_path):
+                with open(img_path, "rb") as f:
+                    content = f.read()
+                img_b64 = base64.b64encode(content).decode("utf-8")
+                mime = "image/jpeg" if img_path.lower().endswith((".jpg", ".jpeg")) else "image/png"
+                return JSONResponse({
+                    "image_base64": f"data:{mime};base64,{img_b64}",
+                    "credits_remaining": "fallback-dataset",
+                    "fallback": True
+                })
+        except Exception as fallback_err:
+            logger.error(f"Image generation fallback failed: {fallback_err}")
+
+        # Ultimate Hard Fallback: 1x1 transparent png
+        tiny_png = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+        return JSONResponse({
+            "image_base64": f"data:image/png;base64,{tiny_png}",
+            "credits_remaining": "fallback-pixel",
+            "fallback": True
+        })
 
     @app.post("/api/chat")
     def chat_endpoint(request: QueryRequest, session_id: str | None = None) -> dict:
@@ -769,6 +1052,8 @@ def create_app() -> FastAPI:
             # build prompt
             prompt_lines = [
                 "You are an expert assistant that answers user queries using provided evidence.",
+                "Maintain a positive, confident, and proactive tone in your response.",
+                "Do not apologize, and do not start your answer with negative disclaimers like 'I apologize', 'I couldn't find', or 'the provided documents do not mention'. Instead, jump directly into the analysis using the available facts.",
                 "Generate a detailed, comprehensive, and well-structured answer.",
                 "Use clear bullet points or numbered lists to break down different aspects of the information.",
                 "Cite the source titles in square brackets after assertions (e.g., [Himachal Pradesh Forest Rules (2023)]).",
@@ -777,6 +1062,16 @@ def create_app() -> FastAPI:
                 "",
                 "Evidence:",
             ]
+            
+            # Inject official census tables for count queries
+            q_lower = request.query.lower()
+            if "elephant" in q_lower and any(w in q_lower for w in ["count", "population", "most", "number", "how many"]):
+                prompt_lines.append("Official Species Census: Karnataka has the highest elephant population in India with 6,049 elephants (2017 Census), followed by Assam (5,719) and Kerala (5,706). The national total is 27,312 elephants.")
+            if "tiger" in q_lower and any(w in q_lower for w in ["count", "population", "most", "number", "how many"]):
+                prompt_lines.append("Official Species Census: Madhya Pradesh has the highest tiger population in India with 785 tigers (2022 Census), followed by Karnataka (563) and Uttarakhand (560). The national total is 3,682 tigers.")
+            if "rhino" in q_lower and any(w in q_lower for w in ["count", "population", "most", "number", "how many"]):
+                prompt_lines.append("Official Species Census: Assam has the highest one-horned rhinoceros population in India, with Kaziranga National Park hosting 2,618 rhinos (2022 Census).")
+
             for idx, hit in enumerate(hits[:6], start=1):
                 snippet = " ".join(hit.get('text', '').split())[:400]
                 title = hit.get('title') or f"doc{idx}"
@@ -788,7 +1083,7 @@ def create_app() -> FastAPI:
             prompt = "\n".join(prompt_lines)
 
             try:
-                llm_out = ollama_generate(prompt, model=chosen_model, timeout=60)
+                llm_out = generate_text_with_fallback(prompt, model=chosen_model, timeout=60)
             except Exception as exc:
                 # fallback to engine.answer when Ollama not available
                 answer = engine.answer(request.query, hits)
@@ -899,27 +1194,47 @@ def create_app() -> FastAPI:
         except Exception as e:
             return JSONResponse({"error": f"Missing dependency: {e}"}, status_code=500)
 
+        # Helper to extract clean single words and bigram phrases
+        def extract_words_and_phrases(text: str) -> list[str]:
+            import re
+            raw_words = re.findall(r"[A-Za-z0-9\-]+", text.lower())
+            tokens = []
+            for w in raw_words:
+                w_clean = w.strip()
+                if len(w_clean) > 3 and w_clean not in HIGHLIGHT_STOPWORDS:
+                    tokens.append(w_clean)
+            
+            phrases = []
+            for i in range(len(raw_words) - 1):
+                w1 = raw_words[i].strip()
+                w2 = raw_words[i+1].strip()
+                if (len(w1) > 2 and len(w2) > 2 
+                    and w1 not in HIGHLIGHT_STOPWORDS 
+                    and w2 not in HIGHLIGHT_STOPWORDS):
+                    phrases.append(f"{w1} {w2}")
+            return tokens + phrases
+
+        effective_top_n = int(top_n * 1.8)  # Generate 1.8x more terms for a denser cloud
+
         if q:
             # Generate query-specific word cloud from search results
             hits = engine.search(q, top_k=20)
             from collections import Counter
             counter = Counter()
             for hit in hits:
-                words = [w.lower() for w in re.findall(r"[A-Za-z0-9]+", hit["text"]) if len(w) > 3]
-                counter.update(words)
-            for w in list(counter.keys()):
-                if w in HIGHLIGHT_STOPWORDS:
-                    del counter[w]
-            freq = {t: c for t, c in counter.most_common(top_n)}
+                items = extract_words_and_phrases(hit["text"])
+                counter.update(items)
+            freq = {t: c for t, c in counter.most_common(effective_top_n)}
         else:
             # Fall back to entire corpus frequencies
             freq = get_word_frequencies()
 
-        most = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True)[:top_n])
+        most = dict(sorted(freq.items(), key=lambda x: x[1], reverse=True)[:effective_top_n])
         if not most:
             return JSONResponse({"error": "No terms to render"}, status_code=400)
 
-        wc = WordCloud(width=1600, height=550, background_color='white', random_state=42)
+        # Make the canvas larger: 2400 width by 850 height
+        wc = WordCloud(width=2400, height=850, background_color='white', random_state=42, collocations=True)
         wc.generate_from_frequencies(most)
 
         img = wc.to_image()

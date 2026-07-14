@@ -8,7 +8,7 @@ class QueryRequest(BaseModel):
     top_k: int = Field(default=5, ge=1, le=12)
     category: str | None = None
     source: str | None = None
-    year: int | None = None
+    year: str | int | None = None
     include_wordcloud: bool = False
 
 
@@ -48,7 +48,7 @@ class SummaryRequest(BaseModel):
     attach_snippets: bool = True
     category: str | None = None
     source: str | None = None
-    year: int | None = None
+    year: str | int | None = None
     top_k: int = 5
 
 
@@ -61,6 +61,11 @@ class ExportRequest(BaseModel):
     attach_snippets: bool = True
     category: str | None = None
     source: str | None = None
-    year: int | None = None
+    year: str | int | None = None
     top_k: int = 5
-    detailed_report: str | None = None
+    detailed_report: str | None = None
+    ai_image_base64: str | None = None
+
+
+class ImageGenRequest(BaseModel):
+    prompt: str = Field(min_length=1, max_length=1000)

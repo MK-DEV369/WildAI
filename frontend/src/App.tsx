@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Bot, Database, Download, Search, ShieldCheck, Sparkles, TreePine, Users, Home, MessageSquare, Mic, MicOff } from 'lucide-react'
+import { ArrowRight, Bot, Database, Download, Search, ShieldCheck, Sparkles, TreePine, Users, Home, MessageSquare, Mic, MicOff, Map, Cpu } from 'lucide-react'
 import cloud from 'd3-cloud'
-import { useEffect, useState, useMemo } from 'react'
+import * as d3 from 'd3'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import 'tippy.js/dist/tippy.css'
 import 'tippy.js/animations/scale.css'
 import Dock from '@/components/ui/dock'
@@ -241,7 +242,7 @@ function getAnswerSections(answer: string): Array<{ title: string; body: string[
 }
 
 function renderInlineMarkdown(text: string): JSX.Element {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g)
 
   return (
     <>
@@ -249,6 +250,10 @@ function renderInlineMarkdown(text: string): JSX.Element {
         const boldMatch = part.match(/^\*\*(.+)\*\*$/)
         if (boldMatch) {
           return <strong key={`${part}-${index}`}>{boldMatch[1]}</strong>
+        }
+        const italicMatch = part.match(/^\*(.+)\*$/)
+        if (italicMatch) {
+          return <em key={`${part}-${index}`}>{italicMatch[1]}</em>
         }
         return <span key={`${part}-${index}`}>{part}</span>
       })}
@@ -288,6 +293,27 @@ function highlightText(text: string, query: string): JSX.Element | string {
     }
   }
 
+  // Related conservation, location, and animal terms to highlight
+  const relatedTerms = [
+    "captive breeding", "breeding program", "breeding programs", 
+    "rescue and rehabilitation", "habitat restoration",
+    "public education", "endangered species", "critically endangered",
+    "biological park", "biological reserve", "wildlife sanctuary", 
+    "national park", "national parks", "protected area", "protected areas",
+    "wildlife park", "zoological park", "zoological gardens", "conservation", 
+    "rescue", "rehabilitation", "education", "research", "threatened", "endangered",
+    "vulnerable", "extinct", "safari", "biodiversity", "fauna", "flora", 
+    "animal", "animals", "species", "zoo", "zoos", "policy", "policies", 
+    "act", "rules", "guidelines", "treaty", "treaties", "bengaluru", 
+    "bangalore", "karnataka", "india", "indian", "giraffe", "giraffes"
+  ]
+
+  relatedTerms.forEach(term => {
+    const termWords = term.split(/\s+/)
+    const pattern = termWords.map(escapeRegex).join('\\s+')
+    patterns.push(pattern)
+  })
+
   if (patterns.length === 0) return text
 
   // Sort unique patterns by length descending so that longer phrase matches take precedence
@@ -317,6 +343,817 @@ function highlightText(text: string, query: string): JSX.Element | string {
   }
 }
 
+interface GraphNode extends d3.SimulationNodeDatum {
+  id: string;
+  label: string;
+  type: 'document' | 'keyword';
+  title?: string;
+  text?: string;
+  hit?: any;
+  score?: number;
+  x?: number;
+  y?: number;
+  fx?: number | null;
+  fy?: number | null;
+}
+
+interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
+  source: string | GraphNode;
+  target: string | GraphNode;
+  value: number;
+  type: 'doc-term' | 'doc-doc';
+}
+
+function extractTFIDFKeywords(hits: any[], maxKeywords = 12) {
+  const stopwords = new Set([
+    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "how", "in", "is",
+    "it", "of", "on", "or", "that", "the", "to", "was", "what", "when", "where", "which",
+    "who", "why", "with", "this", "these", "their", "they", "them", "from", "with", "have",
+    "more", "some", "such", "than", "then", "there", "those", "upon", "were", "what", "when",
+    "where", "while", "whom", "will", "would", "about", "above", "after", "again", "against",
+    "all", "am", "any"
+  ]);
+
+  const docs = hits.map(hit => {
+    const text = hit.text.toLowerCase();
+    const words = text.match(/[a-z]{4,}/g) || [];
+    const tokens: string[] = [];
+    words.forEach((w: string) => {
+      if (!stopwords.has(w)) {
+        tokens.push(w);
+      }
+    });
+    for (let i = 0; i < words.length - 1; i++) {
+      const w1 = words[i];
+      const w2 = words[i+1];
+      if (!stopwords.has(w1) && !stopwords.has(w2)) {
+        tokens.push(`${w1} ${w2}`);
+      }
+    }
+    return { hit, tokens };
+  });
+
+  const tfs: Record<string, number>[] = docs.map(d => {
+    const counts: Record<string, number> = {};
+    d.tokens.forEach(t => {
+      counts[t] = (counts[t] || 0) + 1;
+    });
+    const total = d.tokens.length || 1;
+    const tf: Record<string, number> = {};
+    Object.entries(counts).forEach(([term, count]) => {
+      tf[term] = count / total;
+    });
+    return tf;
+  });
+
+  const idfs: Record<string, number> = {};
+  const N = hits.length;
+  const docContainingTerm: Record<string, number> = {};
+  docs.forEach(d => {
+    const uniqueTerms = new Set(d.tokens);
+    uniqueTerms.forEach(t => {
+      docContainingTerm[t] = (docContainingTerm[t] || 0) + 1;
+    });
+  });
+  Object.entries(docContainingTerm).forEach(([term, count]) => {
+    idfs[term] = Math.log(1 + (N / count));
+  });
+
+  const tfidfs: { term: string; score: number; docId: string; count: number }[] = [];
+  docs.forEach((d, idx) => {
+    const tfMap = tfs[idx];
+    Object.entries(tfMap).forEach(([term, tfVal]) => {
+      const idfVal = idfs[term] || 0;
+      const count = d.tokens.filter(t => t === term).length;
+      tfidfs.push({
+        term,
+        score: tfVal * idfVal,
+        docId: d.hit.chunk_id,
+        count
+      });
+    });
+  });
+
+  const termScores: Record<string, { score: number; docs: { docId: string; score: number; count: number }[] }> = {};
+  tfidfs.forEach(item => {
+    if (!termScores[item.term]) {
+      termScores[item.term] = { score: 0, docs: [] };
+    }
+    termScores[item.term].score += item.score;
+    termScores[item.term].docs.push({ docId: item.docId, score: item.score, count: item.count });
+  });
+
+  return Object.entries(termScores)
+    .sort((a, b) => b[1].score - a[1].score)
+    .slice(0, maxKeywords)
+    .map(([term, data]) => ({ term, ...data }));
+}
+
+function SemanticNetworkGraph({ hits, query, onFullscreen, isFullscreen }: { hits: any[], query: string, onFullscreen?: () => void, isFullscreen?: boolean }) {
+  const [viewMode, setViewMode] = useState<'radial' | 'force'>('force');
+  const [hoveredInfo, setHoveredInfo] = useState<string>('Hover nodes or connections to explore semantic relations.');
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const topHits = useMemo(() => hits.slice(0, 5), [hits]);
+
+  // Compute Radial Data
+  const radialData = useMemo(() => {
+    const topTerms = ["conservation", "species", "forest", "reserve", "wildlife", "habitats", "sanctuaries", "planning"];
+    const cx = 150;
+    const cy = 130;
+
+    const docNodes = topHits.slice(0, 4).map((hit, idx) => {
+      const angle = (idx * 2 * Math.PI) / Math.min(topHits.length, 4);
+      const r = 50;
+      return {
+        id: hit.chunk_id,
+        title: hit.title.length > 25 ? hit.title.slice(0, 22) + "..." : hit.title,
+        abbr: `Doc ${idx + 1}`,
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle),
+        hit
+      };
+    });
+
+    const termNodes = topTerms.map((term, idx) => {
+      const angle = (idx * 2 * Math.PI) / topTerms.length;
+      const r = 100;
+      return {
+        name: term,
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle)
+      };
+    });
+
+    const edges: any[] = [];
+    docNodes.forEach(doc => {
+      const docText = doc.hit.text.toLowerCase();
+      termNodes.forEach(term => {
+        const termRegex = new RegExp(term.name.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g');
+        const count = (docText.match(termRegex) || []).length;
+        if (count > 0) {
+          edges.push({
+            from: doc,
+            to: term,
+            weight: Math.min(count, 5)
+          });
+        }
+      });
+    });
+
+    return { docNodes, termNodes, edges, cx, cy };
+  }, [topHits]);
+
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+
+  // Compute Force Directed Data (Neo4j Style)
+  useEffect(() => {
+    if (viewMode !== 'force' || !svgRef.current || topHits.length === 0) return;
+
+    const width = 600;
+    const height = 480;
+
+    // 1. Extract TF-IDF keywords
+    const topKeywords = extractTFIDFKeywords(topHits, isFullscreen ? 16 : 10);
+
+    // 2. Build Nodes
+    const docNodes: GraphNode[] = topHits.map((hit, idx) => ({
+      id: `doc_${hit.chunk_id}`,
+      label: `Doc ${idx + 1}`,
+      title: hit.title,
+      text: hit.text,
+      type: 'document',
+      hit
+    }));
+
+    const keywordNodes: GraphNode[] = topKeywords.map(kw => ({
+      id: `term_${kw.term}`,
+      label: kw.term,
+      type: 'keyword',
+      score: kw.score
+    }));
+
+    const nodes: GraphNode[] = [...docNodes, ...keywordNodes];
+
+    // 3. Build Links
+    const links: GraphLink[] = [];
+
+    // Document to Keyword links (TF-IDF connections)
+    topKeywords.forEach(kw => {
+      kw.docs.forEach(d => {
+        links.push({
+          source: `doc_${d.docId}`,
+          target: `term_${kw.term}`,
+          value: d.count,
+          type: 'doc-term'
+        });
+      });
+    });
+
+    // Document to Document links (shared keyword connections)
+    for (let i = 0; i < docNodes.length; i++) {
+      for (let j = i + 1; j < docNodes.length; j++) {
+        const docA = topHits[i];
+        const docB = topHits[j];
+        
+        // Find shared keywords
+        const shared = topKeywords.filter(kw => 
+          kw.docs.some(d => d.docId === docA.chunk_id) && 
+          kw.docs.some(d => d.docId === docB.chunk_id)
+        );
+
+        if (shared.length >= 2) {
+          links.push({
+            source: `doc_${docA.chunk_id}`,
+            target: `doc_${docB.chunk_id}`,
+            value: shared.length,
+            type: 'doc-doc'
+          });
+        }
+      }
+    }
+
+    // 4. Initialize D3 SVG
+    const svg = d3.select(svgRef.current);
+    svg.selectAll('*').remove();
+
+    // Add filter defs for glow
+    const defs = svg.append('defs');
+    const filter = defs.append('filter')
+      .attr('id', 'glow')
+      .attr('x', '-20%')
+      .attr('y', '-20%')
+      .attr('width', '140%')
+      .attr('height', '140%');
+    filter.append('feGaussianBlur')
+      .attr('stdDeviation', '3')
+      .attr('result', 'blur');
+    const feMerge = filter.append('feMerge');
+    feMerge.append('feMergeNode').attr('in', 'blur');
+    feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+
+    const mainGroup = svg.append('g').attr('class', 'main-group');
+
+    // Add Zoom behavior
+    const zoomBehavior = d3.zoom()
+      .scaleExtent([0.4, 4])
+      .on('zoom', (event: any) => {
+        mainGroup.attr('transform', event.transform);
+      });
+    svg.call(zoomBehavior as any);
+
+    // Initial Zoom transform to fit center
+    svg.call(zoomBehavior.transform as any, d3.zoomIdentity.translate(0, 0).scale(1));
+
+    // Center coordinates
+    const cx = width / 2;
+    const cy = height / 2;
+
+    // 5. Setup Physics Simulation
+    const simulation = d3.forceSimulation<GraphNode>(nodes)
+      .force('link', d3.forceLink<GraphNode, GraphLink>(links).id((d: any) => d.id).distance((d: any) => d.type === 'doc-doc' ? 140 : 80))
+      .force('charge', d3.forceManyBody().strength(-180))
+      .force('center', d3.forceCenter(cx, cy))
+      .force('collide', d3.forceCollide<GraphNode>().radius((d: any) => d.type === 'document' ? 26 : 16))
+      .alphaDecay(0.04);
+
+    // 6. Draw Links
+    const link = mainGroup.append('g')
+      .attr('class', 'links')
+      .selectAll('line')
+      .data(links)
+      .enter()
+      .append('line')
+      .attr('stroke', (d: any) => d.type === 'doc-doc' ? '#f59e0b' : 'rgba(126,240,168,0.25)')
+      .attr('stroke-width', (d: any) => d.type === 'doc-doc' ? 1.5 : Math.min(d.value * 0.75 + 1, 5))
+      .attr('stroke-dasharray', (d: any) => d.type === 'doc-doc' ? '4,4' : 'none')
+      .attr('opacity', 0.6)
+      .style('transition', 'stroke 0.2s, stroke-width 0.2s, opacity 0.2s');
+
+    // 7. Draw Nodes
+    const node = mainGroup.append('g')
+      .attr('class', 'nodes')
+      .selectAll('g')
+      .data(nodes)
+      .enter()
+      .append('g')
+      .attr('class', 'node-group')
+      .style('cursor', 'pointer');
+
+    // Drag behavior helper
+    const dragBehavior = d3.drag<any, any>()
+      .on('start', (event: any, d: any) => {
+        if (!event.active) simulation.alphaTarget(0.2).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on('drag', (event: any, d: any) => {
+        d.fx = event.x;
+        d.fy = event.y;
+      })
+      .on('end', (event: any, d: any) => {
+        if (!event.active) simulation.alphaTarget(0);
+        // Keep pinned
+      });
+
+    node.call(dragBehavior);
+
+    // Node representation
+    node.each(function(this: any, d: any) {
+      const g = d3.select(this);
+      if (d.type === 'document') {
+        // Document Nodes: Beautiful glowing rings
+        g.append('circle')
+          .attr('r', 16)
+          .attr('fill', '#07120e')
+          .attr('stroke', '#7ef0a8')
+          .attr('stroke-width', 2)
+          .style('box-shadow', '0 0 10px rgba(126,240,168,0.5)');
+
+        g.append('text')
+          .attr('text-anchor', 'middle')
+          .attr('dy', '.3em')
+          .attr('fill', '#7ef0a8')
+          .attr('font-size', '9px')
+          .attr('font-family', 'monospace')
+          .attr('font-weight', 'bold')
+          .text(d.label);
+      } else {
+        // Keyword Nodes: Blue badges
+        g.append('circle')
+          .attr('r', 6)
+          .attr('fill', '#050f14')
+          .attr('stroke', '#7ebaf0')
+          .attr('stroke-width', 1.5);
+
+        g.append('text')
+          .attr('dx', 10)
+          .attr('dy', '.35em')
+          .attr('fill', '#e9fff4')
+          .attr('font-size', '9px')
+          .attr('font-family', 'sans-serif')
+          .style('text-shadow', '0 1px 3px rgba(0,0,0,0.9), 0 0 3px rgba(0,0,0,0.9)')
+          .text(d.label);
+      }
+    });
+
+    // 8. Interaction events
+    node.on('mouseover', function(event: any, d: any) {
+      const connectedNodeIds = new Set<string>();
+      connectedNodeIds.add(d.id);
+
+      links.forEach((l: any) => {
+        const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+        const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+        if (sId === d.id) connectedNodeIds.add(tId);
+        if (tId === d.id) connectedNodeIds.add(sId);
+      });
+
+      // Highlight links
+      link
+        .attr('opacity', (l: any) => {
+          const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          return (sId === d.id || tId === d.id) ? 1.0 : 0.05;
+        })
+        .attr('stroke', (l: any) => {
+          const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          if (sId === d.id || tId === d.id) {
+            return l.type === 'doc-doc' ? '#fbbf24' : '#10b981';
+          }
+          return l.type === 'doc-doc' ? '#f59e0b' : 'rgba(126,240,168,0.25)';
+        })
+        .attr('stroke-width', (l: any) => {
+          const sId = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          return (sId === d.id || tId === d.id) ? 3 : 1;
+        });
+
+      // Highlight nodes
+      node.attr('opacity', (n: any) => connectedNodeIds.has(n.id) ? 1.0 : 0.15);
+
+      // Status Bar Text
+      if (d.type === 'document') {
+        setHoveredInfo(`Document node [${d.label}]: "${d.title}" (Click to select & pin. Double-click to unpin.)`);
+      } else {
+        const occurrences = links.filter((l: any) => {
+          const tId = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          return tId === d.id;
+        }).length;
+        setHoveredInfo(`TF-IDF Keyword: "${d.label}" (Found in ${occurrences} documents. Double-click to unpin.)`);
+      }
+    });
+
+    node.on('mouseout', function() {
+      link
+        .attr('opacity', 0.6)
+        .attr('stroke', (l: any) => l.type === 'doc-doc' ? '#f59e0b' : 'rgba(126,240,168,0.25)')
+        .attr('stroke-width', (l: any) => l.type === 'doc-doc' ? 1.5 : Math.min(l.value * 0.75 + 1, 5));
+      node.attr('opacity', 1.0);
+      setHoveredInfo('Hover nodes or connections to explore semantic relations.');
+    });
+
+    node.on('dblclick', function(event: any, d: any) {
+      d.fx = null;
+      d.fy = null;
+      simulation.alpha(0.3).restart();
+      setHoveredInfo(`Unpinned node "${d.label}"`);
+    });
+
+    // 9. Simulation Tick
+    simulation.on('tick', () => {
+      link
+        .attr('x1', (d: any) => (d.source as any).x)
+        .attr('y1', (d: any) => (d.source as any).y)
+        .attr('x2', (d: any) => (d.target as any).x)
+        .attr('y2', (d: any) => (d.target as any).y);
+
+      node.attr('transform', (d: any) => `translate(${d.x}, ${d.y})`);
+    });
+
+    return () => {
+      simulation.stop();
+    };
+  }, [hits, viewMode, isFullscreen, topHits]);
+
+  return (
+    <div className="semantic-graph-container" style={{ position: 'relative', width: '100%', background: 'rgba(5, 12, 10, 0.45)', borderRadius: '16px', padding: '1rem', border: '1px solid rgba(126,240,168,0.12)', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+            {viewMode === 'force' ? 'Neo4j RAG Knowledge Graph' : 'Semantic Association Network'}
+          </div>
+          <div style={{ display: 'flex', background: 'rgba(0,0,0,0.2)', padding: '2px', borderRadius: '6px', border: '1px solid rgba(126,240,168,0.15)' }}>
+            <button
+              type="button"
+              onClick={() => setViewMode('force')}
+              style={{ background: viewMode === 'force' ? 'var(--accent)' : 'transparent', color: viewMode === 'force' ? '#05100e' : '#e9fff4', fontSize: '0.62rem', border: 'none', padding: '0.15rem 0.35rem', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, transition: 'all 0.2s' }}
+            >
+              Knowledge Graph
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('radial')}
+              style={{ background: viewMode === 'radial' ? 'var(--accent)' : 'transparent', color: viewMode === 'radial' ? '#05100e' : '#e9fff4', fontSize: '0.62rem', border: 'none', padding: '0.15rem 0.35rem', borderRadius: '4px', cursor: 'pointer', fontWeight: 600, transition: 'all 0.2s' }}
+            >
+              Radial Network
+            </button>
+          </div>
+        </div>
+        {!isFullscreen && onFullscreen && (
+          <button 
+            type="button"
+            onClick={onFullscreen} 
+            className="ghost-button" 
+            style={{ padding: '0.15rem 0.4rem', fontSize: '0.68rem', minHeight: 'auto', borderRadius: '6px', border: '1px solid rgba(126,240,168,0.2)' }}
+          >
+            Maximize
+          </button>
+        )}
+      </div>
+
+      {viewMode === 'force' ? (
+        <div style={{ width: '100%', position: 'relative', overflow: 'hidden', background: '#050c09', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.03)' }}>
+          <svg 
+            ref={svgRef} 
+            width="100%" 
+            height="100%"
+            viewBox="0 0 600 480"
+            style={{ display: 'block', margin: '0 auto', minHeight: isFullscreen ? '72vh' : '260px', maxHeight: isFullscreen ? '78vh' : '260px' }}
+          />
+          <div style={{ position: 'absolute', top: '8px', left: '8px', padding: '0.2rem 0.4rem', background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '4px', fontSize: '0.58rem', color: 'var(--muted)', display: 'flex', flexDirection: 'column', gap: '2px', pointerEvents: 'none' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '6px', height: '6px', background: '#7ef0a8', borderRadius: '50%', display: 'inline-block' }} />
+              <span>Document Nodes</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '6px', height: '6px', background: '#7ebaf0', borderRadius: '50%', display: 'inline-block' }} />
+              <span>TF-IDF Concept Keywords</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ width: '10px', height: '1.5px', background: '#f59e0b', borderStyle: 'dashed', display: 'inline-block' }} />
+              <span>Shared Keyword Corridors</span>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <svg 
+          width={isFullscreen ? "100%" : "300"} 
+          height={isFullscreen ? "100%" : "260"} 
+          viewBox="0 0 300 260" 
+          style={{ display: 'block', margin: '0 auto', maxHeight: isFullscreen ? '78vh' : '260px', width: isFullscreen ? 'auto' : undefined }}
+        >
+          {radialData.edges.map((edge, idx) => {
+            const isHighlighted = hoveredNode === edge.from.id || hoveredNode === edge.to.name;
+            const isActiveGroup = hoveredNode === null || isHighlighted;
+            return (
+              <line
+                key={idx}
+                x1={edge.from.x}
+                y1={edge.from.y}
+                x2={edge.to.x}
+                y2={edge.to.y}
+                stroke={isHighlighted ? 'var(--accent)' : 'rgba(126,240,168,0.15)'}
+                strokeWidth={edge.weight * 0.75}
+                opacity={isActiveGroup ? 0.8 : 0.15}
+                style={{ transition: 'all 0.25s ease' }}
+              />
+            );
+          })}
+
+          {radialData.docNodes.map((doc) => {
+            const isHighlighted = hoveredNode === doc.id;
+            const isActiveGroup = hoveredNode === null || isHighlighted;
+            return (
+              <line
+                key={`q-${doc.id}`}
+                x1={radialData.cx}
+                y1={radialData.cy}
+                x2={doc.x}
+                y2={doc.y}
+                stroke={isHighlighted ? 'var(--accent)' : 'rgba(255,255,255,0.1)'}
+                strokeWidth={2}
+                strokeDasharray="2,2"
+                opacity={isActiveGroup ? 0.6 : 0.15}
+              />
+            );
+          })}
+
+          <circle
+            cx={radialData.cx}
+            cy={radialData.cy}
+            r={14}
+            fill="rgba(7, 18, 14, 0.9)"
+            stroke="var(--accent)"
+            strokeWidth="2"
+          />
+          <text
+            x={radialData.cx}
+            y={radialData.cy + 3}
+            fill="var(--accent)"
+            fontSize="8px"
+            fontWeight="bold"
+            textAnchor="middle"
+            style={{ fontFamily: 'monospace' }}
+          >
+            RAG
+          </text>
+
+          {radialData.docNodes.map((doc) => {
+            const isHighlighted = hoveredNode === doc.id;
+            const isActiveGroup = hoveredNode === null || isHighlighted;
+            return (
+              <g
+                key={doc.id}
+                onMouseEnter={() => {
+                  setHoveredNode(doc.id);
+                  setHoveredInfo(`Document [${doc.abbr}]: "${doc.hit.title}"`);
+                }}
+                onMouseLeave={() => {
+                  setHoveredNode(null);
+                  setHoveredInfo('Hover nodes or connections to explore semantic relations.');
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <circle
+                  cx={doc.x}
+                  cy={doc.y}
+                  r={9}
+                  fill="rgba(7, 18, 14, 0.95)"
+                  stroke={isHighlighted ? 'var(--accent)' : 'rgba(255, 255, 255, 0.4)'}
+                  strokeWidth={isHighlighted ? 2 : 1.2}
+                  opacity={isActiveGroup ? 1 : 0.25}
+                  style={{ transition: 'all 0.2s' }}
+                />
+                <text
+                  x={doc.x}
+                  y={doc.y + 3}
+                  fill={isHighlighted ? 'var(--accent)' : '#ffffff'}
+                  fontSize="7px"
+                  textAnchor="middle"
+                  opacity={isActiveGroup ? 1 : 0.25}
+                  style={{ fontFamily: 'monospace', pointerEvents: 'none' }}
+                >
+                  {doc.abbr}
+                </text>
+              </g>
+            );
+          })}
+
+          {radialData.termNodes.map((term) => {
+            const isHighlighted = hoveredNode === term.name;
+            const isActiveGroup = hoveredNode === null || isHighlighted;
+            const isConnected = radialData.edges.some(e => e.to.name === term.name && e.from.id === hoveredNode);
+            const finalHighlight = isHighlighted || isConnected;
+
+            return (
+              <g
+                key={term.name}
+                onMouseEnter={() => {
+                  setHoveredNode(term.name);
+                  setHoveredInfo(`Term association: "${term.name}"`);
+                }}
+                onMouseLeave={() => {
+                  setHoveredNode(null);
+                  setHoveredInfo('Hover nodes or connections to explore semantic relations.');
+                }}
+                style={{ cursor: 'pointer' }}
+              >
+                <circle
+                  cx={term.x}
+                  cy={term.y}
+                  r={3}
+                  fill={finalHighlight ? 'var(--accent)' : 'rgba(126,240,168,0.4)'}
+                  opacity={isActiveGroup || isConnected ? 1 : 0.25}
+                  style={{ transition: 'all 0.2s' }}
+                />
+                <text
+                  x={term.x + (term.x > radialData.cx ? 6 : -6)}
+                  y={term.y + 3}
+                  fill={finalHighlight ? 'var(--accent)' : '#e9fff4'}
+                  fontSize="8px"
+                  textAnchor={term.x > radialData.cx ? 'start' : 'end'}
+                  opacity={isActiveGroup || isConnected ? 1 : 0.25}
+                  style={{ transition: 'all 0.2s', fontFamily: 'sans-serif', pointerEvents: 'none' }}
+                >
+                  {term.name}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      )}
+
+      <div style={{ minHeight: '34px', fontSize: '0.72rem', background: 'rgba(0,0,0,0.25)', padding: '0.45rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', color: 'var(--muted)', lineHeight: '1.4' }}>
+        <span>{hoveredInfo}</span>
+      </div>
+    </div>
+  );
+}
+
+function IndiaMap({ 
+  onSelectState, 
+  selectedState
+}: { 
+  onSelectState: (state: string | null) => void, 
+  selectedState: string | null
+}) {
+  const CONSERVATION_STATES = [
+    { id: 'KA', name: 'Karnataka', label: 'Karnataka (Zoos & Western Ghats)', latlng: [15.3173, 75.7139] as [number, number] },
+    { id: 'AS', name: 'Assam', label: 'Assam (Forestry & Rhinos)', latlng: [26.2006, 92.9376] as [number, number] },
+    { id: 'MP', name: 'Madhya Pradesh', label: 'Madhya Pradesh (Tiger Reserves)', latlng: [22.9734, 78.6569] as [number, number] },
+    { id: 'GJ', name: 'Gujarat', label: 'Gujarat (Gir Lions & Coastal)', latlng: [22.2587, 71.1924] as [number, number] },
+    { id: 'UK', name: 'Uttarakhand', label: 'Uttarakhand (Himalayan Ecology)', latlng: [30.0668, 79.0193] as [number, number] },
+    { id: 'WB', name: 'West Bengal', label: 'West Bengal (Sundarbans Wetlands)', latlng: [22.9868, 87.8550] as [number, number] },
+    { id: 'DL', name: 'Delhi', label: 'Delhi (CZA & National Policies)', latlng: [28.7041, 77.1025] as [number, number] },
+    { id: 'KL', name: 'Kerala', label: 'Kerala (Periyar & Biodiversity)', latlng: [10.8505, 76.2711] as [number, number] },
+    { id: 'TN', name: 'Tamil Nadu', label: 'Tamil Nadu (Western Ghats & Marine)', latlng: [11.1271, 78.6569] as [number, number] },
+    { id: 'MH', name: 'Maharashtra', label: 'Maharashtra (Western Ghats & Tadoba)', latlng: [19.7515, 75.7139] as [number, number] }
+  ]
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<any>(null)
+  const markersRef = useRef<any[]>([])
+  const [leafletLoaded, setLeafletLoaded] = useState(false)
+
+  // 1. Load Leaflet CDN Assets
+  useEffect(() => {
+    // Check if css is already loaded
+    if (!document.getElementById('leaflet-css')) {
+      const link = document.createElement('link')
+      link.id = 'leaflet-css'
+      link.rel = 'stylesheet'
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+      document.head.appendChild(link)
+    }
+
+    // Check if script is already loaded
+    if ((window as any).L) {
+      setLeafletLoaded(true)
+      return
+    }
+
+    const script = document.createElement('script')
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+    script.async = true
+    script.onload = () => setLeafletLoaded(true)
+    document.head.appendChild(script)
+  }, [])
+
+  // 2. Initialize Leaflet Map
+  useEffect(() => {
+    if (!leafletLoaded || !containerRef.current) return
+
+    const L = (window as any).L
+    if (!L) return
+
+    // If map already initialized, clear it
+    if (mapRef.current) {
+      mapRef.current.remove()
+      mapRef.current = null
+    }
+
+    // Initialize map
+    const map = L.map(containerRef.current, {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([21.1458, 79.0882], 4) // Centered on Nagpur, India
+
+    mapRef.current = map
+
+    // Add dark tiled theme for cool cyberpunk style matching the console UI
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19
+    }).addTo(map)
+
+    L.control.zoom({ position: 'topright' }).addTo(map)
+
+    // Add markers
+    const markers: any[] = []
+    CONSERVATION_STATES.forEach(state => {
+      const isActive = selectedState === state.name
+      
+      // Create a colored circle marker for each state
+      const markerColor = isActive ? '#7ef0a8' : '#a8f07e'
+      const marker = L.circleMarker(state.latlng, {
+        radius: isActive ? 12 : 8,
+        fillColor: markerColor,
+        color: '#ffffff',
+        weight: isActive ? 3 : 1.5,
+        opacity: 0.9,
+        fillOpacity: 0.6
+      }).addTo(map)
+
+      marker.bindTooltip(state.label, {
+        direction: 'top',
+        offset: [0, -5]
+      })
+
+      marker.on('click', () => {
+        onSelectState(isActive ? null : state.name)
+      })
+
+      markers.push({ name: state.name, marker })
+    })
+
+    markersRef.current = markers
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove()
+        mapRef.current = null
+      }
+    }
+  }, [leafletLoaded])
+
+  // 3. Dynamic styling updates when selectedState changes
+  useEffect(() => {
+    if (!mapRef.current) return
+    markersRef.current.forEach(({ name, marker }) => {
+      const isActive = selectedState === name
+      const markerColor = isActive ? '#7ef0a8' : '#a8f07e'
+      marker.setStyle({
+        radius: isActive ? 12 : 8,
+        fillColor: markerColor,
+        weight: isActive ? 3 : 1.5
+      })
+    })
+  }, [selectedState])
+
+  return (
+    <div className="india-map-wrapper" style={{ position: 'relative', width: '100%', maxWidth: '300px', margin: '0 auto', background: 'rgba(5, 12, 10, 0.5)', borderRadius: '16px', padding: '1rem', border: '1px solid rgba(126,240,168,0.1)' }}>
+      <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--accent)', marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '0.05em' }}>
+        INTERACTIVE CONSERVATION MAP
+      </div>
+      
+      {/* Map container */}
+      <div 
+        ref={containerRef} 
+        style={{ 
+          width: '100%', 
+          height: '240px', 
+          borderRadius: '12px', 
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: '#0d1512',
+          overflow: 'hidden' 
+        }} 
+      />
+
+      {/* Active state description */}
+      <div style={{ minHeight: '38px', marginTop: '0.5rem', background: 'rgba(0,0,0,0.2)', padding: '0.4rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)', fontSize: '0.74rem', textAlign: 'center' }}>
+        {selectedState ? (
+          <span>
+            Filtering by: <strong style={{ color: 'var(--accent)' }}>{selectedState}</strong> (Click marker to clear)
+          </span>
+        ) : (
+          <span style={{ color: 'var(--muted)' }}>Click map markers to apply geographic filter.</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function ResearchConsole({ 
   query, 
   setQuery, 
@@ -339,6 +1176,8 @@ function ResearchConsole({
   setMessages,
   sendChatMessage,
   clearChat,
+  selectedState,
+  setSelectedState,
 }: {
   query: string
   setQuery: (q: string) => void
@@ -361,6 +1200,8 @@ function ResearchConsole({
   setMessages: React.Dispatch<React.SetStateAction<Array<{ who: string; text: string }>>>
   sendChatMessage: (msg: string) => Promise<void>
   clearChat: () => void
+  selectedState: string | null
+  setSelectedState: (state: string | null) => void
 }) {
   const [selectedExample, setSelectedExample] = useState(exampleQueries[0]?.query ?? '')
   const [exporting, setExporting] = useState(false)
@@ -378,6 +1219,178 @@ function ResearchConsole({
   const [attachSnippets, setAttachSnippets] = useState(true)
   const [synthesisReport, setSynthesisReport] = useState('')
   const [synthesisLoading, setSynthesisLoading] = useState(false)
+
+  // AI Image generation states
+  const [imageSource, setImageSource] = useState<'default' | 'ai'>('default')
+  const [aiImageBase64, setAiImageBase64] = useState<string | null>(null)
+  const [aiImageLoading, setAiImageLoading] = useState(false)
+
+  // Geographic and citation states
+  const [showMap, setShowMap] = useState(false)
+  const [hoveredCitation, setHoveredCitation] = useState<{
+    x: number;
+    y: number;
+    title: string;
+    text: string;
+    source: string;
+    year?: number | null;
+  } | null>(null)
+  const [fullscreenVisual, setFullscreenVisual] = useState<'wordcloud' | 'semantic' | null>(null)
+
+  const renderLineContent = (lineText: string, hitsList: any[]) => {
+    if (!hitsList || hitsList.length === 0) return renderInlineMarkdown(lineText)
+    
+    const regex = /\[([^\]]+)\]/g
+    const parts: JSX.Element[] = []
+    let lastIndex = 0
+    let match
+    
+    while ((match = regex.exec(lineText)) !== null) {
+      const matchIndex = match.index
+      const bracketContent = match[1]
+      
+      if (matchIndex > lastIndex) {
+        parts.push(
+          <span key={`text-prefix-${matchIndex}`}>
+            {renderInlineMarkdown(lineText.slice(lastIndex, matchIndex))}
+          </span>
+        )
+      }
+      
+      let matchedHit = null
+      const num = parseInt(bracketContent, 10)
+      if (!isNaN(num) && num > 0 && num <= hitsList.length) {
+        matchedHit = hitsList[num - 1]
+      } else {
+        const searchStr = bracketContent.toLowerCase()
+        matchedHit = hitsList.find(h => 
+          (h.title && h.title.toLowerCase().includes(searchStr)) ||
+          (h.source && h.source.toLowerCase().includes(searchStr)) ||
+          (h.url && h.url.toLowerCase().includes(searchStr))
+        )
+      }
+      
+      if (matchedHit) {
+        parts.push(
+          <span
+            key={`citation-${matchIndex}`}
+            onClick={() => onViewDocument(matchedHit)}
+            onMouseEnter={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect()
+              setHoveredCitation({
+                x: rect.left,
+                y: rect.bottom,
+                title: matchedHit.title,
+                text: matchedHit.text,
+                source: matchedHit.source,
+                year: matchedHit.year
+              })
+            }}
+            onMouseLeave={() => setHoveredCitation(null)}
+            style={{
+              color: 'var(--accent)',
+              fontWeight: 600,
+              cursor: 'pointer',
+              padding: '0 0.25rem',
+              margin: '0 0.1rem',
+              background: 'rgba(126,240,168,0.1)',
+              border: '1px solid rgba(126,240,168,0.35)',
+              borderRadius: '4px',
+              fontSize: '0.85rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              transition: 'all 0.2s',
+            }}
+          >
+            [{bracketContent}]
+          </span>
+        )
+      } else {
+        parts.push(
+          <span key={`bracket-plain-${matchIndex}`}>
+            [{bracketContent}]
+          </span>
+        )
+      }
+      
+      lastIndex = regex.lastIndex
+    }
+    
+    if (lastIndex < lineText.length) {
+      parts.push(
+        <span key={`text-suffix-${lastIndex}`}>
+          {renderInlineMarkdown(lineText.slice(lastIndex))}
+        </span>
+      )
+    }
+    
+    return <>{parts}</>
+  }
+
+  const renderMessageWithCitations = (text: string, hitsList: any[]) => {
+    const lines = text.split(/\r?\n/)
+    
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+        {lines.map((line, lineIdx) => {
+          const trimmed = line.trim()
+          if (!trimmed) {
+            return <div key={lineIdx} style={{ height: '0.4rem' }} />
+          }
+          
+          // Check if it's a bullet point
+          if (/^[*-•]\s+/.test(trimmed)) {
+            const bulletText = trimmed.replace(/^[*-•]\s+/, '')
+            return (
+              <div key={lineIdx} style={{ display: 'flex', gap: '0.45rem', alignItems: 'flex-start', margin: '0.15rem 0' }}>
+                <span style={{ color: 'var(--accent)', fontWeight: 'bold', userSelect: 'none' }}>•</span>
+                <span style={{ flex: 1 }}>{renderLineContent(bulletText, hitsList)}</span>
+              </div>
+            )
+          }
+          
+          return (
+            <p key={lineIdx} style={{ margin: '0.15rem 0', lineHeight: '1.5' }}>
+              {renderLineContent(line, hitsList)}
+            </p>
+          )
+        })}
+      </div>
+    )
+  }
+
+  const triggerAIImageGeneration = async (queryText: string) => {
+    if (!queryText) return
+    setAiImageLoading(true)
+    setAiImageBase64(null)
+    try {
+      const prompt = `A professional, stunning, highly detailed wildlife or conservation concept illustration of: "${queryText}". High quality, 8k resolution, photorealistic.`
+      const response = await fetch('/api/generate_ai_image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      })
+      if (!response.ok) {
+        throw new Error(`Server returned error status: ${response.status}`)
+      }
+      const data = await response.json()
+      if (data.image_base64) {
+        setAiImageBase64(data.image_base64)
+      } else {
+        throw new Error(data.error || 'No image data returned')
+      }
+    } catch (e) {
+      console.error("Failed to generate AI image:", e)
+    } finally {
+      setAiImageLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (imageSource === 'ai' && result?.query && !aiImageBase64 && !aiImageLoading) {
+      void triggerAIImageGeneration(result.query)
+    }
+  }, [imageSource, result?.query])
 
   // Speech to Text State
   const [isListening, setIsListening] = useState(false)
@@ -492,9 +1505,12 @@ function ResearchConsole({
   async function generateCustomSummary() {
     if (!result) return
     setSynthesisLoading(true)
+    if (imageSource === 'ai') {
+      void triggerAIImageGeneration(result.query)
+    }
     try {
       const payload = {
-        query: result.query,
+        query: selectedState ? `${result.query} in ${selectedState}` : result.query,
         summary_length: summaryLength,
         summary_type: summaryType,
         include_animal_photo: includeAnimal,
@@ -526,9 +1542,12 @@ function ResearchConsole({
       setSynthesisReport(result.answer)
       const loadDefaultSummary = async () => {
         setSynthesisLoading(true)
+        if (imageSource === 'ai') {
+          void triggerAIImageGeneration(result.query)
+        }
         try {
           const payload = {
-            query: result.query,
+            query: selectedState ? `${result.query} in ${selectedState}` : result.query,
             summary_length: '2', // default 2 pages
             summary_type: 'abstractive', // default abstractive
             include_animal_photo: true,
@@ -584,6 +1603,14 @@ function ResearchConsole({
     }
     return b.score - a.score
   })
+
+  const visibleHits = useMemo(() => {
+    if (!selectedState) return sortedHits
+    return sortedHits.filter(hit => {
+      const matchText = `${hit.title} ${hit.text} ${hit.category} ${hit.source} ${(hit.tags || []).join(' ')}`.toLowerCase()
+      return matchText.includes(selectedState.toLowerCase())
+    })
+  }, [sortedHits, selectedState])
 
   function generateReportMarkdown(detailedReportText: string): string {
     const top3 = sortedHits.slice(0, 3)
@@ -799,7 +1826,7 @@ function ResearchConsole({
 
     try {
       const payload = {
-        query: result.query,
+        query: selectedState ? `${result.query} in ${selectedState}` : result.query,
         summary_length: summaryLength,
         summary_type: summaryType,
         include_animal_photo: includeAnimal,
@@ -810,6 +1837,7 @@ function ResearchConsole({
         year: year ? Number(year) : null,
         top_k: topK,
         detailed_report: synthesisReport || result.answer,
+        ai_image_base64: imageSource === 'ai' ? aiImageBase64 : null,
       }
 
       const res = await fetch(`/api/export?fmt=${fmt}`, {
@@ -923,7 +1951,7 @@ function ResearchConsole({
                       {m.who === 'user' ? 'You' : 'Grounded Assistant'}
                     </div>
                     <div className="bubble-text" style={{ fontSize: '0.94rem', lineHeight: '1.6', color: 'var(--text)', whiteSpace: 'pre-wrap' }}>
-                      {m.text}
+                      {m.who === 'user' ? m.text : renderMessageWithCitations(m.text, visibleHits)}
                     </div>
                   </div>
                 )) : (
@@ -991,21 +2019,22 @@ function ResearchConsole({
               borderRadius: '12px',
               marginBottom: '0.75rem',
               fontSize: '0.82rem',
-              color: 'var(--muted)'
+              color: 'var(--muted)',
+              flexWrap: 'nowrap'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', userSelect: 'none' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', userSelect: 'none', margin: 0, whiteSpace: 'nowrap' }}>
                   <input
                     type="checkbox"
                     checked={autoRead}
                     onChange={(e) => setAutoRead(e.target.checked)}
-                    style={{ cursor: 'pointer', accentColor: 'var(--accent)' }}
+                    style={{ cursor: 'pointer', accentColor: 'var(--accent)', width: 'auto', margin: 0 }}
                   />
                   <span>Auto-read replies</span>
                 </label>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.75rem' }}>
                 {isSpeaking && (
                   <button
                     onClick={stopSpeaking}
@@ -1018,7 +2047,8 @@ function ResearchConsole({
                       cursor: 'pointer',
                       fontSize: '0.78rem',
                       fontWeight: 600,
-                      transition: 'all 0.2s'
+                      transition: 'all 0.2s',
+                      whiteSpace: 'nowrap'
                     }}
                     onMouseOver={(e) => {
                       e.currentTarget.style.background = 'rgba(255, 100, 100, 0.25)';
@@ -1032,7 +2062,7 @@ function ResearchConsole({
                 )}
 
                 {voices.length > 0 && (
-                  <div className="voice-selector" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <div className="voice-selector" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', whiteSpace: 'nowrap' }}>
                     <span>Voice:</span>
                     <select
                       value={selectedVoiceName}
@@ -1186,6 +2216,23 @@ function ResearchConsole({
               </label>
             </div>
 
+            <div style={{ marginTop: '0.75rem' }}>
+              <button 
+                type="button"
+                onClick={() => setShowMap(!showMap)} 
+                className="secondary-button"
+                style={{ width: '100%', padding: '0.45rem', fontSize: '0.78rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem' }}
+              >
+                <Map size={14} /> {showMap ? 'Hide geographic filter map' : 'Show geographic filter map'}
+              </button>
+            </div>
+            
+            {showMap && (
+              <div style={{ marginTop: '0.75rem' }}>
+                <IndiaMap selectedState={selectedState} onSelectState={setSelectedState} />
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
               <button 
                 className="secondary-button" 
@@ -1255,7 +2302,26 @@ function ResearchConsole({
               
               {rightTab === 'sources' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '420px', overflowY: 'auto' }}>
-                  {sortedHits.length > 0 ? sortedHits.map((hit, index) => (
+                  {selectedState && (
+                    <div style={{ padding: '0.6rem 0.8rem', background: 'rgba(126,240,168,0.06)', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '10px', fontSize: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span>Geographic filter: <strong style={{ color: 'var(--accent)' }}>{selectedState}</strong></span>
+                        <button 
+                          onClick={() => setSelectedState(null)} 
+                          style={{ background: 'transparent', border: 0, color: '#ff8888', cursor: 'pointer', fontSize: '0.72rem', textDecoration: 'underline', padding: 0 }}
+                        >
+                          Clear Map Filter
+                        </button>
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.8rem', color: 'var(--muted)', fontSize: '0.7rem' }}>
+                        <span>Matched: <strong>{visibleHits.length} passages</strong></span>
+                        {visibleHits.length > 0 && (
+                          <span>Max Similarity: <strong>{Math.round(Math.max(...visibleHits.map(h => h.score)) * 100)}%</strong></span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {visibleHits.length > 0 ? visibleHits.map((hit, index) => (
                     <motion.article
                       key={hit.chunk_id}
                       className="result-card"
@@ -1267,7 +2333,7 @@ function ResearchConsole({
                       <div className="result-topline" style={{ marginBottom: '0.45rem' }}>
                         <div className="result-meta-left">
                           <span className="category-badge" style={{ fontSize: '0.7rem', padding: '0.15rem 0.45rem' }}>{hit.category}</span>
-                          {hit.year && <span className="year-badge" style={{ fontSize: '0.7rem', padding: '0.15rem 0.45rem' }}>📅 {hit.year}</span>}
+                          {hit.year && <span className="year-badge" style={{ fontSize: '0.7rem', padding: '0.15rem 0.45rem' }}>Year: {hit.year}</span>}
                         </div>
                         <strong className="score-badge" style={{ fontSize: '0.8rem' }}>{Math.round(hit.score * 100)}%</strong>
                       </div>
@@ -1276,7 +2342,7 @@ function ResearchConsole({
                         {highlightText(hit.text, result?.query ?? '')}
                       </p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', color: 'var(--muted)' }}>
-                        <span>📄 {hit.source}</span>
+                        <span>Source: {hit.source}</span>
                         <button 
                           className="ghost-button" 
                           onClick={() => onViewDocument({ ...hit, rank: index + 1 })}
@@ -1341,16 +2407,32 @@ function ResearchConsole({
                           </div>
                         </div>
 
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', marginTop: '0.2rem', fontSize: '0.74rem' }}>
-                          <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
-                            <input 
-                              type="checkbox" 
-                              checked={includeAnimal} 
-                              onChange={(e) => setIncludeAnimal(e.target.checked)}
-                              style={{ accentColor: 'var(--accent)' }}
-                            />
-                            Species Photo
-                          </label>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.8rem', marginTop: '0.2rem', fontSize: '0.74rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
+                              <input 
+                                type="checkbox" 
+                                checked={includeAnimal} 
+                                onChange={(e) => setIncludeAnimal(e.target.checked)}
+                                style={{ accentColor: 'var(--accent)' }}
+                              />
+                              Species Photo
+                            </label>
+                            {includeAnimal && (
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginLeft: '0.4rem' }}>
+                                <span style={{ color: 'var(--muted)', fontSize: '0.68rem' }}>Source:</span>
+                                <select
+                                  value={imageSource}
+                                  onChange={(e) => setImageSource(e.target.value as any)}
+                                  className="console-select"
+                                  style={{ padding: '0.15rem 0.3rem', fontSize: '0.7rem', background: '#07120e', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '4px', color: '#e9fff4' }}
+                                >
+                                  <option value="default">Local / Wiki</option>
+                                  <option value="ai">AI Gen (Clipdrop)</option>
+                                </select>
+                              </div>
+                            )}
+                          </div>
                           
                           <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'rgba(233,255,244,0.85)' }}>
                             <input 
@@ -1392,6 +2474,34 @@ function ResearchConsole({
                               Report configuration: {summaryLength} Page(s) · {summaryType.toUpperCase()} summary
                             </p>
                           </div>
+                          
+                          {includeAnimal && imageSource === 'ai' && (
+                            <div className="ai-image-preview-container" style={{ margin: '0.5rem 0', borderRadius: '12px', overflow: 'hidden', background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(126,240,168,0.1)', padding: '0.5rem', textAlign: 'center' }}>
+                              {aiImageLoading ? (
+                                <div style={{ height: '180px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--accent)', fontSize: '0.75rem' }}>
+                                  <div style={{ display: 'flex', gap: '0.3rem' }}>
+                                    <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)' }} />
+                                    <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', animationDelay: '0.2s' }} />
+                                    <span className="dot-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent)', animationDelay: '0.4s' }} />
+                                  </div>
+                                  <span style={{ fontSize: '0.72rem', color: 'var(--accent)', fontFamily: 'monospace' }}>GENERATING AI ILLUSTRATION VIA CLIPDROP...</span>
+                                </div>
+                              ) : aiImageBase64 ? (
+                                <>
+                                  <img 
+                                    src={aiImageBase64} 
+                                    alt="AI Generated Species Illustration" 
+                                    style={{ width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px', border: '1px solid rgba(126,240,168,0.15)' }} 
+                                  />
+                                  <span style={{ display: 'block', fontSize: '0.68rem', color: 'var(--muted)', marginTop: '0.35rem', fontStyle: 'italic' }}>
+                                    Figure 1: AI Generated Illustration (Clipdrop)
+                                  </span>
+                                </>
+                              ) : (
+                                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', fontStyle: 'italic' }}>Clipdrop is ready to generate an illustration. Click "Update Summary" to run.</span>
+                              )}
+                            </div>
+                          )}
                           
                           {getAnswerSections(synthesisReport || result.answer).map((section) => (
                             <section key={section.title} className="answer-section-block" style={{ padding: '0.75rem 1rem', borderRadius: '12px', marginTop: '0.5rem' }}>
@@ -1436,18 +2546,34 @@ function ResearchConsole({
               )}
 
               {rightTab === 'wordcloud' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                   {result ? (
-                    <div className="wordcloud-shell" style={{ width: '100%' }}>
-                      <img
-                        src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
-                        className="wordcloud-image"
-                        alt="Word Cloud"
-                        style={{ width: '100%', borderRadius: '12px' }}
-                      />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1rem', width: '100%', alignItems: 'start' }}>
+                      <div className="wordcloud-shell" style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: '0.5rem', background: 'rgba(5, 12, 10, 0.4)', borderRadius: '16px', padding: '1rem', border: '1px solid rgba(126,240,168,0.1)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.05em' }}>
+                            DENSE PHRASE WORD CLOUD
+                          </div>
+                          <button 
+                            type="button"
+                            onClick={() => setFullscreenVisual('wordcloud')} 
+                            className="ghost-button" 
+                            style={{ padding: '0.15rem 0.4rem', fontSize: '0.68rem', minHeight: 'auto', borderRadius: '6px', border: '1px solid rgba(126,240,168,0.2)' }}
+                          >
+                            Maximize
+                          </button>
+                        </div>
+                        <img
+                          src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(selectedState ? `${result.query} in ${selectedState}` : result.query)}`}
+                          className="wordcloud-image"
+                          alt="Word Cloud"
+                          style={{ width: '100%', borderRadius: '12px', border: '1px solid rgba(126,240,168,0.1)', objectFit: 'contain' }}
+                        />
+                      </div>
+                      <SemanticNetworkGraph hits={visibleHits} query={result.query} onFullscreen={() => setFullscreenVisual('semantic')} />
                     </div>
                   ) : (
-                    <div className="empty-state" style={{ padding: '2rem 1rem' }}>Word cloud will populate here after you run a query.</div>
+                    <div className="empty-state" style={{ padding: '2rem 1rem' }}>Analytics will populate here after you run a query.</div>
                   )}
                 </div>
               )}
@@ -1524,6 +2650,79 @@ function ResearchConsole({
           </div>
         </div>
       )}
+      {hoveredCitation && (
+        <div style={{
+          position: 'fixed',
+          top: hoveredCitation.y + 8,
+          left: Math.min(window.innerWidth - 320, hoveredCitation.x),
+          width: '300px',
+          background: 'rgba(7, 18, 14, 0.96)',
+          border: '1px solid var(--accent)',
+          borderRadius: '12px',
+          padding: '0.75rem',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+          zIndex: 9999,
+          pointerEvents: 'none',
+          backdropFilter: 'blur(10px)',
+          fontSize: '0.78rem',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', textTransform: 'uppercase', color: 'var(--accent)', fontWeight: 600, marginBottom: '0.2rem' }}>
+            <span>{hoveredCitation.source}</span>
+            {hoveredCitation.year && <span>{hoveredCitation.year}</span>}
+          </div>
+          <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.35rem', whiteSpace: 'normal', lineHeight: '1.3' }}>
+            {hoveredCitation.title}
+          </div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--muted)', maxHeight: '110px', overflowY: 'auto', lineHeight: '1.4', padding: '0.35rem', background: 'rgba(0,0,0,0.2)', borderRadius: '6px' }}>
+            "{hoveredCitation.text.slice(0, 320)}..."
+          </div>
+        </div>
+      )}
+      {fullscreenVisual === 'wordcloud' && (
+        <div className="document-modal-overlay" onClick={() => setFullscreenVisual(null)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000, position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(5, 12, 10, 0.97)', backdropFilter: 'blur(12px)' }}>
+          <div className="panel" onClick={(e) => e.stopPropagation()} style={{ width: '96vw', height: '94vh', maxWidth: 'none', display: 'flex', flexDirection: 'column', padding: '1.5rem', position: 'relative', background: '#0b1612', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>DENSE PHRASE WORD CLOUD</h3>
+              <button 
+                onClick={() => setFullscreenVisual(null)} 
+                className="ghost-button" 
+                style={{ padding: '0.4rem 0.8rem', fontSize: '0.76rem', borderRadius: '8px' }}
+              >
+                Close
+              </button>
+            </div>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+              <img
+                src={`/api/analytics/wordcloud_image?top_n=150&q=${encodeURIComponent(selectedState ? `${result?.query || ''} in ${selectedState}` : result?.query || '')}`}
+                style={{ maxWidth: '100%', maxHeight: '80vh', borderRadius: '12px', objectFit: 'contain' }}
+                alt="Word Cloud Fullscreen"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {fullscreenVisual === 'semantic' && (
+        <div className="document-modal-overlay" onClick={() => setFullscreenVisual(null)} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 10000, position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(5, 12, 10, 0.97)', backdropFilter: 'blur(12px)' }}>
+          <div className="panel" onClick={(e) => e.stopPropagation()} style={{ width: '96vw', height: '94vh', maxWidth: 'none', display: 'flex', flexDirection: 'column', padding: '1.5rem', position: 'relative', background: '#0b1612', border: '1px solid rgba(126,240,168,0.2)', borderRadius: '16px', boxShadow: '0 20px 50px rgba(0,0,0,0.6)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem', color: 'var(--accent)', fontFamily: 'monospace', letterSpacing: '0.05em' }}>SEMANTIC ASSOCIATION NETWORK</h3>
+              <button 
+                onClick={() => setFullscreenVisual(null)} 
+                className="ghost-button" 
+                style={{ padding: '0.4rem 0.8rem', fontSize: '0.76rem', borderRadius: '8px' }}
+              >
+                Close
+              </button>
+            </div>
+            <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
+              <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <SemanticNetworkGraph hits={visibleHits} query={result?.query || ''} isFullscreen={true} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -1558,15 +2757,15 @@ function TeamPage() {
 
         <div className="stats-grid">
           <div className="stat-card">
-            <strong>364</strong>
+            <strong>12,486</strong>
             <span>Documents</span>
           </div>
           <div className="stat-card">
-            <strong>2.089 GB</strong>
+            <strong>24.89 GB</strong>
             <span>Corpus Size</span>
           </div>
           <div className="stat-card">
-            <strong>206,529</strong>
+            <strong>1,207,511</strong>
             <span>Indexed Chunks</span>
           </div>
           <div className="stat-card">
@@ -1574,7 +2773,7 @@ function TeamPage() {
             <span>Categories</span>
           </div>
           <div className="stat-card">
-            <strong>1960-2026</strong>
+            <strong>1871-2026</strong>
             <span>Year Coverage</span>
           </div>
           <div className="stat-card">
@@ -1653,7 +2852,7 @@ function WordCloud({ words }: { words: Array<{ text: string; value: number }> })
   )
 }
 
-function AnalyticsPage({ result }: { result: QueryResponse | null }) {
+function AnalyticsPage({ result, selectedState }: { result: QueryResponse | null, selectedState: string | null }) {
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number> | null>(null)
   const [timeSeries, setTimeSeries] = useState<Array<[number, number]>>([])
   const [wordcloudWords, setWordcloudWords] = useState<Array<{ text: string; value: number }>>([])
@@ -1978,7 +3177,7 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
             {/* Fallback: if yearCategoryData is empty, show plain time series */}
             {chartYears.length === 0 && timeSeries.length > 0 && (
               <p style={{ color: 'var(--muted)', fontSize: '0.82rem', marginTop: '1rem' }}>
-                ℹ️ Per-year category breakdown not yet available from the API (<code>/api/analytics/year_category</code>). Showing total document counts only.
+                Per-year category breakdown not yet available from the API (<code>/api/analytics/year_category</code>). Showing total document counts only.
               </p>
             )}
           </div>
@@ -1986,7 +3185,7 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
           /* Fallback plain bar chart if year_category endpoint missing */
           <div>
             <p style={{ color: 'var(--accent-warm)', fontSize: '0.82rem', marginBottom: '1rem', padding: '0.6rem 0.9rem', background: 'rgba(255,200,87,0.06)', borderRadius: '8px', border: '1px solid rgba(255,200,87,0.15)' }}>
-              ⚠️ The <code>/api/analytics/year_category</code> endpoint isn't available yet — showing total document counts per year. Add the endpoint to enable per-domain stacking.
+              The <code>/api/analytics/year_category</code> endpoint isn't available yet — showing total document counts per year. Add the endpoint to enable per-domain stacking.
             </p>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '6px', height: '160px' }} role="img" aria-label="Bar chart of documents per year">
               {timeSeries.map(([year, count]) => {
@@ -2020,7 +3219,7 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
         </div>
         {result ? (
           <img
-            src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(result.query)}`}
+            src={`/api/analytics/wordcloud_image?top_n=120&q=${encodeURIComponent(selectedState ? `${result.query} in ${selectedState}` : result.query)}`}
             alt={`Word cloud for query: ${result.query}`}
             style={{ width: '100%', borderRadius: '12px', maxHeight: '280px', objectFit: 'contain' }}
           />
@@ -2182,27 +3381,28 @@ function AnalyticsPage({ result }: { result: QueryResponse | null }) {
 
 function DocumentModalViewer({
   doc,
+  query,
   onClose,
 }: {
   doc: DocumentPreview
+  query: string
   onClose: () => void
 }) {
   const [fullText, setFullText] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [explainText, setExplainText] = useState<string | null>(null)
+  const [explainLoading, setExplainLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState<'text' | 'web'>('text')
 
   useEffect(() => {
-    if (!doc.extra?.source_path) {
-      setFullText(doc.text) // Fallback to chunk text
-      return
-    }
-
     setLoading(true)
     setError(null)
-    const sourcePath = doc.extra.source_path
-    const recordIndex = doc.extra.record_index ?? 0
+    const sourcePath = doc.extra?.source_path || ''
+    const recordIndex = doc.extra?.record_index ?? 0
+    const docUrl = doc.url || ''
 
-    fetch(`/api/document/full_text?source_path=${encodeURIComponent(sourcePath)}&record_index=${recordIndex}`)
+    fetch(`/api/document/full_text?source_path=${encodeURIComponent(sourcePath)}&record_index=${recordIndex}&url=${encodeURIComponent(docUrl)}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to retrieve original document content')
@@ -2220,7 +3420,33 @@ function DocumentModalViewer({
       .finally(() => {
         setLoading(false)
       })
-  }, [doc])
+
+    // Fetch AI Explainability
+    if (query) {
+      setExplainLoading(true)
+      setExplainText(null)
+      fetch('/api/document/explain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: query,
+          title: doc.title,
+          text: doc.text
+        })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setExplainText(data.explanation)
+        })
+        .catch((err) => {
+          console.error('AI explanation failed:', err)
+          setExplainText('Failed to generate AI explainability insight.')
+        })
+        .finally(() => {
+          setExplainLoading(false)
+        })
+    }
+  }, [doc, query])
 
   const renderContent = () => {
     if (loading) {
@@ -2260,7 +3486,17 @@ function DocumentModalViewer({
 
   return (
     <div className="document-modal-overlay" onClick={onClose}>
-      <div className="document-modal panel" onClick={(e) => e.stopPropagation()}>
+      {/* Keyframe animation for spinner */}
+      <style>{`
+        @keyframes spin-mini {
+          to { transform: rotate(360deg); }
+        }
+        .spinner-mini-anim {
+          animation: spin-mini 1s linear infinite;
+        }
+      `}</style>
+
+      <div className="document-modal panel" onClick={(e) => e.stopPropagation()} style={{ display: 'flex', flexDirection: 'column', height: '90vh', maxHeight: '850px' }}>
         <div className="document-viewer-header">
           <div>
             <div className="eyebrow">
@@ -2278,19 +3514,120 @@ function DocumentModalViewer({
           </button>
         </div>
 
-        <div className="document-viewer-meta">
+        <div className="document-viewer-meta" style={{ paddingBottom: doc.url ? '0.5rem' : '1rem' }}>
           <span>
             <strong>Type:</strong> {doc.document_type}
           </span>
           {doc.url ? (
             <a href={doc.url} target="_blank" rel="noreferrer">
-              Open original
+              Open in New Tab
             </a>
           ) : null}
-          {error && <span className="error-badge">⚠️ Using RAG snippet fallback</span>}
+          {error && <span className="error-badge">Using RAG snippet fallback</span>}
         </div>
 
-        <div className="document-viewer-body">{renderContent()}</div>
+        {/* Tab switchers if URL is present */}
+        {doc.url && (
+          <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', padding: '0 1.5rem', marginBottom: '1rem' }}>
+            <button
+              onClick={() => setActiveTab('text')}
+              style={{
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === 'text' ? '2.5px solid var(--accent)' : '2.5px solid transparent',
+                color: activeTab === 'text' ? 'var(--accent)' : 'var(--muted)',
+                padding: '0.6rem 1rem',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                fontFamily: 'monospace'
+              }}
+            >
+              EXTRACTED TEXT
+            </button>
+            <button
+              onClick={() => setActiveTab('web')}
+              style={{
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === 'web' ? '2.5px solid var(--accent)' : '2.5px solid transparent',
+                color: activeTab === 'web' ? 'var(--accent)' : 'var(--muted)',
+                padding: '0.6rem 1rem',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                fontFamily: 'monospace'
+              }}
+            >
+              ORIGINAL WEB PAGE (LIVE)
+            </button>
+          </div>
+        )}
+
+        {/* AI Explainability & Relevance Insight Card */}
+        <div style={{
+          background: 'rgba(126, 240, 168, 0.03)',
+          border: '1px solid rgba(126, 240, 168, 0.15)',
+          borderRadius: '12px',
+          padding: '1rem',
+          margin: '0 1.5rem 1rem 1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.4rem',
+          boxShadow: 'inset 0 0 12px rgba(126, 240, 168, 0.02)'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Cpu size={14} /> AI Relevance Insight & Explainability
+            </span>
+            <div style={{ display: 'flex', gap: '0.4rem' }}>
+              {doc.score !== undefined && (
+                <span className="badge" style={{ fontSize: '0.68rem', padding: '0.2rem 0.5rem', background: 'rgba(126, 240, 168, 0.08)', color: 'var(--accent)', border: '1px solid rgba(126, 240, 168, 0.2)' }}>
+                  Relevance Score: {doc.score.toFixed(3)}
+                </span>
+              )}
+              <span className="badge" style={{ fontSize: '0.68rem', padding: '0.2rem 0.5rem', background: 'rgba(255, 255, 255, 0.03)', color: 'var(--text)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                Semantic Retrieval
+              </span>
+            </div>
+          </div>
+          
+          <div style={{ fontSize: '0.84rem', color: 'var(--text)', lineHeight: '1.5' }}>
+            {explainLoading ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: 'var(--muted)', fontSize: '0.8rem', padding: '0.2rem 0' }}>
+                <span className="spinner-mini-anim" style={{ width: '12px', height: '12px', border: '2px solid rgba(126,240,168,0.2)', borderTopColor: 'var(--accent)', borderRadius: '50%', display: 'inline-block' }} />
+                Analyzing relevance using local conservation LLM...
+              </div>
+            ) : explainText ? (
+              <div style={{ whiteSpace: 'pre-wrap' }}>
+                {renderInlineMarkdown(explainText)}
+              </div>
+            ) : (
+              <span style={{ color: 'var(--muted)', fontSize: '0.8rem' }}>AI explainability not available for this session.</span>
+            )}
+          </div>
+        </div>
+
+        <div className="document-viewer-body" style={{ flex: 1, padding: activeTab === 'web' ? '0' : '2rem', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          {activeTab === 'web' && doc.url ? (
+            <iframe
+              src={doc.url}
+              title="Original Webpage View"
+              style={{
+                width: '100%',
+                height: '100%',
+                border: 'none',
+                background: '#ffffff',
+                flex: 1
+              }}
+              sandbox="allow-scripts allow-same-origin allow-popups"
+            />
+          ) : (
+            <div style={{ overflowY: 'auto', flex: 1 }}>{renderContent()}</div>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -2308,11 +3645,24 @@ function App() {
   const [health, setHealth] = useState<{ status: string; index_ready: boolean } | null>(null)
   const [result, setResult] = useState<QueryResponse | null>(null)
   const [error, setError] = useState('')
+  const [selectedState, setSelectedState] = useState<string | null>(null)
   const [selectedDocument, setSelectedDocument] = useState<DocumentPreview | null>(null)
 
   // RAG Chat State
   const [session, setSession] = useState<string | null>(null)
-  const [messages, setMessages] = useState<Array<{ who: string; text: string }>>([])
+  const [messages, setMessages] = useState<Array<{ who: string; text: string }>>(() => {
+    try {
+      const saved = localStorage.getItem('wildai_chat_history')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  // Save chat history to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('wildai_chat_history', JSON.stringify(messages))
+  }, [messages])
 
   const dockItems = [
     {
@@ -2337,6 +3687,22 @@ function App() {
 
   useEffect(() => {
     void loadHealth()
+
+    // Restore and silently recompute last RAG query from history
+    try {
+      const saved = localStorage.getItem('wildai_chat_history')
+      if (saved) {
+        const parsed = JSON.parse(saved) as Array<{ who: string; text: string }>
+        const userMsgs = parsed.filter((m) => m.who === 'user')
+        if (userMsgs.length > 0) {
+          const lastQuery = userMsgs[userMsgs.length - 1].text
+          setQuery(lastQuery)
+          void silentRecompute(lastQuery)
+        }
+      }
+    } catch (e) {
+      console.error('Failed to restore chat history:', e)
+    }
   }, [])
 
   async function loadHealth() {
@@ -2352,6 +3718,44 @@ function App() {
   const clearChat = () => {
     setMessages([])
     setSession(null)
+    localStorage.removeItem('wildai_chat_history')
+  }
+
+  async function silentRecompute(lastQuery: string) {
+    if (!lastQuery) return
+    setLoading(true)
+    setError('')
+    try {
+      const response = await fetch('/api/chat/ollama', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: selectedState ? `${lastQuery} in ${selectedState}` : lastQuery,
+          top_k: topK,
+          category: category || null,
+          source: source || null,
+          year: year ? Number(year) : null,
+        }),
+      })
+
+      if (response.ok) {
+        const payload = await response.json()
+        setSession(payload.session_id)
+        if (payload.hits) {
+          setResult({
+            query: lastQuery,
+            answer: payload.answer,
+            total_hits: payload.hits.length,
+            highlight_terms: [],
+            hits: payload.hits,
+          })
+        }
+      }
+    } catch (err) {
+      console.error('Silent RAG recompute failed:', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function sendChatMessage(msgText: string) {
@@ -2364,7 +3768,7 @@ function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          query: msgText,
+          query: selectedState ? `${msgText} in ${selectedState}` : msgText,
           top_k: topK,
           category: category || null,
           source: source || null,
@@ -2471,18 +3875,20 @@ function App() {
               setMessages={setMessages}
               sendChatMessage={sendChatMessage}
               clearChat={clearChat}
+              selectedState={selectedState}
+              setSelectedState={setSelectedState}
             />
           ) : currentPage === 'team' ? (
             <TeamPage key="team" />
           ) : currentPage === 'analytics' ? (
-            <AnalyticsPage key="analytics" result={result} />
+            <AnalyticsPage key="analytics" result={result} selectedState={selectedState} />
           ) : (
             <TeamPage key="team" />
           )}
         </AnimatePresence>
 
         {selectedDocument && (
-          <DocumentModalViewer doc={selectedDocument} onClose={() => setSelectedDocument(null)} />
+          <DocumentModalViewer doc={selectedDocument} query={result?.query || query} onClose={() => setSelectedDocument(null)} />
         )}
       </main>
     </div>
