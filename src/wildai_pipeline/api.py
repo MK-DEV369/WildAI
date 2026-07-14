@@ -970,7 +970,7 @@ def create_app() -> FastAPI:
 
             return JSONResponse({"error": "Unsupported format"}, status_code=400)
 
-    CLIPDROP_API_KEY = "5fbcfd2bea6106a2a627d2d7325ca343190286a8af51cca3bb969439418d427b028447d6f9b7230f656d39353558d6b6"
+    CLIPDROP_API_KEY = os.environ.get("CLIPDROP_API_KEY", "5fbcfd2bea6106a2a627d2d7325ca343190286a8af51cca3bb969439418d427b028447d6f9b7230f656d39353558d6b6")
 
     @app.post("/api/generate_ai_image")
     def generate_ai_image(request: ImageGenRequest) -> Any:
